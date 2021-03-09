@@ -108,6 +108,7 @@ Configuration options explained:
 
 |Key|Required?|Description|
 |---|---------|-----------|
+| |.env| |
 |`TOKEN`|☑|Your bot token, via Discord developer portal.|
 |`PREFIX`|☑|Your bot prefix, to execute commands.|
 |`IP`|☑|The IP of your or another Minecraft server.|
@@ -117,7 +118,6 @@ Configuration options explained:
 |`TWITCH_CLIENT_ID`|☑|Client ID for your Twitch app, via developer portal.|
 |`TWITCH_OAUTH_TOKEN`|☑|OAuth token that grants access to your Twitch app, via `id.twitch.tv` as explained above.|
 | |config.json| |
-|---|---------|-----------|
 |`discord_mentions`| |This maps channel names to the Discord @ you want to send, such as a role or `everyone`. If a channel is missing here, no @ is used. Note: once the message is updated, the @ is always removed to prevent spamming users with notifications.|
 |`twitch_check_interval_ms`| |How often to poll the Twitch API and send or update live embeds.|
 |`twitch_use_boxart`| |If true, use alternate Live Embed style that includes game boxart as a thumbnail image if available.|
