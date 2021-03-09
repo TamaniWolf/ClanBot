@@ -8,8 +8,8 @@
  - Minecraft Server status ping as command and for display in bot status bar.
  - Command to start a minecraft server if pm2 is installend.
  - Admin commands to stop/restart the bot if run with pm2.
- - 📢 Monitor and announce Twitch channels going live with customizable `@mentions`.
- - 🔴 Live stream card that is automatically updated with the stream status, current game and viewership statistics.
+ - Monitor and announce Twitch channels going live with customizable `@mentions`.
+ - Live stream card that is automatically updated with the stream status, current game and viewership statistics.
 
 ## Using the bot
 
