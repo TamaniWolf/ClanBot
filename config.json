@@ -1,0 +1,8 @@
+{
+  "discord_mentions": {
+    "twitch-name-1": "everyone",
+    "twitch-name-2": "here"
+  },
+  "twitch_check_interval_ms": 60000,
+  "twitch_use_boxart": true
+}
