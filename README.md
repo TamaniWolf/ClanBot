@@ -1,5 +1,5 @@
 # Clanbot
-[![Discord server](https://img.shields.io/discord/584905969637785612?color=%237289da&label=discord%20server&logo=discord)](https://discord.gg/qmtXjrQ)
+[![Discord server](https://img.shields.io/discord/584905969637785612?color=%237289da&label=discord%20server&logo=discord)](https://discord.gg/UPaMDY9)
 
 **A simple, customizable Discord bot that announces Twitch streams going live (plus a bunch of silly extras).**
 
