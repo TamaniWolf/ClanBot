@@ -1,6 +1,6 @@
 # Clanbot
 
-Configuration options explained:
+commands explained:
 
 |Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
@@ -77,5 +77,6 @@ Configuration options explained:
 | |roylasfw|\<true/false\>|Turns text sfw on(true) or off(false)| |
 | |wordreact|\<true/false\>|Turns wordreact on(true) or off(false)| |
 
+# More later
 
 
