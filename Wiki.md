@@ -11,18 +11,18 @@ Configuration options explained:
 |grouphug| | |Grouphugs everyone.|☑|
 | |@\<usernames\>| |Tag one or multiple users to grouphug| |
 |growl| | |Are Angry or annoyed by someone or just in bad mood? Growl!| |
-| |@<username>| |Tag one or multiple users to growl at| |
+| |@\<usernames\>| |Tag one or multiple users to growl at| |
 |hug| | |Hug someone, get them some lovly hugs.|☑|
-| |@<username>| |Tag one or multiple users to hug| |
+| |@\<usernames\>| |Tag one or multiple users to hug| |
 |hydrate| | |Drink Water stupid!| |
-| |@<username>| |Tag one or multiple users to remind to drink| |
+| |@\<usernames\>| |Tag one or multiple users to remind to drink| |
 |slap| | |Slap the bitch. Haha!|☑|
-| |@<username>| |Tag one or multiple users to slap| |
+| |@\<usernames\>| |Tag one or multiple users to slap| |
 |mcserver| | |Get's the startus of on Minecraft Server| |
 |addprofile| | |Add's the database profile your the executing user.| |
 |balance| | |Check how much is on you.| |
 |gamble| | |Gamble what you have on you.| |
-| |<amont>| |Type in the amont you want to gamble| |
+| |\<amont\>| |Type in the amont you want to gamble| |
 |jobs| | |Get a Job!| |
 | |list| |list of jobs you can take| |
 | |leave| |leave a job| |
