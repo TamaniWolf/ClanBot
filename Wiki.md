@@ -4,7 +4,7 @@ Configuration options explained:
 
 |Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
-| | Normal Users | | |
+| | Normal Users | | | |
 |help| | |Is Displaying a list of commands in the chat.| |
 |blush| | |Makes someone blush.|☑|
 |german| | |If someone said something in german, count it!|☑|
@@ -30,5 +30,7 @@ Configuration options explained:
 | |fischer| | | |
 | |assassine| | | |
 |work| | |Work!| |
+| | Admins | | | |
+| | | | | |
 
 
