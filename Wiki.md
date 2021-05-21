@@ -9,7 +9,7 @@ Configuration options explained:
 |blush| | |Makes someone blush.|☑|
 |german| | |If someone said something in german, count it!| |
 |grouphug| | |Grouphugs everyone.|☑|
-| |@<usernames>| |Tag one or multiple users to grouphug| |
+| |@\<usernames\>| |Tag one or multiple users to grouphug| |
 |growl| | |Are Angry or annoyed by someone or just in bad mood? Growl!| |
 | |@<username>| |Tag one or multiple users to growl at| |
 |hug| | |Hug someone, get them some lovly hugs.|☑|
