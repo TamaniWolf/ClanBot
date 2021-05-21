@@ -3,7 +3,7 @@
 Configuration options explained:
 
 |Command|Arg0|Arg1|Description|NSFW version|
-|---|---------|----|-----------|------|
+|---|---|---|-----------|---|
 | | |Normal Users| | |
 |help| | |Is Displaying a list of commands in the chat.| |
 |blush| | |Makes someone blush.|☑|
