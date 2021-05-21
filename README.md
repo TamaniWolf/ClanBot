@@ -1,5 +1,5 @@
 # Clanbot
-[![Discord server](https://img.shields.io/discord/584905969637785612?color=%237289da&label=discord%20server&logo=discord)](https://discord.gg/UPaMDY9)
+[!(https://img.shields.io/discord/720746186788831323?color=%237289da&label=discord&logo=discord&style=flat-square)]
 
 **A simple, customizable Discord bot (plus a bunch of silly extras).**
 
