@@ -26,19 +26,19 @@ Configuration options explained:
 |jobs| | |Get a Job!| |
 | |list| |list of jobs you can take| |
 | |leave| |leave a job| |
-| |hunter| | | |
-| |fischer| | | |
-| |assassine| | | |
+| |hunter| |Hunting| |
+| |fischer| |Fisching| |
+| |assassine| |Kill| |
 |work| | |Work!| |
 | | Admins | | | |
-|adminhelp| | | | |
-|botinfo| | | | |
-|changelog| | | | |
-| | | | | |
-|ping| | | | |
-|reload| | | | |
-|restart| | | | |
-|shutdown| | | | |
+|adminhelp| | |help Text for Admins| |
+|botinfo| | |Bot infos| |
+|changelog| | |changelog of bot| |
+| |\<date from list\>| |changelog history| |
+|ping| | |ping, pong| |
+|reload| | |reload commands| |
+|restart| | |restarts bot if run with pm2| |
+|shutdown| | |shutdown bot if run with pm2| |
 |config| | |Edits the config files| |
 | |joinprofile|\<true/false\>|Turns Profile creating by joinen on(true) or off(false)| |
 | |commandprofile|\<true/false\>|Turns Profile creactin by command on(true) or off(false)| |
