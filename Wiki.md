@@ -42,44 +42,46 @@ commands explained:
 |shutdown| | |shutdown bot if run with pm2|
 #### Config
 Default is `false` with exception of `editconfig` `ping`, `shutdown`, `reload`, `restart`, `help` and `adminhelp`.
+on is = '`true`'
+off is = '`false`'
 |Command|Arg0|Arg1|Description|
 |---|---|---|-------------|
 |config| | |Edits the config files|
-| |joinprofile|\<true/false\>|Turns Profile creating by joinen on (true) or off (false)|
-| |commandprofile|\<true/false\>|Turns Profile creactin by command on (true) or off (false)|
-| |twitchboxart|\<true/false\>|Turns Twitch boxart on (true) or off (false)|
-| |twitch|\<true/false\>|Turns twitch on (true) or off (false)|
-| |reaction|\<true/false\>|Turns reaction on (true) or off (false)|
-| |cooldown|\<true/false\>|Turns Cooldown on (true) or off (false)|
-| |reload|\<true/false\>|Turns command Reload on (true) or off (false)|
-| |restart|\<true/false\>|Turns Bot restart on (true) or off (false)|
-| |shutdown|\<true/false\>|Turns Bot shutdown on (true) or off (false)|
-| |add|\<true/false\>|Turns add command on (true) or off (false)|
-| |adminhelp|\<true/false\>|Turns adminhelp on (true) or off (false)|
-| |botinfo|\<true/false\>|Turns botinfo on (true) or off (false)|
-| |changelog|\<true/false\>|Turns changelog on (true) or off (false)|
-| |clear|\<true/false\>|Turns chat clear on (true) or off (false)|
-| |editconfig|\<true/false\>|Turns config editing on (true) or off (false)|
-| |mute|\<true/false\>|Turns mute command on (true) or off (false)|
-| |ping|\<true/false\>|Turns ping command on (true) or off (false)|
-| |react|\<true/false\>|Turns add reactions to a message on (true) or off (false)|
-| |addprofile|\<true/false\>|Turns addprofile on (true) or off (false)|
-| |balance|\<true/false\>|Turns balance check on (true) or off (false)|
-| |gamble|\<true/false\>|Turns gamble on (true) or off (false)|
-| |jobs|\<true/false\>|Turns jobs on (true) or off (false)|
-| |work|\<true/false\>|Turns work on (true) or off (false)|
-| |blush|\<true/false\>|Turns blush on (true) or off (false)|
-| |german|\<true/false\>|Turns german on (true) or off (false)|
-| |grouphug|\<true/false\>|Turns grouphug on (true) or off (false)|
-| |growl|\<true/false\>|Turns growl on (true) or off (false)|
-| |hug|\<true/false\>|Turns hug on (true) or off (false)|
-| |hydrate|\<true/false\>|Turns hydrate on (true) or off (false)|
-| |slap|\<true/false\>|Turns slap on (true) or off (false)|
-| |help|\<true/false\>|Turns help on (true) or off (false)|
-| |mcserver|\<true/false\>|Turns mcserver on (true) or off (false)|
-| |reactionrole|\<true/false\>|Turns reaction roles on (true) or off (false)|
-| |royalnsfw|\<true/false\>|Turns text nsfw on (true) or off (false)|
-| |roylasfw|\<true/false\>|Turns text sfw on (true) or off (false)|
-| |wordreact|\<true/false\>|Turns wordreact on (true) or off (false)|
+| |joinprofile|\<true/false\>|Turns Profile creating by joinen on or off|
+| |commandprofile|\<true/false\>|Turns Profile creactin by command on or off|
+| |twitchboxart|\<true/false\>|Turns Twitch boxart on or off|
+| |twitch|\<true/false\>|Turns twitch on or off|
+| |reaction|\<true/false\>|Turns reaction on or off|
+| |cooldown|\<true/false\>|Turns Cooldown on on or off|
+| |reload|\<true/false\>|Turns command Reload on or off|
+| |restart|\<true/false\>|Turns Bot restart on or off|
+| |shutdown|\<true/false\>|Turns Bot shutdown on or off|
+| |add|\<true/false\>|Turns add command on on or off|
+| |adminhelp|\<true/false\>|Turns adminhelp on or off|
+| |botinfo|\<true/false\>|Turns botinfo on or off|
+| |changelog|\<true/false\>|Turns changelog on or off|
+| |clear|\<true/false\>|Turns chat clear on or off|
+| |editconfig|\<true/false\>|Turns config editing on or off|
+| |mute|\<true/false\>|Turns mute command on or off|
+| |ping|\<true/false\>|Turns ping command on or off|
+| |react|\<true/false\>|Turns add reactions to a message on or off|
+| |addprofile|\<true/false\>|Turns addprofile on or off|
+| |balance|\<true/false\>|Turns balance check on or off|
+| |gamble|\<true/false\>|Turns gamble on or off|
+| |jobs|\<true/false\>|Turns jobs on or off|
+| |work|\<true/false\>|Turns work on or off|
+| |blush|\<true/false\>|Turns blush on or off|
+| |german|\<true/false\>|Turns german on or off|
+| |grouphug|\<true/false\>|Turns grouphug on or off|
+| |growl|\<true/false\>|Turns growl on or off|
+| |hug|\<true/false\>|Turns hug on or off|
+| |hydrate|\<true/false\>|Turns hydrate on or off|
+| |slap|\<true/false\>|Turns slap on or off|
+| |help|\<true/false\>|Turns help on or off|
+| |mcserver|\<true/false\>|Turns mcserver on or off|
+| |reactionrole|\<true/false\>|Turns reaction roles on or off|
+| |royalnsfw|\<true/false\>|Turns text nsfw on or off|
+| |roylasfw|\<true/false\>|Turns text sfw on or off|
+| |wordreact|\<true/false\>|Turns wordreact on or off|
 
 
