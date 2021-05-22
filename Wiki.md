@@ -40,6 +40,7 @@ commands explained:
 |restart| | |restarts bot if run with pm2| |
 |shutdown| | |shutdown bot if run with pm2| |
 ###### Config
+|Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
 |config| | |Edits the config files| |
 | |joinprofile|\<true/false\>|Turns Profile creating by joinen on(true) or off(false)| |
