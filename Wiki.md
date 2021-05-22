@@ -1,4 +1,4 @@
-# Clanbot
+# RoyalBot
 
 commands explained:
 #### Normal Users
