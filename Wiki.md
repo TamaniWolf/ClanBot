@@ -41,6 +41,7 @@ commands explained:
 |restart| | |restarts bot if run with pm2| |
 |shutdown| | |shutdown bot if run with pm2| |
 #### Config
+Default is `false` with exception of `editconfig` `ping`, `shutdown`, `reload`, `restart`, `help` and `adminhelp`.
 |Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
 |config| | |Edits the config files| |
