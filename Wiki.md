@@ -39,7 +39,8 @@ commands explained:
 |reload| | |reload commands| |
 |restart| | |restarts bot if run with pm2| |
 |shutdown| | |shutdown bot if run with pm2| |
-### Config
+###### Config
+|---|---|---|-------------|---|
 |config| | |Edits the config files| |
 | |joinprofile|\<true/false\>|Turns Profile creating by joinen on(true) or off(false)| |
 | |commandprofile|\<true/false\>|Turns Profile creactin by command on(true) or off(false)| |
