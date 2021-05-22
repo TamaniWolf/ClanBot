@@ -31,7 +31,7 @@ https://nodejs.org/en/download/
 
 ### Installation
 
-To set up Clanbot, download the latest repository ZIP by asking Tamni Wolf
+To set up Royalbot, download the latest repository ZIP by asking Tamni Wolf
     
 Once installed, enter the directory and install the dependencies:
 
@@ -53,7 +53,7 @@ And to get the dependencie packages in the bot:
 Note that you will need to set up some external applications: 
 
 #### Discord bot application
-Your Discord bot needs to be registered as an application, and you will need a bot token  (`DISCORD_BOT_TOKEN` in Clanbot .env).
+Your Discord bot needs to be registered as an application, and you will need a bot token  (`DISCORD_BOT_TOKEN` in .env).
 
 Follow [this guide](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) for more information.
 
@@ -71,11 +71,11 @@ To begin the authorization flow, you'll need to complete the authorization promp
 https://id.twitch.tv/oauth2/authorize?client_id=<YOUR_CLIENT_ID_HERE>&response_type=token&redirect_uri=http://localhost
 ```
 
-You can grab the `access_token` from the redirect URL in your browser, and store it as `TWITCH_OAUTH_TOKEN` in Clanbot .env . 
+You can grab the `access_token` from the redirect URL in your browser, and store it as `TWITCH_OAUTH_TOKEN` in .env . 
 
 ### Configuration
  
-To configure Clanbot, use the included `config.json` and `.env` and enter or customize the values in the file.
+To configure RoyalBot, use the included `config.json` and `.env` and enter or customize the values in the file.
 
 ```json
 {
@@ -133,15 +133,17 @@ Configuration options explained:
 |`twitch_check_interval_ms`| |How often to poll the Twitch API and send or update live embeds.|
 |`twitch_use_boxart`| |If true, use alternate Live Embed style that includes game boxart as a thumbnail image if available.|
 
-### Starting Clanbot
+### Starting RoyalBot
 
 Once the application has been configured, start it using `node` from the installation directory:
 
     node .
 
 Or with pm2.
+
+    pm2 start royalbot.js
   
-### Inviting CLanbot
+### Inviting RoyalBot
 
 Send the following link to the admin of a Discord server to let them invite the Bot:
 
