@@ -43,7 +43,7 @@ commands explained:
 #### Config
 Default is `false` with exception of `editconfig` `ping`, `shutdown`, `reload`, `restart`, `help` and `adminhelp`.
 |Command|Arg0|Arg1|Description|
-|---|---|---|-------------|---|
+|---|---|---|-------------|
 |config| | |Edits the config files|
 | |joinprofile|\<true/false\>|Turns Profile creating by joinen on(true) or off(false)|
 | |commandprofile|\<true/false\>|Turns Profile creactin by command on(true) or off(false)|
