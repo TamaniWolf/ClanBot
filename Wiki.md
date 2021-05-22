@@ -1,10 +1,9 @@
 # Clanbot
 
 commands explained:
-
+##### Normal Users
 |Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
-| | Normal Users | | | |
 |help| | |Is Displaying a list of commands in the chat.| |
 |blush| | |Makes someone blush.|☑|
 |german| | |If someone said something in german, count it!|☑|
@@ -30,7 +29,9 @@ commands explained:
 | |fischer| |Fisching| |
 | |assassine| |Kill| |
 |work| | |Work!| |
-| | Admins | | | |
+##### Admins
+|Command|Arg0|Arg1|Description|NSFW version|
+|---|---|---|-------------|---|
 |adminhelp| | |help Text for Admins| |
 |botinfo| | |Bot infos| |
 |changelog| | |changelog of bot| |
@@ -39,7 +40,7 @@ commands explained:
 |reload| | |reload commands| |
 |restart| | |restarts bot if run with pm2| |
 |shutdown| | |shutdown bot if run with pm2| |
-###### Config
+##### Config
 |Command|Arg0|Arg1|Description|NSFW version|
 |---|---|---|-------------|---|
 |config| | |Edits the config files| |
