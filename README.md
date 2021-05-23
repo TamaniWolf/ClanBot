@@ -105,7 +105,7 @@ DISCORD_ANNOUNCE_CHANNEL = <replace me>
 TWITCH_CLIENT_ID = <replace me>
 TWITCH_OAUTH_TOKEN = <replace me>
 TWITCH_USE_BOXART = false
-
+```
 Configuration options explained:
 
 |Key|Required?|Description|
