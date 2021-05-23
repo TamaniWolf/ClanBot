@@ -4,5 +4,9 @@
     "twitch-name-2": "here"
   },
   "twitch_check_interval_ms": 60000,
-  "twitch_use_boxart": true
+  "twitch_use_boxart": false,
+  "set": {
+    "profilenewjoin": false,
+    "profilenewcommand": false
+  }
 }
