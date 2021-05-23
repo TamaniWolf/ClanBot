@@ -1,0 +1,33 @@
+{
+    "roles":{
+        "role1":"",
+        "role2":"",
+        "role3":"",
+        "role4":"",
+        "role5":"",
+        "role6":"",
+        "role7":"",
+        "role8":"",
+        "role9":"",
+        "role10":"",
+        "role11":"",
+        "role12":"",
+        "role13":"",
+        "role14":"",
+        "role15":""
+    },
+    "admin":{
+        "admin1":"",
+        "admin2":"",
+        "admin3":"",
+        "admin4":"",
+        "admin5":""
+    },
+    "bot":{
+        "bot1":"",
+        "bot2":"",
+        "bot3":"",
+        "bot4":"",
+        "bot5":""
+    }
+}
