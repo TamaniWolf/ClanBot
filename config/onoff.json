@@ -14,12 +14,12 @@
                 "profile": false
             },
             "add": false,
-            "adminhelp": false,
+            "adminhelp": true,
             "botinfo": false,
             "changelog": false,
             "clear": false,
             "consolecolors": false,
-            "editconfig": false,
+            "editconfig": true,
             "mute": false,
             "ping": true,
             "react": false
@@ -45,7 +45,7 @@
             "level": {
                 "1": false
             },
-            "help": false,
+            "help": true,
             "mcserver": false
         },
         "wordreaction": {
