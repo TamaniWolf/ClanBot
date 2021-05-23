@@ -1,0 +1,16 @@
+const lang = require('../../lang/en_US.json');
+const config = require('../../config.json');
+const chalk = require('chalk');
+var moment = require('moment');
+require('dotenv').config();
+
+module.exports = {
+	name: "",
+	aliases: [''],
+	description: "",
+	guildOnly: true,
+	async execute(client, message, args) {
+		//code to run when command is sent
+		console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.default.log)));
+	}
+}
