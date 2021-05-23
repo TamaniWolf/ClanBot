@@ -35,12 +35,12 @@ To set up Royalbot, download the latest repository ZIP by asking Tamni Wolf
     
 Once installed, enter the directory and install the dependencies:
 
-    cd Clanbot
+    cd RoyalBot
     npm install
 
 I recommend to use pnpm for space efictionsy of the dependencies:
 
-    cd Clanbot
+    cd RoyalBot
     npm i g- pnpm
     pnpm i -g <package>
 
@@ -84,12 +84,16 @@ To configure RoyalBot, use the included `config.json` and `.env` and enter or cu
     "twitch-name-2": "here"
   },
   "twitch_check_interval_ms": 60000,
-  "twitch_use_boxart": true
+  "twitch_use_boxart": false,
+  "set": {
+    "profilenewjoin": false,
+    "profilenewcommand": false
+  }
 }
 ```    
 ```json
 //For Settings in .env use (process.env.) and (config.) in Config.json
-//-- Anxiety --//
+//-- Royal Bot --//
 TOKEN = <replace me>
 PREFIX = <replace me>
 IP = <replace me>
@@ -100,20 +104,7 @@ TWITCH_CHANNELS = <replace me>
 DISCORD_ANNOUNCE_CHANNEL = <replace me>
 TWITCH_CLIENT_ID = <replace me>
 TWITCH_OAUTH_TOKEN = <replace me>
-TWITCH_USE_BOXART = true
-
-//-Channels
-CHANNEL_1 = <replace id>
-
-//-Admin Roles+Channels
-ADMIN_CHANNEL_1 = <replace id>
-ADMIN_CHANNEL_2 = <replace id>
-ADMIN_CHANNEL_3 = <replace id>
-ADMIN_ROLE_1 = <replace id>
-ADMIN_ROLE_2 = <replace id>
-ADMIN_ROLE_3 = <replace id>
-ADMIN_ROLE_4 = <replace id>
-```    
+TWITCH_USE_BOXART = false
 
 Configuration options explained:
 
