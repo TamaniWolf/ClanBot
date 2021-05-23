@@ -1,0 +1,19 @@
+{
+    "dbNumber": 1,
+    "version": 1,
+    "member": {
+        "guildID": null,
+        "joinedTimestamp": null,
+        "lastMessageChannelID": null,
+        "premiumSinceTimestamp": null,
+        "deleted": false,
+        "nickname": null,
+        "userID": null,
+        "displayName": null
+    },
+    "cooldown": {
+        "newjoin": "01/01/2121-00:01:00-am",
+        "gamble": "01/01/2121-00:01:00-am",
+        "job": "01/01/2121-00:01:00-am"
+    }
+}
