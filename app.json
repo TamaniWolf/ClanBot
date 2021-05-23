@@ -1,0 +1,24 @@
+
+{
+    "name": "royal",
+    "description": "Luci is the counterpart to Lupi and is also the Bot for The Familie/Community.",
+    "repository": "./Bots/repository/Luci/",
+    "env": {
+      "token": {
+        "description": "Your discord bot's token.",
+        "required": true
+      },
+      "ip": {
+        "description": "Main mc server's ip.",
+        "required": true
+      },
+      "port": {
+        "description": "Main mc server's port, if your not sure set it to '25566'.",
+        "required": true
+      },
+      "prefix": {
+        "description": "Your discord bot's prefix, if your not sure then set it to '='.",
+        "required": true
+      }
+    }
+}
