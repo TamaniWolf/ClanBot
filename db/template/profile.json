@@ -1,0 +1,35 @@
+{
+    "dbNumber": 1,
+    "version": 1,
+    "member": {
+        "guildID": null,
+        "joinedTimestamp": null,
+        "lastMessageChannelID": null,
+        "premiumSinceTimestamp": null,
+        "deleted": null,
+        "nickname": null,
+        "userID": null,
+        "displayName": null
+    },
+    "coins": 100,
+    "gamble": {
+        "gambleToken": 5,
+        "gambleCooldown": false
+    },
+    "job": {
+        "hasjob": false,
+        "jobs": "None",
+        "jobexp": {
+            "hunter": 0,
+            "fischer": 0,
+            "assassine": 0
+        },
+        "jobworked": 0
+    },
+    "experience": {
+        "exp": 0,
+        "level": 0,
+        "stars": 0
+    },
+    "inventory": false
+}
