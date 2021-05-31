@@ -11,6 +11,8 @@
  - Monitor and announce Twitch channels going live with customizable `@mentions`.
  - Live stream card that is automatically updated with the stream status, current game and viewership statistics.
 
+More in the **[Wiki](https://github.com/TamaniWolf/RoyalBot/wiki)**
+
 ## Using the bot
 
 You have two options:
