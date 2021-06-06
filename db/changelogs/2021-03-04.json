@@ -1,4 +1,0 @@
-{
-    "embed": "Update to version: 2.4 \n+ Added Shutdown command \n+ Added Restart command \n+ Added Changelog command \n+Added Changelogs \n+ Added counter for command german \n+ Moved more data in to the config file .env for easier editing/changing \n+ Added Option to make Self assining roles via reactions \n+ Added command react to spawn the reactions (The bot only knows the roles we set in the .env config) \n+ Updated lang/en_US.json \n+ Added NSFW variables to multible commands \n- Removed unfinished/old/unused NSFW commands \n- Removed old/unused code \n- Removed Luci \"strip down\"",
-    "date": "2021/03/04"
-}
