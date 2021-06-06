@@ -1,6 +1,8 @@
-const lang = require('../../../lang/en_US.json');
+const configmain = require('../../../config/config.json');
+const configchannel = require('../../../config/channels.json');
 const configonoff = require('../../../config/onoff.json');
-const configg = require('../../../config/config.json');
+const configrole = require('../../../config/roles.json');
+const lang = require('../../.' + configmain.lang);
 const chalk = require('chalk');
 const Math = require('mathjs');
 const fs = require('fs');
@@ -33,15 +35,15 @@ module.exports = {
             let memberjobs = profiledataread.jobs
 
             if (!args[0]) {
-                message.reply('Type __!jobs list__ for a list and information about jobs.')
+                message.reply('Type __c.jobs list__ for a list and information about jobs.')
             }
 
             if (args[0] === "list") {
                 message.channel.send(
     `       ***__Jobs Board.__***
-        To obtain a job, type __!jobs <job-name>__.
-        To leave a job, type __!jobs leave__.
-        To work as your job, type __!work__.
+        To obtain a job, type __c.jobs <job-name>__.
+        To leave a job, type __c.jobs leave__.
+        To work as your job, type __c.work__.
         --------------------
         **Hunter**: Hunts Animals and Monsters.
         **Fisher**: Fishes Fish.
