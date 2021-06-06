@@ -1,8 +1,8 @@
+const configonoff = require('./config/onoff.json');
+const chalk = require('chalk');
 const request = require('request');
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
-const configonoff = require('./config/onoff.json');
 var moment = require('moment');
 
 if(configonoff.mcping === true) {
