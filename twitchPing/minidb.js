@@ -1,6 +1,6 @@
-const fs = require('fs');
 const configonoff = require('../config/onoff.json');
 const chalk = require('chalk');
+const fs = require('fs');
 var moment = require('moment');
 
 if(configonoff.twitch === true){
