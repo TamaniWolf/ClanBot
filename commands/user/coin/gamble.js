@@ -1,6 +1,8 @@
-const lang = require('../../../lang/en_US.json');
+const configmain = require('../../../config/config.json');
+const configchannel = require('../../../config/channels.json');
 const configonoff = require('../../../config/onoff.json');
-const configg = require('../../../config/config.json');
+const configrole = require('../../../config/roles.json');
+const lang = require('../../.' + configmain.lang);
 const chalk = require('chalk');
 const Math = require('mathjs');
 const fs = require('fs');
@@ -55,19 +57,9 @@ module.exports = {
 										let gambleMath = Math.floor(Math.random() * 2)
 										if (gambleMath === 0) {
 											gambleNumberMinus = Math.subtract(membercoins, args[0])
-											let gambleMinuswrite = { 
-												dbNumber: profiledataread.dbNumber,
-												version: profiledataread.version,
-												member: profiledataread.member,
-												coins: gambleNumberMinus,
-												gamble: {
-													gambleToken: gambleTokenMinus,
-													gambleCooldown: false
-												},
-												job: profiledataread.job,
-												experience: profiledataread.experience,
-												inventory: profiledataread.inventory
-											};
+											profiledataread.coins = gambleNumberMinus;
+											profiledataread.gamble.gambleToken = gambleTokenMinus;
+											profiledataread.gamble.gambleCooldown = false;
 											let datacount = JSON.stringify(gambleMinuswrite, null, 2);
 											fs.writeFileSync(profileData, datacount);
 											message.reply(`You lost ${args[0]} Meepies. Now has ${gambleNumberMinus}.`)
@@ -75,34 +67,15 @@ module.exports = {
 												message.reply(`You used all your 5 Gamble Tokens. Wait 1 Day for refill.`)
 												console.log(`${member.id} : ${member.displayName}'s Gamble Tokens are out. Added to Cooldown.`)
 												// DB Number count
-												let gamblecoolddownwrite = { 
-													dbNumber: cooldowndataread.dbNumber,
-													version: cooldowndataread.version,
-													member: cooldowndataread.member,
-													cooldown: {
-														newjoin: cooldowndataread.cooldown.newjoin,
-														gamble: onedaycooldown,
-														job: cooldowndataread.cooldown.job
-													}
-												};
+												cooldowndataread.cooldown.gamble= onedaycooldown;
 												let datacount = JSON.stringify(gamblecoolddownwrite, null, 2);
 												fs.writeFileSync(cooldownData, datacount);
 											}
 										} else if (gambleMath === 1) {
 											gambleNumberPlus = Math.add(membercoins, args[0])
-											let gamblePluswrite = { 
-												dbNumber: profiledataread.dbNumber,
-												version: profiledataread.version,
-												member: profiledataread.member,
-												coins: gambleNumberPlus,
-												gamble: {
-													gambleToken: gambleTokenMinus,
-													gambleCooldown: false
-												},
-												job: profiledataread.job,
-												experience: profiledataread.experience,
-												inventory: profiledataread.inventory
-											};
+											profiledataread.coins = gambleNumberPlus;
+											profiledataread.gamble.gambleToken = gambleTokenMinus;
+											profiledataread.gamble.gambleCooldown = false;
 											let datacount = JSON.stringify(gamblePluswrite, null, 2);
 											fs.writeFileSync(profileData, datacount);
 											message.reply(`You won ${args[0]} Meepies. Now has ${gambleNumberPlus}.`)
@@ -110,16 +83,7 @@ module.exports = {
 												message.reply(`You used all your 5 Gamble Tokens. Wait 1 Day for refill.`)
 												console.log(`${member.id} : ${member.displayName}'s Gamble Tokens are out. Added to Cooldown.`)
 												// DB Number count
-												let gamblecoolddownwrite = { 
-													dbNumber: cooldowndataread.dbNumber,
-													version: cooldowndataread.version,
-													member: cooldowndataread.member,
-													cooldown: {
-														newjoin: cooldowndataread.cooldown.newjoin,
-														gamble: onedaycooldown,
-														job: cooldowndataread.cooldown.job
-													}
-												};
+												cooldowndataread.cooldown.gamble = onedaycooldown;
 												let datacount = JSON.stringify(gamblecoolddownwrite, null, 2);
 												fs.writeFileSync(cooldownData, datacount);
 											}
