@@ -7,7 +7,6 @@ const configmain = require('./config/config.json');
 const configchannel = require('./config/channels.json');
 const configonoff = require('./config/onoff.json');
 const configrole = require('./config/roles.json');
-const discord_mentions = require('./config/discord_mentions.json');
 const lang = require(configmain.lang);
 const chalk = require('chalk');
 //MC Ping const
@@ -327,7 +326,7 @@ console.log(chalk.yellow(lang.prefix.clan + chalk.white(' ▪ ▪ ▪ ▪ ▪ ',
                                 }
                                 // Expand the message with a @mention for "here" or "everyone"
                                 // We don't do this in updates because it causes some people to get spammed
-                                let mentionMode = (discord_mentions && discord_mentions[streamData.user_name.toLowerCase()]) || null;
+                                let mentionMode = (configmain.discord_mentions && configmain.discord_mentions[streamData.user_name.toLowerCase()]) || null;
                                 if (mentionMode) {
                                     mentionMode = mentionMode.toLowerCase();
                                     if (mentionMode === "everyone" || mentionMode === "here") {
