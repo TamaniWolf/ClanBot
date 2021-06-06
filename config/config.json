@@ -1,12 +1,10 @@
 {
-  "discord_mentions": {
-    "twitch-name-1": "everyone",
-    "twitch-name-2": "here"
-  },
+  "twitch_channels": "<REPLACE_ME>, <REPLACE_ME_2>",
   "twitch_check_interval_ms": 60000,
   "twitch_use_boxart": false,
   "set": {
     "profilenewjoin": false,
     "profilenewcommand": false
-  }
+  },
+  "lang": "./lang/en_US.json"
 }
