@@ -1,0 +1,10 @@
+{
+    "basic": {
+        "hunter": "Hunter",
+        "fisher": "Fisher",
+        "thife": "Thife"
+    },
+    "special": {
+        "nugget": "Nugget"
+    }
+}
