@@ -1,6 +1,7 @@
-const lang = require('../lang/en_US.json');
-const config = require('../config/config.json');
+const configmain = require('../config/config.json');
 const configonoff = require('../config/onoff.json');
+const discord_mentions = require('../config/discord_mentions.json');
+const lang = require('.' + configmain.lang);
 const chalk = require('chalk');
 var moment = require('moment');
 require('dotenv').config();
@@ -25,7 +26,7 @@ if(configonoff.twitch === true) {
         static start() {
             // Load channel names from config
             this.channelNames = [];
-            process.env.TWITCH_CHANNELS.split(', ').forEach((channelName) => {
+            discord_mentions.twitch_channels.split(', ').forEach((channelName) => {
                 if (channelName) {
                     this.channelNames.push(channelName.toLowerCase());
                 }
@@ -36,7 +37,7 @@ if(configonoff.twitch === true) {
             }
 
             // Configure polling interval
-            let checkIntervalMs = parseInt(config.twitch_check_interval_ms);
+            let checkIntervalMs = parseInt(configmain.twitch_check_interval_ms);
             if (isNaN(checkIntervalMs) || checkIntervalMs < TwitchMonitor.MIN_POLL_INTERVAL_MS) {
                 // Enforce minimum poll interval to help avoid rate limits
                 checkIntervalMs = TwitchMonitor.MIN_POLL_INTERVAL_MS;
