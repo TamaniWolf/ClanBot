@@ -1,7 +1,9 @@
-const lang = require('../../../lang/en_US.json');
-const chalk = require('chalk');
+const configmain = require('../../../config/config.json');
 const configchannel = require('../../../config/channels.json');
 const configonoff = require('../../../config/onoff.json');
+const configrole = require('../../../config/roles.json');
+const lang = require('../../.' + configmain.lang);
+const chalk = require('chalk');
 var moment = require('moment');
 require('dotenv').config();
 
@@ -16,13 +18,16 @@ module.exports = {
             const nsfw2 = configchannel.nsfw.nsfw2
             const nsfw3 = configchannel.nsfw.nsfw3
             const nsfw4 = configchannel.nsfw.nsfw4
-            const nsfw5 = channelconfig.nsfw.nsfw5
+            const nsfw5 = configchannel.nsfw.nsfw5
+            const nsfwVoice1 = configchannel.nsfwVoice1
+            const nsfwVoice2 = configchannel.nsfwVoice2
+            const nsfwVoice3 = configchannel.nsfwVoice3
             if (message.channel.id === nsfw1 || message.channel.id === nsfw2 || message.channel.id === nsfw3 || message.channel.id === nsfw4 || message.channel.id === nsfw5) {
-                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.blush.log)));
+                //console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.blush.log)));
                 //const taggedUser = message.mentions.users.first();
                 message.channel.send(lang.blush.nsfw);
             } else {
-                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.blush.log)));
+                //console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.blush.log)));
                 //const taggedUser = message.mentions.users.first();
                 message.channel.send(lang.blush.text);
             }
