@@ -1,4 +1,5 @@
-const lang = require('../../lang/en_US.json');
+const configmain = require('../../config/config.json')
+const lang = require('../.' + configmain.lang);
 const chalk = require('chalk');
 const fs = require('fs');
 var moment = require('moment');
@@ -29,7 +30,7 @@ module.exports = async (Discord, client, message) => {
     if(command) command.execute(client, message, args, Discord);
     } catch (error){
         message.reply(lang.error.errorcommand);
-        console.log(chalk.yellow('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(error)));
+        console.log(chalk.yellow('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(error)));
     }
 
 }
