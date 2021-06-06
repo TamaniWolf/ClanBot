@@ -1,10 +1,10 @@
+const configmain = require('../config/config.json');
+const configonoff = require('../config/onoff.json');
+const lang = require('.' + configmain.lang);
+const chalk = require('chalk');
+const request = require('request');
 const MiniDb = require('./minidb');
 const FeedParser = require('feedparser');
-const request = require('request');
-const lang = require('../lang/en_US.json');
-const configonoff = require('../config/onoff.json');
-const config = require('../config/config.json');
-const chalk = require('chalk');
 var moment = require('moment');
 
 if(configonoff.twitch === true) {
@@ -12,7 +12,7 @@ if(configonoff.twitch === true) {
 
     class FooduseMonitor {
         static start() {
-            if (!config.discord_fooduse_channel) {
+            if (!configmain.discord_fooduse_channel) {
                 // Fooduse integration is disabled (no channel configured)
                 return;
             }
@@ -100,7 +100,7 @@ if(configonoff.twitch === true) {
 
         static doAnnounce(rssItem) {
             this.targetChannels = DiscordChannelSync.getChannelList(global.discordJsClient,
-                config.discord_fooduse_channel, false);
+                configmain.discord_fooduse_channel, false);
 
             let emojiTxtBob = global.getServerEmoji("BOB_USE", true);
             let formattedMessage = `${rssItem.link} ${emojiTxtBob}`;
