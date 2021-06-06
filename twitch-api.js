@@ -13,7 +13,7 @@ if(configonoff.twitch === true) {
     static get requestOptions() {
       // Automatically remove "oauth:" prefix if it's present
       const oauthPrefix = "oauth:";
-      let oauthBearer = twitchtoken.twitchoauthtoken;
+      let oauthBearer = twitchtoken.twitch_oauth_token;
       if (oauthBearer.startsWith(oauthPrefix)) {
         oauthBearer = oauthBearer.substr(oauthPrefix.length);
       }
