@@ -1,8 +1,8 @@
-const axios = require('axios');
-const chalk = require('chalk');
-var moment = require('moment');
 const configonoff = require('./config/onoff.json');
-const configtoken = require('./utils/twitchRequest/twitchrequest.json')
+const twitchtoken = require('./utils/twitchRequest/twitchrequest.json')
+const chalk = require('chalk');
+const axios = require('axios');
+var moment = require('moment');
 require('dotenv').config();
 
 if(configonoff.twitch === true) {
@@ -13,8 +13,7 @@ if(configonoff.twitch === true) {
     static get requestOptions() {
       // Automatically remove "oauth:" prefix if it's present
       const oauthPrefix = "oauth:";
-      let oauthBearer = configtoken.twitchoauthtoken;
-      // console.log(configtoken.twitchoauthtoken)
+      let oauthBearer = twitchtoken.twitchoauthtoken;
       if (oauthBearer.startsWith(oauthPrefix)) {
         oauthBearer = oauthBearer.substr(oauthPrefix.length);
       }
