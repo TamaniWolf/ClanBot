@@ -1,12 +1,12 @@
 const configmain = require('../config/config.json');
 const configonoff = require('../config/onoff.json');
-const discord_mentions = require('../config/discord_mentions.json');
 const lang = require('.' + configmain.lang);
 const chalk = require('chalk');
 var moment = require('moment');
 require('dotenv').config();
 const TwitchApi = require('../twitch-api');
 const MiniDb = require('./minidb');
+const { config } = require('dotenv');
 
 if(configonoff.twitch === true) {
     class TwitchMonitor {
@@ -26,7 +26,7 @@ if(configonoff.twitch === true) {
         static start() {
             // Load channel names from config
             this.channelNames = [];
-            discord_mentions.twitch_channels.split(', ').forEach((channelName) => {
+            configmain.twitch_channels.split(', ').forEach((channelName) => {
                 if (channelName) {
                     this.channelNames.push(channelName.toLowerCase());
                 }
