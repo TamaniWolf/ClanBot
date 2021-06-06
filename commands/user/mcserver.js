@@ -1,10 +1,13 @@
 const mcping = require('mc-ping-updated');
-const lang = require('../../lang/en_US.json');
+const configmain = require('../../config/config.json');
+const configchannel = require('../../config/channels.json');
 const configonoff = require('../../config/onoff.json');
+const configrole = require('../../config/roles.json');
+const lang = require('../.' + configmain.lang);
 const chalk = require('chalk');
+const escape = require('markdown-escape');
 var moment = require('moment');
 require('dotenv').config();
-const escape = require('markdown-escape');
 var hasIcon = 'yes';
 embedColor = ("0x" + "#00ba3b");
 embedColorOff = ("0x" + "#b51f49");
@@ -18,11 +21,11 @@ module.exports = {
         if(configonoff.command.user.mcserver === true) {
             if(configonoff.mcping === true) {
                 //code to run when command is sent
-                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.mc.log)));
+                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.mc.log)));
                 mcping(process.env.IP, 25300, function (err, res) {
                     if (err) {
-                        console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(err)));
-                        message.channel.send('Error getting server status.');
+                        console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(err)));
+                        message.channel.send(lang.mc.error);
                         return;
                     } else {
                         //console.log('RES:', res)
@@ -39,31 +42,31 @@ module.exports = {
                         }
                         let onlinePlayers = [];
                         if (typeof res.players.sample == 'undefined') {
-                            serverStatus = '*No one is playing!*';
+                            serverStatus = lang.mc.noplayer;
                         } else {
                             for (var i = 0; i < res.players.sample.length; i++) {
                                 onlinePlayers.push(res.players.sample[i].name);
                             };
                             onlinePlayers = escape(onlinePlayers.sort().join(', ')).replace(/\u00A7[0-9A-FK-OR]|\\n/ig,'');
                             serverStatus = '**' + res.players.online + '/' + res.players.max +
-                                '**' + ' player(s) online.\n\n' + onlinePlayers;
+                                '**' + ` ${lang.mc.playeron}\n\n` + onlinePlayers;
 
                             console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + '][MC]' + chalk.white('Server Status', serverStatus)));
                         };
                         if (hasIcon === 'yes') {
                             const buffer = Buffer.from(favicon, 'base64')
                             const serverEmbedicon = new Discord.MessageEmbed().attachFiles({ attachment: buffer,
-                                name: 'icon.png' }).setTitle('Status for ' +
+                                name: 'icon.png' }).setTitle(lang.mc.statusfor +
                                 process.env.IP + ':').setColor(embedColor).setDescription(
-                                serverStatus).setThumbnail('attachment://icon.png').addField("IP:",
+                                serverStatus).setThumbnail('attachment://icon.png').addField(lang.mc.ip,
                                 process.env.IP).addField(
-                                "Server version:", res.version.name)
+                                lang.mc.version, res.version.name)
                             message.channel.send(serverEmbedicon);
                         } else if (hasIcon === 'no') {
                             const serverEmbedNoIcon = new Discord.MessageEmbed().setTitle(
-                                    'Status for ' + process.env.MCSNAME + ':').setColor(embedColor)
-                                .setDescription(serverStatus).addField("IP:",
-                                    process.env.IP).addField("Server version:",
+                                lang.mc.statusfor + process.env.MCSNAME + ':').setColor(embedColor)
+                                .setDescription(serverStatus).addField(lang.mc.ip,
+                                    process.env.IP).addField(lang.mc.version,
                                     res.version.name)
                             message.channel.send(serverEmbedNoIcon);
                         }
