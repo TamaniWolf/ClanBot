@@ -1,6 +1,8 @@
-const lang = require('../../../lang/en_US.json');
+const configmain = require('../../../config/config.json');
+const configchannel = require('../../../config/channels.json');
 const configonoff = require('../../../config/onoff.json');
-const configg = require('../../../config/config.json');
+const configrole = require('../../../config/roles.json');
+const lang = require('../../.' + configmain.lang);
 const chalk = require('chalk');
 const fs = require('fs');
 var moment = require('moment');
@@ -35,11 +37,11 @@ module.exports = {
 			
 					let membercoins = profiledataread.coins
 				message.reply(lang.balance.text + membercoins)
-				console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.balance.log)));
+				console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.balance.log)));
 				}
 			} else if (message.member.roles.cache.has(lupi) || message.member.roles.cache.has(mod) || message.member.roles.cache.has(wolf)) {
 				if (!message.mentions.users.size) {
-					console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.balance.error)));
+					console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.balance.error)));
 					return message.reply(lang.error.taggs);
 				}
 				const taggedUserID = message.mentions.users.first();
