@@ -1,58 +1,58 @@
 {
-    "twitch": false,
-    "reaction": false,
-    "cooldown": false,
-    "mcping": false,
-    "command": {
-        "admin": {
-            "boot": {
-                "reload": true,
-                "restart": true,
-                "shutdown": true
-            },
-            "eco": {
-                "profile": false
-            },
-            "add": false,
-            "adminhelp": true,
-            "botinfo": false,
-            "changelog": false,
-            "clear": false,
-            "consolecolors": false,
-            "editconfig": true,
-            "mute": false,
-            "ping": true,
-            "react": false
-        },
-        "user": {
-            "eco": {
-                "addprofile": false,
-                "balance": false,
-                "gamble": false,
-                "jobs": false,
-                "test": false,
-                "work": false
-            },
-            "fun": {
-                "blush": false,
-                "german": false,
-                "grouphug": false,
-                "growl": false,
-                "hug": false,
-                "hydrate": false,
-                "slap": false
-            },
-            "level": {
-                "1": false
-            },
-            "help": true,
-            "mcserver": false
-        },
-        "wordreaction": {
-            "reactionrole": false,
-            "royalnsfw": false,
-            "royalsfw": false,
-            "wordreact": false
-        }
-    } 
+  "twitch": false,
+  "reaction": false,
+  "cooldown": false,
+  "mcping": false,
+  "command": {
+    "admin": {
+      "boot": {
+        "reload": true,
+        "restart": true,
+        "shutdown": true
+      },
+      "eco": {
+        "profile": false
+      },
+      "add": false,
+      "adminhelp": true,
+      "botinfo": false,
+      "changelog": false,
+      "clear": false,
+      "consolecolors": false,
+      "editconfig": true,
+      "mute": false,
+      "ping": true,
+      "react": false
+    },
+    "user": {
+      "eco": {
+        "addprofile": false,
+        "balance": false,
+        "gamble": false,
+        "jobs": false,
+        "test": false,
+        "work": false
+      },
+      "fun": {
+        "blush": false,
+        "german": false,
+        "grouphug": false,
+        "growl": false,
+        "hug": false,
+        "hydrate": false,
+        "slap": false
+      },
+      "level": {
+        "1": false
+      },
+      "help": true,
+      "mcserver": false
+    },
+    "wordreaction": {
+      "reactionrole": false,
+      "clannsfw": false,
+      "clansfw": false,
+      "wordreact": false
+    }
+  }
 }
