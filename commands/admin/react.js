@@ -1,9 +1,10 @@
-const lang = require('../../lang/en_US.json');
+const configmain = require('../../config/config.json');
+const configchannel = require('../../config/channels.json');
+const configonoff = require('../../config/onoff.json');
+const configrole = require('../../config/roles.json');
+const lang = require('../.' + configmain.lang);
 const chalk = require('chalk');
 var moment = require('moment');
-const configonoff = require('../../config/onoff.json');
-const channelconfig = require('../../config/channels.json');
-const roleconfig = require('../../config/roles.json');
 require('dotenv').config();
 
 module.exports = {
@@ -13,17 +14,19 @@ module.exports = {
     guildOnly: true,
     async execute(client, message, args) {
         if(configonoff.command.admin.react === true) {
-            const adminchannel1 = channelconfig.admin.admin1;
-            const adminchannel2 = channelconfig.admin.admin2;
-            const adminchannel3 = channelconfig.admin.admin3;
-            const roleChannel1 = channelconfig.reaction.channel1;
-            const rolemessage1 = channelconfig.reaction.message.message1;
-            const admin1 = roleconfig.admin.admin1;
-            const admin2 = roleconfig.admin.admin2;
-            const admin3 = roleconfig.admin.admin3;
-            if(message.channel.id === adminchannel1 || message.channel.id === adminchannel2) {
-                if (message.member.roles.cache.has(admin1) || message.member.roles.cache.has(admin2) || message.member.roles.cache.has(admin3)) {
-                    message.royal.channels.fetch(roleChannel1).then(channel => {
+            const adminchannel1 = configchannel.admin.admin1;
+            const adminchannel2 = configchannel.admin.admin2;
+            const adminchannel3 = configchannel.admin.admin3;
+            const adminchannel4 = configchannel.admin.admin4;
+            const adminchannel5 = configchannel.admin.admin5;
+            const admin1 = configrole.admin.admin1;
+            const admin2 = configrole.admin.admin2;
+            const admin3 = configrole.admin.admin3;
+            const admin4 = configrole.admin.admin4;
+            const admin5 = configrole.admin.admin5;
+            if(message.channel.id === adminchannel1 || message.channel.id === adminchannel2 || message.channel.id === adminchannel3 || message.channel.id === adminchannel4 || message.channel.id === adminchannel5) {
+                if(message.member.roles.cache.has(admin1) || message.member.roles.cache.has(admin2) || message.member.roles.cache.has(admin3) || message.member.roles.cache.has(admin4) || message.member.roles.cache.has(admin5)) {
+                    message.clan.channels.fetch(roleChannel1).then(channel => {
                         channel.messages.fetch(rolemessage1).then(message => {
                             message.react("⛏️");
                             message.react("<:EmoteSus:810274377098199050>");
@@ -31,12 +34,12 @@ module.exports = {
                             // message.react("🍵");
                         })
                     })
-                    console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.admin.ping.log)));
+                    console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.admin.react.log)));
                 } else {
-                    console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.admin.ping.errorperms)));
+                    console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.admin.react.errorperms)));
                 }
             } else {
-                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.admin.ping.errorchannel)));
+                console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.admin.react.errorchannel)));
             }
         }
     }
