@@ -1,8 +1,8 @@
 {
-  "name": "royalbot",
-  "version": "2.6.7",
+  "name": "clanbot",
+  "version": "2.8.3",
   "description": "An Bot for the Royalty of the Eternal Clan.",
-  "main": "royalbot.js",
+  "main": "clanbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +18,7 @@
     "humanize-duration": "^3.26.0",
     "json": "^11.0.0",
     "markdown-escape": "^1.1.0",
-    "mathjs": "^9.4.0",
+    "mathjs": "^9.4.1",
     "mc-ping-updated": "^0.1.1",
     "mcping-js": "^1.5.0",
     "moment": "^2.29.1",
