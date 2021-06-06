@@ -1,5 +1,5 @@
 {
-    "dbNumber": 1,
+    "dbNumber": 0,
     "version": 1,
     "member": {
         "guildID": null,
@@ -22,14 +22,13 @@
         "jobexp": {
             "hunter": 0,
             "fischer": 0,
-            "assassine": 0
+            "thife": 0
         },
         "jobworked": 0
     },
     "experience": {
         "exp": 0,
-        "level": 0,
-        "stars": 0
+        "level": 0
     },
-    "inventory": false
+    "inventory": true
 }
