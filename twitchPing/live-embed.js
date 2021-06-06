@@ -1,14 +1,15 @@
 const Discord = require('discord.js');
-const moment = require('moment');
-const humanizeDuration = require("humanize-duration");
+const configmain = require('../config/config.json');
 const configonoff = require('../config/onoff.json');
-const config = require('../config/config.json');
+const lang = require('../lang/en_US.json');
+const humanizeDuration = require("humanize-duration");
+const moment = require('moment');
 
 if(configonoff.twitch === true) {
   class LiveEmbed {
     static createForStream(streamData) {
       const isLive = streamData.type === "live";
-      const allowBoxArt = config.twitch_use_boxart;
+      const allowBoxArt = configmain.twitch_use_boxart;
 
       let msgEmbed = new Discord.MessageEmbed();
       msgEmbed.setColor(isLive ? "#9146ff" : "GREY");
@@ -27,23 +28,23 @@ if(configonoff.twitch === true) {
 
       if (isLive) {
         // Title
-        msgEmbed.setTitle(`:red_circle: **${streamData.user_name} is live on Twitch!**`);
-        msgEmbed.addField("Title", streamData.title, false);
+        msgEmbed.setTitle(`:red_circle: **${streamData.user_name} ${lang.twitch.islivetitle}**`);
+        msgEmbed.addField(lang.twitch.title, streamData.title, false);
       } else {
-        msgEmbed.setTitle(`:white_circle: ${streamData.user_name} was live on Twitch.`);
-        msgEmbed.setDescription('The stream has now ended.');
+        msgEmbed.setTitle(`:white_circle:`, streamData.user_name, lang.twitch.waslivetitle);
+        msgEmbed.setDescription(lang.twitch.waslivedesc);
 
-        msgEmbed.addField("Title", streamData.title, true);
+        msgEmbed.addField(lang.twitch.title, streamData.title, true);
       }
 
       // Add game
       if (streamData.game) {
-        msgEmbed.addField("Game", streamData.game.name, false);
+        msgEmbed.addField(lang.twitch.game, streamData.game.name, false);
       }
 
       if (isLive) {
         // Add status
-        msgEmbed.addField("Status", isLive ? `Live with ${streamData.viewer_count} viewers` : 'Stream has ended', true);
+        msgEmbed.addField(lang.twitch.status, isLive ? `${lang.twitch.livewith} ${streamData.viewer_count} ${lang.twitch.viewers}` : `${lang.twitch.ended}`, true);
 
         // Set main image (stream preview)
         let imageUrl = streamData.thumbnail_url;
@@ -57,7 +58,7 @@ if(configonoff.twitch === true) {
         let now = moment();
         let startedAt = moment(streamData.started_at);
 
-        msgEmbed.addField("Uptime", humanizeDuration(now - startedAt, {
+        msgEmbed.addField(lang.twitch.uptime, humanizeDuration(now - startedAt, {
           delimiter: ", ",
           largest: 2,
           round: true,
