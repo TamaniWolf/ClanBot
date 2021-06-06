@@ -1,8 +1,9 @@
-const lang = require('../../lang/en_US.json');
-const chalk = require('chalk');
+const configmain = require('../../config/config.json');
+const configchannel = require('../../config/channels.json');
 const configonoff = require('../../config/onoff.json');
-const channelconfig = require('../../config/channels.json');
-const roleconfig = require('../../config/roles.json');
+const configrole = require('../../config/roles.json');
+const lang = require('../.' + configmain.lang);
+const chalk = require('chalk');
 var moment = require('moment');
 require('dotenv').config();
 
