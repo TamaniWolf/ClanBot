@@ -1,8 +1,8 @@
 
 {
-    "name": "royal",
-    "description": "Luci is the counterpart to Lupi and is also the Bot for The Familie/Community.",
-    "repository": "./Bots/repository/Luci/",
+    "name": "clanbot",
+    "description": "An Bot for the Royalty of the Eternal Clan.",
+    "repository": "https://github.com/TamaniWolf/ClanBot.git",
     "env": {
       "token": {
         "description": "Your discord bot's token.",
