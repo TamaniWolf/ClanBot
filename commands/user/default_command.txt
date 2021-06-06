@@ -1,5 +1,8 @@
-const lang = require('../../lang/en_US.json');
-const config = require('../../config.json');
+const configmain = require('../../config/config.json');
+const configchannel = require('../../config/channels.json');
+const configonoff = require('../../config/onoff.json');
+const configrole = require('../../config/roles.json');
+const lang = require('../.' + configmain.lang);
 const chalk = require('chalk');
 var moment = require('moment');
 require('dotenv').config();
@@ -11,6 +14,6 @@ module.exports = {
 	guildOnly: true,
 	async execute(client, message, args) {
 		//code to run when command is sent
-		console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.royal, chalk.white(lang.default.log)));
+		console.log(chalk.cyan('[' + moment.utc().format('MM/DD/YYYY-h:mm:ss-A') + ']' + lang.prefix.clan, chalk.white(lang.default.log)));
 	}
 }
