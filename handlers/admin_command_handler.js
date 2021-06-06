@@ -1,4 +1,5 @@
-const lang = require('../lang/en_US.json');
+const configmain = require('../config/config.json')
+const lang = require('.' + configmain.lang);
 const chalk = require('chalk');
 const fs = require('fs');
 var moment = require('moment');
