@@ -1,0 +1,4 @@
+{
+  "updatebot": "040100",
+  "dependencies": "discord.js, dotenv, luxon"
+}
