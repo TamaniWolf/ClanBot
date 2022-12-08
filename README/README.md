@@ -7,7 +7,7 @@
 
  - New features list in the works.
 
-More in the **[Wiki](https://github.com/TamaniWolf/RoyalBot/wiki)**
+More in the **[Wiki](https://github.com/TamaniWolf/ClanBot/wiki)**
 
 ## Using the bot
 
