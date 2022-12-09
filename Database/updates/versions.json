@@ -1,4 +1,4 @@
 {
-  "updatebot": "22w49",
+  "updatebot": "22w49a",
   "dependencies": "discord.js, dotenv, luxon"
 }
