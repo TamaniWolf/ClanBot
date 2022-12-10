@@ -1,4 +1,7 @@
 {
-  "updatebot": "22w49a",
-  "dependencies": "discord.js, dotenv, luxon"
+  "update": {
+    "id": "22w49a",
+    "name": "4.4.7",
+    "dependencies": "discord.js, dotenv, luxon"
+  }
 }
