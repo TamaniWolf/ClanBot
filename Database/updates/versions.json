@@ -1,6 +1,6 @@
 {
   "update": {
-    "id": "22w49a",
+    "id": "22w49b",
     "name": "4.4.7",
     "dependencies": "discord.js, dotenv, luxon"
   }
