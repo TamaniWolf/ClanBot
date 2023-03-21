@@ -1,7 +1,7 @@
 {
   "update": {
-    "id": "22w49b",
-    "name": "4.4.7",
-    "dependencies": "discord.js, dotenv, luxon"
+    "id": "23w12a",
+    "name": "4.7.0",
+    "dependencies": "discord.js, dotenv, luxon, better-sqlite3, octokit, mathjs, markdown-escape, humanize-duration, feedparser, axios"
   }
 }
