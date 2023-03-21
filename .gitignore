@@ -1,0 +1,40 @@
+# Compressed Packages #
+#######################
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.gz
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+*.sql
+*.sqlite
+
+# Environment Variable Files #
+##############################
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Directorys #
+##############
+node_modules/
+ClanSys/config/
+backup/
+
+# Files #
+#########
+pnpm-lock.yaml*
+.eslintrc.json*

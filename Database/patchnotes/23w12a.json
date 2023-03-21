@@ -1,0 +1,98 @@
+[
+    {
+        "embed": "Update to version: 4.7.0",
+        "version": "4.7.0",
+        "date": "2023/03/21",
+        "number": "23w12a"
+    },
+    {
+        "embed": "\n+ Converted from API version v9 to v10 "
+    },
+    {
+        "embed": "\n+ Converted to Slash Commands "
+    },
+    {
+        "embed": "\n+ Added Commands /convert /update /mute /unmute /clear /logs /language "
+    },
+    {
+        "embed": "\n+ Added more Logs to the selection "
+    },
+    {
+        "embed": "\n+ Added Update function "
+    },
+    {
+        "embed": "\n+ Added Dynamic SQLite functions "
+    },
+    {
+        "embed": "\n+ Added Database setup on start "
+    },
+    {
+        "embed": "\n+ Added Database setup on Server Join "
+    },
+    {
+        "embed": "\n+ Added Database erase on Server Leave "
+    },
+    {
+        "embed": "\n+ Added Permission, Color and Language code converter functions "
+    },
+    {
+        "embed": "\n+ Added Channel Type and System Channel Flags converter functions "
+    },
+    {
+        "embed": "\n+ Added Dependencies install check on start up "
+    },
+    {
+        "embed": "\n+ Added new event, command, system and logs handler "
+    },
+    {
+        "embed": "\n+ Added new module handlers "
+    },
+    {
+        "embed": "\n+ Added deployment commands "
+    },
+    {
+        "embed": "\n+ Added 'On/Off' toggle to more functions "
+    },
+    {
+        "embed": "\n+ Fixed outdated Logs "
+    },
+    {
+        "embed": "\n+ Fixed patch-notes format "
+    },
+    {
+        "embed": "\n+ Fixed command formats "
+    },
+    {
+        "embed": "\n+ Fixed command naming "
+    },
+    {
+        "embed": "\n+ Fixed Databases directory structure "
+    },
+    {
+        "embed": "\n+ Fixed Database incompatibility with multiple bots and shards "
+    },
+    {
+        "embed": "\n- Removed Commands /calendar /level "
+    },
+    {
+        "embed": "\n- Removed Commands NSFW variables "
+    },
+    {
+        "embed": "\n- Removed Twitch announcer (Will be added back in later)"
+    },
+    {
+        "embed": "\n- Removed 'datatoconfig.json' "
+    },
+    {
+        "embed": "\n- Removed Level and Profile System "
+    },
+    {
+        "embed": "\n- Removed unused codes that no one has keep track of (No big/semi important functions) "
+    },
+    {
+        "embed": "\n- Removed unused packages from 'package.json' "
+    },
+    {
+        "embed": "\n- Removed Nordic God 'Hammersbald' from the Bot "
+    }
+]

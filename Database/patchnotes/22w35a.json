@@ -1,0 +1,14 @@
+[
+    {
+        "embed": "Update to version: 3.9.9",
+        "version": "3.9.9",
+        "date": "2022/09/03",
+        "number": "22w35a"
+    },
+    {
+        "embed": "\n+ Fixed Database chaos. "
+    },
+    {
+        "embed": "\n- Removed Luci \"strip down\" "
+    }
+]

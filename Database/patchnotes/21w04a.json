@@ -1,0 +1,35 @@
+[
+    {
+        "embed": "Update to version: 2.0.0",
+        "version": "2.0.0",
+        "date": "2021/01/25",
+        "number": "21w04a"
+    },
+    {
+        "embed": "\n+ Added Bot reacting to words with reactions (e.g. pride = Pride Flag) "
+    },
+    {
+        "embed": "\n+ Added Bot responding to words with text (e.g. sexy = \"Where?!\") "
+    },
+    {
+        "embed": "\n+ Added possibility to add new functions "
+    },
+    {
+        "embed": "\n+ Updated code "
+    },
+    {
+        "embed": "\n. . - command and event handler "
+    },
+    {
+        "embed": "\n. . - all commands "
+    },
+    {
+        "embed": "\n+ Updated dependent software "
+    },
+    {
+        "embed": "\n+ Updated security of sensitive data (e.g. bot token, twitch dev. token, etc...) "
+    },
+    {
+        "embed": "\n- Removed Luci \"strip down\" "
+    }
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "embed": "Update to version: 1.5.0 ",
+        "version": "1.5.0",
+        "date": "2020/12/19",
+        "number": "20w51a"
+    },
+    {
+        "embed": "\n+ Twitch announcements thru Luci it self "
+    },
+    {
+        "embed": "\n+ Luci responds to messages with content \"meep\" with \"Meep!\" "
+    },
+    {
+        "embed": "\n+ Optional: Luci can react to messages with emojis when they contain certain words; both emojis and words adjustable; an emoji can be called up with several words. Reacting permissions are required for this. "
+    },
+    {
+        "embed": "\n- Meep Command, removed "
+    },
+    {
+        "embed": "\n- Remains of the Counting Command test, removed "
+    },
+    {
+        "embed": "\n- Announcement bridge with Mee6, removed "
+    },
+    {
+        "embed": "\n- Removed Luci \"strip down\" "
+    }
+]

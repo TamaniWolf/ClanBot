@@ -1,0 +1,23 @@
+[
+    {
+        "embed": "Update to version: 3.1.3",
+        "version": "3.1.3",
+        "date": "2021/10/12",
+        "number": "21w41a"
+    },
+    {
+        "embed": "\n+ moved most configs to database "
+    },
+    {
+        "embed": "\n+ added info command "
+    },
+    {
+        "embed": "\n- removed unneaded code "
+    },
+    {
+        "embed": "\n+ fixed new user roles "
+    },
+    {
+        "embed": "\n- Removed Luci \"strip down\" "
+    }
+]

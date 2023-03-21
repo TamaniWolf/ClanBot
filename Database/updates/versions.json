@@ -2,6 +2,6 @@
   "update": {
     "id": "23w12a",
     "name": "4.7.0",
-    "dependencies": "discord.js, dotenv, luxon, better-sqlite3, octokit, mathjs, markdown-escape, humanize-duration, feedparser, axios"
+    "dependencies": "discord.js, dotenv, luxon, better-sqlite3, axios, feedparser, humanize-duration, markdown-escape, mathjs, octokit"
   }
 }

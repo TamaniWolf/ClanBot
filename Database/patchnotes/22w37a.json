@@ -1,0 +1,23 @@
+[
+    {
+        "embed": "Update to version: 4.0.1",
+        "version": "4.0.1",
+        "date": "2022/09/14",
+        "number": "22w37a"
+    },
+    {
+        "embed": "\n+ Added Birthday Calendar/announcer "
+    },
+    {
+        "embed": "\n+ Added New/more Logging events "
+    },
+    {
+        "embed": "\n+ Fixed Reaction Roles "
+    },
+    {
+        "embed": "\n+ Fixed Stream Up-Time in Announcement "
+    },
+    {
+        "embed": "\n+ Fixed Bot Commands "
+    }
+]

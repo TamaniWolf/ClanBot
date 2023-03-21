@@ -1,0 +1,44 @@
+[
+    {
+        "embed": "Update to version: 2.4.0",
+        "version": "2.4.0",
+        "date": "2021/03/04",
+        "number": "21w09a"
+    },
+    {
+        "embed": "\n+ Added Shutdown command "
+    },
+    {
+        "embed": "\n+ Added Restart command "
+    },
+    {
+        "embed": "\n+ Added Changelog command "
+    },
+    {
+        "embed": "\n+ Added Changelogs "
+    },
+    {
+        "embed": "\n+ Added counter for command german "
+    },
+    {
+        "embed": "\n+ Moved more data in to the config file .env for easier editing/changing "
+    },
+    {
+        "embed": "\n+ Added Option to make Self assining roles via reactions "
+    },
+    {
+        "embed": "\n+ Added command react to spawn the reactions (The bot only knows the roles we set in the .env config) "
+    },
+    {
+        "embed": "\n+ Updated lang/en_US.json \n+ Added NSFW variables to multible commands "
+    },
+    {
+        "embed": "\n- Removed unfinished/old/unused NSFW commands "
+    },
+    {
+        "embed": "\n- Removed old/unused code "
+    },
+    {
+        "embed": "\n- Removed Luci \"strip down\" "
+    }
+]
