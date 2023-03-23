@@ -9,7 +9,7 @@ First of all, it is important to know this bot is intendet to be run on an Linux
 
 > NOTE: You will need at least `sudo` permissions to performe the installation. If you are loggin in as root you don't need to use sudo before commands.
 
-#### With Install Script
+### With Install Script
 Now that we are sure we want to use an Linux server to Install ClanBot with the Install Script, we log-in in to the server via the ssh login.<br>
 Go to the directory you want the bot to be in to.<br>
 I recommend `/home/discord/` for it's home.<br>
@@ -35,7 +35,7 @@ sudo ./clanbot-installer.sh
 Now we are in the Installer, you only need to follow thy instructions.<br>
 
 
-#### Manuel Install
+### Manuel Install
 This one is a lot more Custom but also a lot more work. It is what it is, an Manuel Install.<br>
 
 But good thing we already have a wiki page for it :-D<br>
