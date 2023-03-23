@@ -1,11 +1,50 @@
 # ClanBot
 [![Discord Server](https://img.shields.io/discord/720746186788831323?color=%237289da&label=discord&logo=discord&style=flat-square)](https://discord.gg/6qcehmM)
 
-**A "simple", customizable Discord bot (plus a bunch of silly extras).**
+**A "simple", customizable Discord bot for Familly, Friends and Communitys with fun in minde.**
 
-## Features
+***
+## How To Install
+First of all, it is important to know this bot is intendet to be run on an Linux based server (Ubuntu, Debian, etc...) I have not tested it outside of Linux and Visual Studio Code. 
 
-- List was to old, a new one is in the work.
+> NOTE: You will need at least `sudo` permissions to performe the installation. If you are loggin in as root you don't need to use sudo before commands.
 
+***
+#### With Install Script
+Now that we are sure we want to use an Linux server to Install ClanBot with the Install Script, we log-in in to the server via the ssh login.
+Go to the directory you want the bot to be in to.
+I recommend `/home/discord/` for it's home.
+Now you need to get the install script, this is strate forward and simple. Copy the code below and past it in the command line.
+
+```shell
+git clone https://github.com/TamaniWolf/clanbot-installer.git
+``` 
+Once the cloning has finished you will need to change the directorys and files permissions to make it executable.
+We use `chmod` for it as followed:
+```shell
+sudo chmod -R +rwx clanbot-installer/
+sudo chmod -R g+rwx clanbot-installer/
+```
+> : -R = recursive; + = adden; r = read; w = write; x = execute
+
+All is ready to start the install script with the command below.
+```shell
+sudo ./clanbot-installer.sh
+``` 
+> NOTE: with `./` you can execute any shell script. Exemple: `./start.sh`.
+
+Now we are in the Installer, you only need to follow thy instructions.
+
+***
+#### Manuel Install
+This one is a lot more Custom but also a lot more work. It is what it is, an Manuel Install.
+
+But good thing we already have a wiki page for it :-D
+**-> [To the Install Page!](https://github.com/TamaniWolf/ClanBot/wiki/installation-and-setup) <-**
+
+***
 More in the **[Wiki](https://github.com/TamaniWolf/ClanBot/wiki)**
 
+
+ A Product of the Eternal Clan <br>
+ [Discord](https://discord.gg/6qcehmM) | [Twitter](https://twitter.com/RealTweetWolf) | [Mastodon](https://mastodon.social/@tamaniwolf) | [Tumblr](https://www.tumblr.com/eternalclan)
