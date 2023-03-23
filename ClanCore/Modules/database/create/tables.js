@@ -17,7 +17,7 @@ module.exports = () => {
         DB.config().pragma("synchronous = 1");
         DB.config().pragma("journal_mode = wal");
     } else if (tableConfig['count(*)']) {
-        require('./column/config/config.js')();
+        require('./column/config/config')();
     };
     //
     // ChannelRole
@@ -31,7 +31,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelAdmin['count(*)']) {
-        require('./column/channelrole/channelAdmin.js')();
+        require('./column/channelRole/channelAdmin')();
     };
     // Check if the table channel_birthday exists.
     const tableChannelBirthday = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel_birthday';").get();
@@ -43,7 +43,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelBirthday['count(*)']) {
-        require('./column/channelrole/channelBirthday.js')();
+        require('./column/channelRole/channelBirthday')();
     };
     // Check if the table channel_log exists.
     const tableChannelLog = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel_log';").get();
@@ -55,7 +55,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelLog['count(*)']) {
-        require('./column/channelrole/channelLog.js')();
+        require('./column/channelRole/channelLog')();
     };
     // Check if the table channel_nsfw exists.
     const tableChannelNsfw = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel_nsfw';").get();
@@ -67,7 +67,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelNsfw['count(*)']) {
-        require('./column/channelrole/channelNsfw.js')();
+        require('./column/channelRole/channelNsfw')();
     };
     // Check if the table channel_reaction exists.
     const tableChannelReaction = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel_reaction';").get();
@@ -79,7 +79,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelReaction['count(*)']) {
-        require('./column/channelrole/channelReaction.js')();
+        require('./column/channelRole/channelReaction')();
     };
     // Check if the table channel_user exists.
     const tableChannelUser = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel_user';").get();
@@ -91,7 +91,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableChannelUser['count(*)']) {
-        require('./column/channelrole/channelMember.js')();
+        require('./column/channelRole/channelMember')();
     };
     // Check if the table role_admin exists.
     const tableRoleAdmin = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'role_admin';").get();
@@ -103,7 +103,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableRoleAdmin['count(*)']) {
-        require('./column/channelrole/roleAdmin.js')();
+        require('./column/channelRole/roleAdmin')();
     };
     // Check if the table role_nsfw exists.
     const tableRoleNsfw = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'role_nsfw';").get();
@@ -115,7 +115,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableRoleNsfw['count(*)']) {
-        require('./column/channelrole/roleNsfw.js')();
+        require('./column/channelRole/roleNsfw')();
     };
     // Check if the table role_user exists.
     const tableRoleUser = DB.channelRole().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'role_user';").get();
@@ -127,7 +127,7 @@ module.exports = () => {
         DB.channelRole().pragma("synchronous = 1");
         DB.channelRole().pragma("journal_mode = wal");
     } else if (tableRoleUser['count(*)']) {
-        require('./column/channelrole/roleMember.js')();
+        require('./column/channelRole/roleMember')();
     };
     //
     // Logs
@@ -141,7 +141,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsBan['count(*)']) {
-        require('./column/logs/ban.js')();
+        require('./column/logs/ban')();
     };
     // Check if the table channel exists.
     const tableLogsChannel = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'channel';").get();
@@ -153,7 +153,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsChannel['count(*)']) {
-        require('./column/logs/channel.js')();
+        require('./column/logs/channel')();
     };
     // Check if the table emoji exists.
     const tableLogsEmoji = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'emoji';").get();
@@ -165,7 +165,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsEmoji['count(*)']) {
-        require('./column/logs/emoji.js')();
+        require('./column/logs/emoji')();
     };
     // Check if the table event exists.
     const tableLogsEvent = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'event';").get();
@@ -177,7 +177,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsEvent['count(*)']) {
-        require('./column/logs/event.js')();
+        require('./column/logs/event')();
     };
     // Check if the table guild exists.
     const tableLogsGuild = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'guild';").get();
@@ -189,7 +189,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsGuild['count(*)']) {
-        require('./column/logs/guild.js')();
+        require('./column/logs/guild')();
     };
     // Check if the table invite exists.
     const tableLogsInvite = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'invite';").get();
@@ -201,7 +201,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsInvite['count(*)']) {
-        require('./column/logs/invite.js')();
+        require('./column/logs/invite')();
     };
     // Check if the table member exists.
     const tableLogsMember = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'member';").get();
@@ -213,7 +213,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsMember['count(*)']) {
-        require('./column/logs/member.js')();
+        require('./column/logs/member')();
     };
     // Check if the table message exists.
     const tableLogsMessage = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'message';").get();
@@ -225,7 +225,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsMessage['count(*)']) {
-        require('./column/logs/message.js')();
+        require('./column/logs/message')();
     };
     // Check if the table misc exists.
     const tableLogsMisc = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'misc';").get();
@@ -237,7 +237,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsMisc['count(*)']) {
-        require('./column/logs/misc.js')();
+        require('./column/logs/misc')();
     };
     // Check if the table roles exists.
     const tableLogsRoles = DB.logs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'roles';").get();
@@ -249,7 +249,7 @@ module.exports = () => {
         DB.logs().pragma("synchronous = 1");
         DB.logs().pragma("journal_mode = wal");
     } else if (tableLogsRoles['count(*)']) {
-        require('./column/logs/roles.js')();
+        require('./column/logs/roles')();
     };
     // 
     // OnOff
@@ -263,7 +263,7 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffCommandAdmin['count(*)']) {
-        require('./column/onOff/commandAdmin.js')();
+        require('./column/onOff/commandAdmin')();
     };
     // Check if the table command_member exists.
     const tableOnOffCommandMember = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'command_member';").get();
@@ -275,7 +275,7 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffCommandMember['count(*)']) {
-        require('./column/onOff/commandMember.js')();
+        require('./column/onOff/commandMember')();
     };
     // Check if the table database exists.
     const tableOnOffDatabase = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'database';").get();
@@ -287,7 +287,7 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffDatabase['count(*)']) {
-        require('./column/onOff/database.js')();
+        require('./column/onOff/database')();
     };
     // Check if the table misc exists.
     const tableOnOffMisc = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'misc';").get();
@@ -299,7 +299,7 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffMisc['count(*)']) {
-        require('./column/onOff/misc.js')();
+        require('./column/onOff/misc')();
     };
     // Check if the table reaction exists.
     const tableOnOffReaction = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'reaction';").get();
@@ -311,7 +311,7 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffReaction['count(*)']) {
-        require('./column/onOff/reaction.js')();
+        require('./column/onOff/reaction')();
     };
     // Check if the table twitch exists.
     const tableOnOffTwitch = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'twitch';").get();
@@ -323,22 +323,10 @@ module.exports = () => {
         DB.onOff().pragma("synchronous = 1");
         DB.onOff().pragma("journal_mode = wal");
     } else if (tableOnOffTwitch['count(*)']) {
-        require('./column/onOff/twitch.js')();
+        require('./column/onOff/twitch')();
     };
     //
     // Reaction
-    // Check if the table polls exists.
-    // const tablePoll = DB.reaction().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'poll';").get();
-    // if (!tablePoll['count(*)']) {
-    //     // If the table isn't there, create it and setup the database correctly.
-    //     DB.reaction().prepare("CREATE TABLE poll (ReactionID VARCHAR PRIMARY KEY, GuildID VARCHAR, MessageID VARCHAR, ChannelID VARCHAR, RoleID VARCHAR, Type VARCHAR, Emoji VARCHAR, Action VARCHAR, Name VARCHAR);").run();
-    //     // Ensure that the "id" row is always unique and indexed.
-    //     DB.reaction().prepare("CREATE UNIQUE INDEX idx_poll_id ON poll (ReactionID);").run();
-    //     DB.reaction().pragma("synchronous = 1");
-    //     DB.reaction().pragma("journal_mode = wal");
-    // } else if (tablePoll['count(*)']) {
-    //     require('./column/reaction/poll.js')();
-    // };
     // Check if the table reaction exists.
     const tableReaction = DB.reaction().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'reaction';").get();
     if (!tableReaction['count(*)']) {
@@ -349,7 +337,7 @@ module.exports = () => {
         DB.reaction().pragma("synchronous = 1");
         DB.reaction().pragma("journal_mode = wal");
     } else if (tableReaction['count(*)']) {
-        require('./column/reaction/reaction.js')();
+        require('./column/reaction/reaction')();
     };
     //
     // MODERATION
@@ -364,7 +352,7 @@ module.exports = () => {
         DB.auditLogs().pragma("synchronous = 1");
         DB.auditLogs().pragma("journal_mode = wal");
     } else if (tableAuditLog['count(*)']) {
-        require('./column/auditlog/auditlog.js')();
+        require('./column/auditLog/auditlog')();
     };
     // Check if the table msgdel exists.
     const tableMsgDel = DB.auditLogs().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'messagedel';").get();
@@ -376,7 +364,7 @@ module.exports = () => {
         DB.auditLogs().pragma("synchronous = 1");
         DB.auditLogs().pragma("journal_mode = wal");
     } else if (tableMsgDel['count(*)']) {
-        require('./column/auditlog/messageDel.js')();
+        require('./column/auditLog/messageDel')();
     };
     //
     // Calender
@@ -390,34 +378,8 @@ module.exports = () => {
         DB.birthday().pragma("synchronous = 1");
         DB.birthday().pragma("journal_mode = wal");
     } else if (tableBirthdays['count(*)']) {
-        require('./column/birthdays/birthdays.js')();
+        require('./column/birthdays/birthdays')();
     };
-    //
-    // // Profile
-    // // Check if the table member exists.
-    // const tableMember = DB.memberProfile().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'member';").get();
-    // if (!tableMember['count(*)']) {
-    //     // If the table isn't there, create it and setup the database correctly.
-    //     DB.memberProfile().prepare("CREATE TABLE member (ProfileID VARCHAR PRIMARY KEY, GuildID VARCHAR, JoinTimestamp VARCHAR, PremiumTimestamp VARCHAR, Nickname VARCHAR, MemberID VARCHAR, DisplayName VARCHAR);").run();
-    //     // Ensure that the "id" row is always unique and indexed.
-    //     DB.memberProfile().prepare("CREATE UNIQUE INDEX idx_member_id ON member (ProfileID);").run();
-    //     DB.memberProfile().pragma("synchronous = 1");
-    //     DB.memberProfile().pragma("journal_mode = wal");
-    // } else if (tableMember['count(*)']) {
-    //     require('./column/profile/profile.js')();
-    // };
-    // // Check if the table scores exists.
-    // const tableScores = DB.memberProfile().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'scores';").get();
-    // if (!tableScores['count(*)']) {
-    //     // If the table isn't there, create it and setup the database correctly.
-    //     DB.memberProfile().prepare("CREATE TABLE scores (ProfileID VARCHAR PRIMARY KEY, MemberID VARCHAR, GuildID VARCHAR, Exp INTEGER, Level INTEGER);").run();
-    //     // Ensure that the "id" row is always unique and indexed.
-    //     DB.memberProfile().prepare("CREATE UNIQUE INDEX idx_scores_id ON scores (ProfileID);").run();
-    //     DB.memberProfile().pragma("synchronous = 1");
-    //     DB.memberProfile().pragma("journal_mode = wal");
-    // } else if (tableScores['count(*)']) {
-    //     require('./column/profile/scores.js')();
-    // };
     //
     // Twitch
     // Check if the table twitchrequest exists.
@@ -430,7 +392,7 @@ module.exports = () => {
         DB.twitchRequest().pragma("synchronous = 1");
         DB.twitchRequest().pragma("journal_mode = wal");
     } else if (tableTwitchRequest['count(*)']) {
-        require('./column/twitch/twitchrequest.js')();
+        require('./column/twitch/twitchrequest')();
     };
     let guildsCache = globalclient.guilds.cache.size;
     if (guildsCache != 0) {
