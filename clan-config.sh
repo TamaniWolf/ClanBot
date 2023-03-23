@@ -15,7 +15,7 @@ while [ "$choice" -eq 4 ]; do
     if [ ! "$token" ] || [ "$token" = "" ]; then
         echo "No Token, no start."
         rm -dr "ClanSys/config"
-        exit 1
+        exit 7
     else
         echo ""
     fi
