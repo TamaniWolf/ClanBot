@@ -15,19 +15,19 @@ Go to the directory you want the bot to be in to.
 I recommend `/home/discord/` for it's home.
 Now you need to get the install script, this is strate forward and simple. Copy the code below and past it in the command line.
 
-```shell
+```
 git clone https://github.com/TamaniWolf/clanbot-installer.git
 ``` 
 Once the cloning has finished you will need to change the directorys and files permissions to make it executable.
 We use `chmod` for it as followed:
-```shell
+```
 sudo chmod -R +rwx clanbot-installer/
 sudo chmod -R g+rwx clanbot-installer/
 ```
 > : -R = recursive; + = adden; r = read; w = write; x = execute
 
 All is ready to start the install script with the command below.
-```shell
+```
 sudo ./clanbot-installer.sh
 ``` 
 > NOTE: with `./` you can execute any shell script. Exemple: `./start.sh`.
