@@ -43,8 +43,5 @@ But good thing we already have a wiki page for it :-D
 **-> [To the Install Page!](https://github.com/TamaniWolf/ClanBot/wiki/installation-and-setup) <-**
 
 ***
-More in the **[Wiki](https://github.com/TamaniWolf/ClanBot/wiki)**
 
-
- A Product of the Eternal Clan <br>
- [Discord](https://discord.gg/6qcehmM) | [Twitter](https://twitter.com/RealTweetWolf) | [Mastodon](https://mastodon.social/@tamaniwolf) | [Tumblr](https://www.tumblr.com/eternalclan)
+> A Product of the Eternal Clan <br> [Discord](https://discord.gg/6qcehmM) | [Twitter](https://twitter.com/RealTweetWolf) | [Mastodon](https://mastodon.social/@tamaniwolf) | [Tumblr](https://www.tumblr.com/eternalclan) | [Wiki](https://github.com/TamaniWolf/ClanBot/wiki)
