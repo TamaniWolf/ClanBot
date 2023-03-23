@@ -1,66 +1,71 @@
 #!/bin/sh
-echo "Installing ClanBot"
+echo "Configuring ClanBot"
 root=$(pwd)
 choice=4
-name="ClanBot"
-DIRECTORY="ClanBot"
 
-token="0"
-prefix="c."
+token=""
+prefix=""
 
-cd "$root/$DIRECTORY"
-while [ $choice -eq 4 ]; do
+while [ "$choice" -eq 4 ]; do
     
     echo "Config - .ENV"
     echo "Enter the Bot's Token:"
-    read token
-    if [[ $token -eq "" ]]; then
+    read -r token
+    
+    if [ ! "$token" ] || [ "$token" = "" ]; then
+        echo "No Token, no start."
+        rm -dr "ClanSys/config"
         exit 1
+    else
+        echo ""
     fi
     echo "Enter a command prefix:"
-    read prefix
-    if [[ $prefix -eq "" ]]; then
+    read -r prefix
+    if [ ! "$prefix" ] || [ "$prefix" = "" ]; then
         prefix="c."
-    elif [[ $prefix -eq / ]]; then
-        prefix="c."
+    else
+        echo ""
     fi
-cat > .env << EOF
-//For Settings in .env use (process.env.) and (configmain) in config.json
-//-- ClanBot --//
-TOKEN = ${token}
-PREFIX = ${prefix}
+    envfile=".env"
+    echo "//For Settings in .env use (process.env.) and (configmain) in config.json" > $envfile
+    echo "//-- ClanBot --//" >> $envfile
+    echo "TOKEN = $token" >> $envfile
+    echo "PREFIX = $prefix" >> $envfile
+    echo "" >> $envfile
+    cat $envfile
 
-EOF
     echo "."
     echo "Config - config.json"
     echo "Enter the Discord Server's Owner ID:"
-    read guildowner
-    if [[ $guildowner -eq "" ]]; then
+    read -r guildowner
+    if [ ! "$guildowner" ] || [ "$guildowner" = "" ]; then
         guildowner="100000000000000000"
     fi
     echo "Enter the Discord Server's ID:"
-    read guildid
-    if [[ $guildid -eq "" ]]; then
+    read -r guildid
+    if [ ! "$guildid" ] || [ "$guildid" = "" ]; then
         guildid="100000000000000000"
     fi
     echo "Enter the Bot's ID:"
-    read clientid
-    if [[ $clientid -eq "" ]]; then
+    read -r clientid
+    if [ ! "$clientid" ] || [ "$clientid" = "" ]; then
         clientid="100000000000000000"
     fi
-cd "$root/$DIRECTORY/ClanSys/config"
-cat > config.json << EOF
-{
-  "config": {
-    "guildid": "${guildid}",
-    "guildowner": "${ownerid}",
-    "botid": "${clientid}"
-  },
-  "external": {
-    "commands": ["megaboop","megahug","boop","hug"]
-  }
-}
-EOF
+    cd "ClanSys/config" || return;
+    conffile="config.json"
+    echo "{" > $conffile
+    echo "    "config": {" >> $conffile
+    echo "        "guildid": "$guildid"," >> $conffile
+    echo "        "guildowner": "$guildowner"," >> $conffile
+    echo "        "botid": "$clientid"" >> $conffile
+    echo "    }," >> $conffile
+    echo "    "external": {" >> $conffile
+    echo "        "commands": ["megaboop","megahug","boop","hug"]" >> $conffile
+    echo "    }" >> $conffile
+    echo "}" >> $conffile
+    cat $conffile
+    choice=3
 
 done
+cd "$root" || return;
 exit 0
