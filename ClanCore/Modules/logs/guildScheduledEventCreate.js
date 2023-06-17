@@ -33,7 +33,7 @@ module.exports = {
         dataLogs = Get.logsForEvent(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Creating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+            const { targetType, actionType, executor, target } = botLog;
 
             if (targetType === 'GuildScheduledEvent' && actionType === 'Create') {
                 let icon2 = executor.avatarURL();

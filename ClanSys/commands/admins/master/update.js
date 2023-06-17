@@ -1,11 +1,16 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { PermissionsBitField, SlashCommandBuilder } = Discord;
-
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 const fs = require('node:fs');
 require('dotenv').config;
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('update')
         .setDescription('Updater')
@@ -14,7 +19,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -43,12 +48,8 @@ module.exports = {
                 .setDescription('Run Update')
         )
     ,
-    permissions: ['VIEW_AUDIT_LOG'],
-    prefix: '/',
-    admin: 'true',
-    nsfw: 'false',
     async execute(interaction) {
-        if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
+        if (interaction != null || interaction.channel.id != null) {
             // SQLite
             const { Get } = require('../../../../ClanCore/Modules/functions/sqlite/prepare');
             // Data Null
@@ -69,8 +70,9 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Updating: 'true' } };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Updating === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
@@ -82,7 +84,7 @@ module.exports = {
                             await interaction.reply({ content: `\`\`\`\nupdate: ${versionsJSON.id}\nVersion: ${versionsJSON.name}\n\n\n\`\`\`` });
                         };
                         if (interaction.options.getSubcommand() === 'info') {
-                            if (packageJSON === versionsJSON.name) { await interaction.reply({ content: 'No new Infos' }); } else
+                            if (packageJSON === versionsJSON.name) { await interaction.reply({ content: `${lang.admin.update.nonewinfo}` }); } else
                             if (packageJSON != versionsJSON.name) { await interaction.reply({ content: `\`\`\`\nUpdate: ${versionsJSON.id}\nVersion: ${versionsJSON.name}\n\n\n\`\`\`` }); };
                         };
                         if (interaction.options.getSubcommand() === 'check') {
@@ -108,7 +110,7 @@ module.exports = {
                                 if (dataMisc === undefined || dataMisc === null) {};
                                 let updateJS = `update${newVersionJSON.id}`;
                                 if (fs.existsSync(`./Database/updates/${updateJS}.js`) === true) {
-                                    await interaction.reply('Your Bot is already up to date.');
+                                    await interaction.reply(`${lang.admin.update.uptodate}`);
                                 } else {
                                     const { data } = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}{?ref}', {
                                         owner: 'TamaniWolf',
@@ -128,7 +130,7 @@ module.exports = {
                         };
                         if (interaction.options.getSubcommand() === 'run') {
                             if (packageJSON === versionsJSON.name) {
-                                await interaction.reply({ content: 'Your Bot is already up to date.' });
+                                await interaction.reply({ content: `${lang.admin.update.uptodate}` });
                             } else if (packageJSON != versionsJSON.name) {
                                 if (fs.existsSync(`./Database/updates/update${versionsJSON.id}.js`) === true) {
                                     require(`../../../../Database/updates/update${versionsJSON.id}.js`)(versionsJSON);
@@ -137,13 +139,13 @@ module.exports = {
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'update\' returned \'null / undefined\'.`);

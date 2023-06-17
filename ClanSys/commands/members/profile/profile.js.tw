@@ -11,15 +11,10 @@ module.exports = {
 	admin: 'false',
 	nsfw: 'false',
     data: new SlashCommandBuilder()
-        .setName('slap')
-        .setDescription('Slaps someone.')
+        .setName('profile')
+        .setDescription('Check your profile.')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
-        .addUserOption(option =>
-            option
-                .setName('member')
-                .setDescription('The Member to be mentioned.')
-                .setRequired(false))
     ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
@@ -34,24 +29,21 @@ module.exports = {
             dataCommandMember = Get.onOffForCommandMember(getBotConfigID);
             // Data Check
             if (dataLang == null) { dataLang = { Lang: './Database/lang/en_US.json' }; };
-            if (dataCommandMember == null) { dataCommandMember = { Slap: 'true' }; };
+            if (dataCommandMember == null) { dataCommandMember = { Blush: 'true' }; };
             // Context
 
             let lang = require(`../../../.${dataLang.Lang}`);
-            if (dataCommandMember.Slap === 'true') {
-                const stringGetUser = interaction.options.getUser('member');
-                if (!stringGetUser) {
-                    // Send Message.
-                    await interaction.reply(`<@${interaction.user.id}> ${lang.default.slap.yourself}`);
-                } else if (stringGetUser) {
-                    // Send Message.
-                    await interaction.reply(`${stringGetUser} ${lang.default.slap.someone} <@${interaction.user.id}>!`);
-                };
+            if (dataCommandMember.Profile === 'true') {
+
+                let dataProfile;
+                dataProfile = Get.profile();
+                if (dataProfile == null) { await interaction.reply({ content: `You did not consent to the Data Protection policy yet.`, ephemeral: true }) };
+
             } else {
                 await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
-            console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'slap\' returned \'null / undefined\'.`);
+            console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'profile\' returned \'null / undefined\'.`);
         };
     },
 };

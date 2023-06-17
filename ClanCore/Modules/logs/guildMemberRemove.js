@@ -22,6 +22,24 @@ module.exports = {
         // Data Get
         let getBotConfigID = `${member.guild.id}-${member.guild.shardId}`;
         dataChannellog = Get.channelForLog(getBotConfigID);
+
+        // Embed
+        const memberLeave = new EmbedBuilder()
+            .setColor('Orange')
+            .setTimestamp(new Date());
+        // Member no AuditLog
+        if (kickLog == null) {
+            let icon2 = member.user.avatarURL();
+            if(member.user.avatar == null) {
+                icon2 = 'attachment://discord_logo_gray.png';
+            };
+            memberLeave.setAuthor({name: `${member.user.username}${member.user.discriminator}`, iconURL: `${icon2}`})
+                .setDescription(`<@${member.user.id}> **Left** the server`)
+                .setFooter({text: `MemberID: ${member.user.id}`})
+            globalclient.channels.cache.get(dataChannellog.ChannelID).send({embeds: [memberLeave]});
+            return;
+        };
+        
         dataAuditLogID = Get.auditLogs(kickLog.id);
         // Data Check
         if (dataChannellog == null) {
@@ -33,17 +51,13 @@ module.exports = {
         dataLogs = Get.logsForMember(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Removing === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = kickLog;
+            const { reason, executor, id, target } = kickLog;
             let createdTimestampLog = kickLog.createdTimestamp;
             let dt = DateTime.now().minus({ seconds: 5 });
             let time = dt.toMillis();
             if (time > createdTimestampLog) {
                 dataAuditLogID = { AuditLogID: `${id}`, GuildID: `${member.guild.id}`, Type: 'Kick', Date: `${kickLog.createdTimestamp}` };
             };
-            // Embed
-            const memberLeave = new EmbedBuilder()
-                .setColor('Orange')
-                .setTimestamp(new Date());
             
             // Member
             if (target.id !== member.user.id || dataAuditLogID != null) {

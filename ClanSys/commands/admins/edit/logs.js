@@ -1,8 +1,15 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
+
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('logs')
         .setDescription('Setting Logs')
@@ -11,7 +18,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -289,11 +296,7 @@ module.exports = {
                         )
                 )
         )
-        ,
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
-    guildOnly: true,
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -327,21 +330,22 @@ module.exports = {
             if (dataLang === null) { dataLang = { Lang: `./Database/lang/en_US.json` }; };
             if (dataCommandAdmin == null) { dataCommandAdmin = { Config: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${getChannelID}` }; };
-            // Context
             dataCommandAdmin = { Logs: 'true' };
+            // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Logs === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
                         const configembed = new EmbedBuilder()
                         .setColor('DarkGreen')
-                        .setTitle('Logs')
+                        .setTitle(`${lang.admin.logs.title}`)
                         // 
                         // Help
                         if(interaction.options.getSubcommand() === 'help') {
                             configembed.addFields(
-                                { name: 'Commands', value: '`logs` - Commands relating to logs.\n`  ⤷ help`    - Displays this help text.\n`  ⤷ channel` - Set\'s Create, Delete, Update for channel \'ON\' or \'OFF\'.\n`  ⤷ emoji`   - Set\'s Create, Delete, Update for emoji \'ON\' or \'OFF\'.\n`  ⤷ message` - Set\'s Delete, Bulk Delete, Update for message \'ON\' or \'OFF\'.\n`  ⤷ roles`   - Set\'s Create, Delete, Update for roles \'ON\' or \'OFF\'.\n`  ⤷ invite`  - Set\'s Create, Delete for invite \'ON\' or \'OFF\'.\n`  ⤷ event`   - Set\'s Create, Delete, Update, User Add, User Remove for event \'ON\' or \'OFF\'.\n`  ⤷ member`  - Set\'s Add, Remove, Update for member \'ON\' or \'OFF\'.\n`  ⤷ Ban`     - Set\'s Add, Remove for Ban \'ON\' or \'OFF\'.\n`  ⤷ guild`   - Set\'s Add, Remove, Update for guild \'ON\' or \'OFF\'.\n`  ⤷ misc`    - Set\'s Integrations Update, Command Permissions Update for misc \'ON\' or \'OFF\'.', inline: false },
+                                { name: `${lang.admin.logs.field1}`, value: `${lang.admin.logs.field2}`, inline: false },
                             );
                             await interaction.reply({embeds: [configembed]});
                         };
@@ -355,15 +359,15 @@ module.exports = {
                                 dataLogsChannel = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Creating: 'true', Deleting: 'true', Updating: 'true', Pins_Update: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsChannel[stringGetChannel] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsChannel[stringGetChannel] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsChannel[stringGetChannel] = 'true';
                                 Set.logsForChannel(dataLogsChannel);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsChannel[stringGetChannel] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsChannel[stringGetChannel] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsChannel[stringGetChannel] = 'false';
                                 Set.logsForChannel(dataLogsChannel);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -376,15 +380,15 @@ module.exports = {
                                 dataLogsEmoji = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Creating: 'true', Deleting: 'true', Updating: 'true' }
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsEmoji[stringGetEmoji] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsEmoji[stringGetEmoji] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsEmoji[stringGetEmoji] = 'true';
                                 Set.logsForEmoji(dataLogsEmoji);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsEmoji[stringGetEmoji] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsEmoji[stringGetEmoji] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsEmoji[stringGetEmoji] = 'false';
                                 Set.logsForEmoji(dataLogsEmoji);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -397,15 +401,15 @@ module.exports = {
                                 dataLogsMessage = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Deleting: 'true', Bulk_Delete: 'true', Updating: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsMessage[stringGetMessage] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsMessage[stringGetMessage] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsMessage[stringGetMessage] = 'true';
                                 Set.logsForMessage(dataLogsMessage);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsMessage[stringGetMessage] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsMessage[stringGetMessage] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsMessage[stringGetMessage] = 'false';
                                 Set.logsForMessage(dataLogsMessage);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -418,15 +422,15 @@ module.exports = {
                                 dataLogsRoles = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Creating: 'true', Deleting: 'true', Updating: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsRoles[stringGetRoles] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsRoles[stringGetRoles] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsRoles[stringGetRoles] = 'true';
                                 Set.logsForRoles(dataLogsRoles);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsRoles[stringGetRoles] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsRoles[stringGetRoles] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsRoles[stringGetRoles] = 'false';
                                 Set.logsForRoles(dataLogsRoles);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -439,15 +443,15 @@ module.exports = {
                                 dataLogsInvite = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Creating: 'true', Deleting: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsInvite[stringGetInvite] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsInvite[stringGetInvite] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsInvite[stringGetInvite] = 'true';
                                 Set.logsForInvite(dataLogsInvite);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsInvite[stringGetInvite] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsInvite[stringGetInvite] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsInvite[stringGetInvite] = 'false';
                                 Set.logsForInvite(dataLogsInvite);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -460,15 +464,15 @@ module.exports = {
                                 dataLogsEvent = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Creating: 'true', Deleting: 'true', Updating: 'true', User_Add: 'true', User_Remove: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsEvent[stringGetEvent] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsEvent[stringGetEvent] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsEvent[stringGetEvent] = 'true';
                                 Set.logsForEvent(dataLogsEvent);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsEvent[stringGetEvent] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsEvent[stringGetEvent] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsEvent[stringGetEvent] = 'false';
                                 Set.logsForEvent(dataLogsEvent);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         // 
@@ -481,15 +485,15 @@ module.exports = {
                                 dataLogsMember = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Adding: 'true', Removing: 'true', Updating: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsMember[stringGetMember] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsMember[stringGetMember] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsMember[stringGetMember] = 'true';
                                 Set.logsForMember(dataLogsMember);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsMember[stringGetMember] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsMember[stringGetMember] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsMember[stringGetMember] = 'false';
                                 Set.logsForMember(dataLogsMember);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         // 
@@ -502,15 +506,15 @@ module.exports = {
                                 dataLogsBan = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Adding: 'true', Removing: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsBan[stringGetBan] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsBan[stringGetBan] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsBan[stringGetBan] = 'true';
                                 Set.logsForBan(dataLogsBan);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsBan[stringGetBan] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsBan[stringGetBan] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsBan[stringGetBan] = 'false';
                                 Set.logsForBan(dataLogsBan);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         // 
@@ -523,15 +527,15 @@ module.exports = {
                                 dataLogsGuild = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Adding: 'true', Removing: 'true', Updating: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsGuild[stringGetGuild] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsGuild[stringGetGuild] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsGuild[stringGetGuild] = 'true';
                                 Set.logsForGuild(dataLogsGuild);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsGuild[stringGetGuild] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsGuild[stringGetGuild] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsGuild[stringGetGuild] = 'false';
                                 Set.logsForGuild(dataLogsGuild);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                         // 
@@ -544,26 +548,26 @@ module.exports = {
                                 dataLogsMisc = { LogsID: `${getChannelLogID}`, GuildID: `${getGuildID}`, Integrations_Update: 'true', Command_Permissions_Update: 'true' };
                             };
                             if (stringGetOnOff === 'true') {
-                                if (dataLogsMisc[stringGetMisc] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (dataLogsMisc[stringGetMisc] === 'true') {await interaction.reply({ content: `${lang.admin.logs.ison}`, ephemeral: true}); return;};
                                 dataLogsMisc[stringGetMisc] = 'true';
                                 Set.logsForMisc(dataLogsMisc);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (dataLogsMisc[stringGetMisc] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (dataLogsMisc[stringGetMisc] === 'false') {await interaction.reply({ content: `${lang.admin.logs.isoff}`, ephemeral: true}); return;};
                                 dataLogsMisc[stringGetMisc] = 'false';
                                 Set.logsForMisc(dataLogsMisc);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.logs.setoff}`, ephemeral: true});
                             };
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'config\' returned \'null / undefined\'.`);

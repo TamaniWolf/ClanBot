@@ -6,7 +6,7 @@ module.exports = {
     description: 'Loggin bot\'s beeing added to the server.',
     call: 'on', // client.once = 'once', client.on = 'on'
     async execute(messageReaction, user) {
-        console.log('mra');
+        // console.log('mra');
         // console.log(messageReaction);
         // console.log(user);
         // SQLite
@@ -52,7 +52,7 @@ module.exports = {
     description: 'Loggin bot\'s beeing added to the server.',
     call: 'on', // client.once = 'once', client.on = 'on'
     async execute(messageReaction, user) {
-        console.log('mrr');
+        // console.log('mrr');
         // console.log(messageReaction);
         // console.log(user);
         // SQLite

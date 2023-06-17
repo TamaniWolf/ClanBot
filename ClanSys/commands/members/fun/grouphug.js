@@ -1,20 +1,26 @@
 
-const { SlashCommandBuilder } = require('discord.js');
+// Require and set
+const Discord = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'false',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('grouphug')
         .setDescription('Grouphug all or just some.')
         .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         // .addUserOption(option =>
         //     option
         //        .setName('user')
         //        .setDescription('The input to echo back')
         //        .setRequired(true))
-        ,
-    nsfw: 'true',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'false',      // Admin Command = 'true', No Admin Command = 'false'.
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -30,11 +36,12 @@ module.exports = {
             if (dataLang == null) { dataLang = { Lang: './Database/lang/en_US.json' }; };
             if (dataCommandMember == null) { dataCommandMember = { Grouphug: 'true' }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandMember.Grouphug === 'true') {
-                let lang = require(`../../../.${dataLang.Lang}`);
-                await interaction.reply(`Grouphug time! <@${interaction.user.id}> wants all the hugs and hugs everyone!`);
+                await interaction.reply(`${lang.default.grouphug.time} <@${interaction.user.id}> ${lang.default.grouphug.want}`);
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'grouphug\' returned \'null / undefined\'.`);

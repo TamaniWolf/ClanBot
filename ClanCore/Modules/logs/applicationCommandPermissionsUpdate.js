@@ -36,7 +36,7 @@ module.exports = {
                 .setColor('Blue')
                 .setTimestamp(new Date());
 
-            const { executor, changes, extra, target } = requestLog;
+            const { executor, changes, target } = requestLog;
 
             let oldChange = changes.find((c) => c.old != undefined);
             let newChange = changes.find((c) => c.new != undefined);

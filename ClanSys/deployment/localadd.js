@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const { REST, Routes } = require('discord.js');
 require('dotenv').config();
 
-module.exports = (message, args, Discord) => {
+module.exports = (message, args) => {
     let getGuildID = message.guild.id;
     let getClientID = globalclient.user.id;
     const slashCommands = [];

@@ -56,8 +56,9 @@ module.exports = (guild) => {
     // Birthdays
     Del.calenderForBirthdaysByGuild(getClientGuildId);
     // // Profile
-    // Del.memberProfileByGuild(getClientGuildId);
-    // Del.memberScoresByGuild(getClientGuildId);
+    // Del.profileByGuild(getClientGuildId);
+    // Del.achievementsByGuild(getClientGuildId);
+    // Del.scoresByGuild(getClientGuildId);
     // Twitch
     Del.twitchTokenRequestByGuild(getClientGuildId);
 };

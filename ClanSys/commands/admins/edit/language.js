@@ -1,12 +1,16 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
 const { DateTime } = require('luxon');
-const fs = require('node:fs');
 const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
+const fs = require('node:fs');
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('language')
         .setDescription('editing lang')
@@ -15,7 +19,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -43,11 +47,8 @@ module.exports = {
                         .setDescription('The language code')
                         .setRequired(true)
                 )
-        ),
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
-    guildOnly: true,
+        )
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -72,17 +73,18 @@ module.exports = {
             if (dataLang == null) { dataLang = { Lang: './Database/lang/en_US.json' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Language === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
                         const configembed = new EmbedBuilder()
                         .setColor('DarkGreen')
                         if(interaction.options.getSubcommand() === 'help') {
-                            configembed.setTitle(`Language - Help`)
+                            configembed.setTitle(`${lang.admin.language.titlehelp}`)
                             .addFields(
-                                { name: 'Commands', value: '`language` - Commands relating to language.\n`  ⤷ help` - Displays this help text.\n`  ⤷ list` - A list of set Languages.\n`  ⤷ set`  - Set\'s a supported language for text output.\n', inline: false},
+                                { name: `${lang.admin.language.helpfield1}`, value: `${lang.admin.language.helpfield2}`, inline: false},
                             );
 /**
 language - Commands relating to language.\n  ⤷ help - Displays this help text.\n  ⤷ list - A list of set Languages.\n  ⤷ set  - Set's a supported language for text output.\n
@@ -106,13 +108,13 @@ language - Commands relating to language.\n  ⤷ help - Displays this help text.
                             let replaceLangCode = stringLangCode.replace(/[,]/gi, '\n');
                             let rln = replaceLangName.replace(/[\n]/gi, '');
                             let rlc = replaceLangCode.replace(/[\n]/gi, '');
-                            if (!rln) {replaceLangName = 'No Data Found.';};
-                            if (!rlc) {replaceLangCode = 'No Data Found.';};
-                            configembed.setTitle('Language - List')
-                                .setDescription('Available Languages')
+                            if (!rln) {replaceLangName = `${lang.admin.language.nodate}`;};
+                            if (!rlc) {replaceLangCode = `${lang.admin.language.nodate}`;};
+                            configembed.setTitle(`${lang.admin.language.titlelist}`)
+                                .setDescription(`${lang.admin.language.desclist}`)
                                 .addFields(
-                                    { name: 'Name', value: `\`\`\`${replaceLangName}\`\`\``, inline: true },
-                                    { name: 'Code', value: `\`\`\`${replaceLangCode}\`\`\``, inline: true },
+                                    { name: `${lang.admin.language.listfield1}`, value: `\`\`\`${replaceLangName}\`\`\``, inline: true },
+                                    { name: `${lang.admin.language.listfield2}`, value: `\`\`\`${replaceLangCode}\`\`\``, inline: true },
                                 );
                             await interaction.reply({ embeds: [configembed] });
                         };
@@ -121,23 +123,24 @@ language - Commands relating to language.\n  ⤷ help - Displays this help text.
                             let langFile;
                             lang_files.forEach(file => {if (file === `${stringChoicesValueset}.json`) {langFile = true;};});
                             if (langFile) {
-                                if (dataLang.Lang === `./Database/lang/${stringChoicesValueset}.json`) {await interaction.reply({ content: 'Already set to it.', ephemeral: true });return;};
+                                if (dataLang.Lang === `./Database/lang/${stringChoicesValueset}.json`) {await interaction.reply({ content: `${lang.admin.language.isset}`, ephemeral: true });return;};
                                 dataLang = { ConfigID: `${getBotConfigID}`, GuildID: `${getGuildID}`, ShardID, BotID: `${globalclient.user.id}`, Lang: `./Database/lang/${stringChoicesValueset}.json` };
                                 Set.botConfig(dataLang);
-                                console.log('[' + DateTime.utc().toFormat(timeFormat) + ']' + lang.prefix.clan, lang.admin.lang.default);
-                                configembed.setDescription('2');
+                                let jsonlang = `${lang.admin.language}.` + `${stringChoicesValueset}`;
+                                console.log('[' + DateTime.utc().toFormat(timeFormat) + ']' + lang.prefix.clan, jsonlang);
+                                configembed.setDescription(`${jsonlang}`);
                                 await interaction.reply({ embeds: [configembed] });
                             };
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'lanuage\' returned \'null / undefined\'.`);

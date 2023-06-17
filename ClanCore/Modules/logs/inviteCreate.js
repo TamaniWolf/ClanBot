@@ -25,7 +25,7 @@ module.exports = {
         dataLogs = Get.logsForChannel(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Creating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+            const { executor, target } = botLog;
             // console.log(botLog);
             // let channels = target.changes;
             // if (target.changes) {

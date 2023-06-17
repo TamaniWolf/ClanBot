@@ -1,15 +1,20 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
 const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
-const prefix = process.env.PREFIX;
 
 module.exports = {
+	cooldown: 5,
+	admin: 'false',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('birthday')
         .setDescription('Command for the Birthday Calendar.')
         .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addSubcommand(subcommand =>
             subcommand
                 .setName('help')
@@ -88,9 +93,8 @@ module.exports = {
                         .setDescription('The User.')
                         .setRequired(true)
                 )
-        ),
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'false',      // Admin Command = 'true', No Admin Command = 'false'.
+        )
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
             // SQLite
@@ -125,10 +129,11 @@ module.exports = {
             if (dataCommandMember == null) { dataCommandMember = { Birthday: 'true' }; };
             if (dataChannelBirthday == null) {  };
             if (dataChannelBirthdayCmd == null) { dataChannelBirthdayCmd = dataChannelBirthday; };
-            if (dataChannelBirthdayCmd == null) { await interaction.reply({ content: 'The Birthday Calendar has not been set up yet.', ephemeral: true }); };
+            let lang = require(`../../../.${dataLang.Lang}`);
+            if (dataChannelBirthdayCmd == null) { await interaction.reply({ content: `${lang.default.birthday.nosetup}`, ephemeral: true }); };
             // Context
+
             if (dataCommandMember.Birthday === 'true') {
-                let lang = require(`../../../.${dataLang.Lang}`);
                 if (interaction.channel.id === dataChannelBirthdayCmd.ChannelID) {
                     const configembed = new EmbedBuilder()
                     .setColor('Purple')
@@ -140,17 +145,17 @@ module.exports = {
                         let permissions = interaction.member.permissions;
                         if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                             // \nbirthday set <date|announce> <Month-Day|yes|no>
-                            configembed.setTitle('Birthdays - Help')
+                            configembed.setTitle(`${lang.default.birthday.helptitle}`)
                             .addFields([
-                                { name: 'commands', value: '`birthday` - Commands relating to birthdays.\n` ⤷help` - Displays this help text.\n` ⤷set date` - Sets or updates your birthday.\n` ⤷set announce` - Sets whenever your birthday will be announced or not.\n` ⤷remove` - Removes your birthday information from this bot.\n` ⤷get` - Gets a user\'s birthday.', inline: false },
-                                { name: 'Moderator Commands', value: 'Nothing :\'-D', inline: false },
+                                { name: `${lang.default.birthday.helpfiled1}`, value: `${lang.default.birthday.helpvalue1}`, inline: false },
+                                { name: `${lang.default.birthday.helpfiled2}`, value: `${lang.default.birthday.helpvalue2}`, inline: false },
                             ]);
                             await interaction.reply({embeds: [configembed]});
                         } else {
                             // \nbirthday set <date|announce> <Month-Day|yes|no>
-                            configembed.setTitle('Birthdays - Help')
+                            configembed.setTitle(`${lang.default.birthday.helptitle}`)
                             .addFields([
-                                { name: 'commands', value: '`birthday` - Commands relating to birthdays.\n` ⤷help` - Displays this help text.\n` ⤷show-nearest` - Get a list of users who recently had or will have a birthday.\n` ⤷set date` - Sets or updates your birthday.\n` ⤷set announce` - Sets whenever your birthday will be announced or not.\n` ⤷remove` - Removes your birthday information from this bot.\n` ⤷get` - Gets a user\'s birthday.', inline: false },
+                                { name: `${lang.default.birthday.helpfiled1}`, value: `${lang.default.birthday.helpvalue1}`, inline: false },
                             ]);
                             await interaction.reply({embeds: [configembed]});
                         };
@@ -173,10 +178,10 @@ module.exports = {
                         });
                         let stringDbt = dbt.toString();
                         if (stringDbt === '' || stringDbt === undefined || stringDbt == null) {
-                            await interaction.reply(`No upcoming birthdays ahead.`)
+                            await interaction.reply(`${lang.default.birthday.nobdayahead}`)
                         };
                         let replaceStringDbt = stringDbt.replace(/[,]/gi, `\n`);
-                        await interaction.reply(`Recent and upcoming birthdays:\n\n${replaceStringDbt}`);
+                        await interaction.reply(`${lang.default.birthday.bdayahead}\n\n${replaceStringDbt}`);
                     };
                     // Add Birthday.
                     if (interaction.options.getSubcommandGroup() === 'set') {
@@ -217,7 +222,7 @@ module.exports = {
                                 let stringDay;
                                 stringDay = resultDay.toString();
                                 if (stringDay === ''/* || stringDay.length != '1'*/) {
-                                    await interaction.reply({ content: 'This Number is not a Day in this Month.' })
+                                    await interaction.reply({ content: `${lang.default.birthday.notaday}` })
                                 } else
                                 if (stringDay.length != '2') {
                                     stringDay = `0${stringDay}`;
@@ -234,10 +239,10 @@ module.exports = {
                                     dataBirthday = Get.calenderForBirthdays(`${getBirthdayID}`);
                                     if (dataBirthday === undefined || dataBirthday === null) {
                                         dataBirthday = { BirthdayID: `${getBirthdayID}`, GuildID: getGuildID, MemberID: interaction.user.id, Date: stringSetDateDate, Timestamp: timestamp, Month: stringMonthNumber, Day: stringDay, TimeZone: stringSetDateTimezone, DatePublic: 'true', Announcement: 'true', Announced: 'false' };
-                                        set = ':white_check_mark: Your birthday has been recorded.';
+                                        set = `:white_check_mark: ${lang.default.birthday.bdayadded}`;
                                     } else if (dataBirthday.BirthdayID === `${getBirthdayID}`) {
                                         dataBirthday = { BirthdayID: dataBirthday.BirthdayID, GuildID: dataBirthday.GuildID, MemberID: dataBirthday.MemberID, Date: stringSetDateDate, Timestamp: timestamp, Month: stringMonthNumber, Day: stringDay, TimeZone: stringSetDateTimezone, DatePublic: dataBirthday.DatePublic, Announcement: dataBirthday.Announcement, Announced: dataBirthday.Announced };
-                                        set = ':white_check_mark: Your birthday has been updated.';
+                                        set = `:white_check_mark: ${lang.default.birthday.bdayupdated}`;
                                     };
                                     Set.calenderForBirthdays(dataBirthday);
                                     await interaction.reply(set);
@@ -256,9 +261,9 @@ module.exports = {
                                 };
                                 if (dataBirthday.Announce === 'false') {
                                     dataBirthday = { BirthdayID: dataBirthday.BirthdayID, GuildID: dataBirthday.GuildID, MemberID: dataBirthday.MemberID, Date: dataBirthday.Date, Timestamp: dataBirthday.Timestamp, Month: dataBirthday.Month, Day: dataBirthday.Day, TimeZone: dataBirthday.TimeZone, DatePublic: dataBirthday.DatePublic, Announce: 'true', Age: dataBirthday.Age };
-                                    announceYes = ':white_check_mark: Your birthday will now be announced.';
+                                    announceYes = `:white_check_mark: ${lang.default.birthday.announceyes}`;
                                 } else if (dataBirthday.Announce === 'true') {
-                                    announceYes = ':x: Your birthday will already be announced.'
+                                    announceYes = `:x: ${lang.default.birthday.announceis}`;
                                 };
                                 Set.calenderForBirthdays(dataBirthday);
                                 await interaction.reply(announceYes);
@@ -271,9 +276,9 @@ module.exports = {
                                 };
                                 if (dataBirthday.Announce === 'false') {
                                     dataBirthday = { BirthdayID: dataBirthday.BirthdayID, GuildID: dataBirthday.GuildID, MemberID: dataBirthday.MemberID, Date: dataBirthday.Date, Timestamp: dataBirthday.Timestamp, Month: dataBirthday.Month, Day: dataBirthday.Day, TimeZone: dataBirthday.TimeZone, DatePublic: dataBirthday.DatePublic, Announce: 'false', Age: dataBirthday.Age };
-                                    announceNo = ':white_check_mark: Your birthday will now not announced.';
+                                    announceNo = `:white_check_mark: ${lang.default.birthday.noannounceyes}`;
                                 } else if (dataBirthday.Announce === 'true') {
-                                    announceNo = ':x: Your birthday will already not announced.'
+                                    announceNo = `:x: ${lang.default.birthday.noannounceis}`;
                                 };
                                 Set.calenderForBirthdays(dataBirthday);
                                 await interaction.reply(announceNo);
@@ -284,7 +289,7 @@ module.exports = {
                             let dataBirthday;
                             dataBirthday = Get.calenderForBirthdays(`${getBirthdayID}`);
                             if (dataBirthday === undefined || dataBirthday === null) {
-                                set = `:x: You have not set your Birthday yet.`;
+                                set = `:x: ${lang.default.birthday.bdaynotset}`;
                             } else if (dataBirthday.BirthdayID === `${getBirthdayID}`) {
                                 let abc;
                                 abc = DateTime.fromISO(`1970-${dataBirthday.Month}-${dataBirthday.Day}T00:00:00.000`, { zone: `${stringSetTimezone}`});
@@ -293,7 +298,7 @@ module.exports = {
                                 }
                                 let timestamp = abc.ts.toString();
                                 dataBirthday = { BirthdayID: dataBirthday.BirthdayID, GuildID: dataBirthday.GuildID, MemberID: dataBirthday.MemberID, Date: dataBirthday.Date, Timestamp: timestamp, Month: dataBirthday.Month, Day: dataBirthday.Day, TimeZone: stringSetTimezone, DatePublic: dataBirthday.DatePublic, Announcement: dataBirthday.Announcement, Announced: dataBirthday.Announced };
-                                set = `:white_check_mark: Your birthday has been updated.\n\` ${dataBirthday.Date} \` \` ${dataBirthday.TimeZone} \``;
+                                set = `:white_check_mark: ${lang.default.birthday.bdayupdated}\n\` ${dataBirthday.Date} \` \` ${dataBirthday.TimeZone} \``;
                                 Set.calenderForBirthdays(dataBirthday);
                             };
                             await interaction.reply(set);
@@ -307,9 +312,9 @@ module.exports = {
                             let dataBirthday;
                             dataBirthday = Get.calenderForBirthdays(`${getBirthdayID}`);
                             if (dataBirthday == undefined || dataBirthday == null) {
-                                remove = ':x: You did not set your Birthday yet.';
+                                remove = `:x: ${lang.default.birthday.bdaynotset}`;
                             } else {
-                                remove = ':white_check_mark: Your birthday has been removed from our records.'
+                                remove = `:white_check_mark: ${lang.default.birthday.bdayremoved}`;
                             };
                             Del.calenderForBirthdays(dataBirthday.BirthdayID);
                             await interaction.reply(remove);
@@ -321,9 +326,9 @@ module.exports = {
                                 let dataBirthday;
                                 dataBirthday = Get.calenderForBirthdays(`${getBirthdayID}`);
                                 if (dataBirthday == undefined || dataBirthday == null) {
-                                    remove = ':x: You did not set your Birthday yet.';
+                                    remove = `:x: ${lang.default.birthday.bdaynotset}`;
                                 } else {
-                                    remove = ':white_check_mark: Your birthday has been removed from our records.'
+                                    remove = `:white_check_mark: ${lang.default.birthday.bdayremoved}`;
                                 };
                                 Del.calenderForBirthdays(dataBirthday.BirthdayID);
                                 await interaction.reply(remove);
@@ -332,9 +337,9 @@ module.exports = {
                                 let dataBirthday2;
                                 dataBirthday2 = Get.calenderForBirthdays(`${getBirthdayID}`);
                                 if (dataBirthday2 == undefined || dataBirthday2 == null) {
-                                    remove2 = ':x: This Member has not set ther Birthday yet.';
+                                    remove2 = `:x: ${lang.default.birthday.membernobday}`;
                                 } else {
-                                    remove2 = ':white_check_mark: The birthday has been removed from the records.'
+                                    remove2 = `:white_check_mark: ${lang.default.birthday.abdayremoved}`;
                                 };
                                 Del.calenderForBirthdays(dataBirthday2.BirthdayID);
                                 await interaction.reply(remove2);
@@ -354,24 +359,25 @@ module.exports = {
                         dataBirthday = Get.calenderForBirthdays(`${getBirthdayID}`);
                         if (member.nickname === null || member.nickname === undefined) {
                             if (dataBirthday === undefined || dataBirthday === null) {
-                                info = `:x: I don't have any information on this user.`;
+                                info = `:x: ${lang.default.birthday.nobdayinfo}`;
                             } else {
                                 info = `**${member.user.username}**#${member.user.discriminator}:\` ${dataBirthday.Date} \``;
                             };
                         } else if (member.nickname != null || member.nickname != undefined) {
                             if (dataBirthday === undefined || dataBirthday === null) {
-                                info = `:x: I don't have any information on this user.`;
+                                info = `:x: ${lang.default.birthday.nobdayinfo}`;
                             } else {
                                 info = `**${member.nickname}** (${member.user.username}#${member.user.discriminator}):\` ${dataBirthday.Date} \``;
                             };
                         };
                         await interaction.reply(info);
                     };
+                    // Error Messages
                 } else {
-                    await interaction.reply({ content: `You are not using this command in the right channel. Move over to <#${dataChannelBirthdayCmd.ChannelID}>`, ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.wrongchnannel} <#${dataChannelBirthdayCmd.ChannelID}>`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'birthday\' returned \'null / undefined\'.`);

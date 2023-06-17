@@ -1,0 +1,38 @@
+[
+    {
+        "embed": "Update to version: 4.8.0",
+        "version": "4.8.0",
+        "date": "2023/06/17",
+        "number": "23w24a"
+    },
+    {
+        "embed": "\n+ Added Commands /eval /reload "
+    },
+    {
+        "embed": "\n+ Added speed convertion "
+    },
+    {
+        "embed": "\n+ Added more language variables "
+    },
+    {
+        "embed": "\n+ Added translation files 'de_DE.json' "
+    },
+    {
+        "embed": "\n+ Added patchnotes files '23w24a.json' "
+    },
+    {
+        "embed": "\n+ Updated packages "
+    },
+    {
+        "embed": "\n+ Fixed Multible Logger errors "
+    },
+    {
+        "embed": "\n+ Fixed convert volume and number "
+    },
+    {
+        "embed": "\n- Removed template command "
+    },
+    {
+        "embed": "\n- Removed Nordic God 'Hammersbald' from the Bot "
+    }
+]

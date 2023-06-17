@@ -1,4 +1,5 @@
 
+// Require SQLite and Databases
 const SQLite = require("better-sqlite3");
 const sql_Config = new SQLite('./Database/sqlite/config/config.sqlite');
 const sql_OnOff = new SQLite('./Database/sqlite/config/onoff.sqlite');
@@ -8,9 +9,11 @@ const sql_Reaction = new SQLite('./Database/sqlite/reaction/reaction.sqlite');
 const sql_TwitchRequest = new SQLite('./Database/sqlite/twitch/twitch.sqlite');
 const sql_Birthday = new SQLite('./Database/sqlite/calender/birthdays.sqlite');
 const sql_AuditLogs = new SQLite('./Database/sqlite/moderation/auditlog.sqlite');
-// const sql_MemberProfile = new SQLite('./Database/sqlite/member/profile.sqlite');
+// const sql_Profile = new SQLite('./Database/sqlite/member/profile.sqlite');
+// const sql_Achievements = new SQLite('./Database/sqlite/member/achievements.sqlite');
 
 class Del {
+    // Regular
     // Config
     static botConfig(id) {
         let data;
@@ -116,7 +119,6 @@ class Del {
         data = globalclient.delLogsRoles.run(id);
         return data;
     };
-    // ChannelRole
     // Channel
     static channelForAdmin(id) {
         let data;
@@ -186,7 +188,7 @@ class Del {
     //     data = globalclient.delPoll.run(id);
     //     return data;
     // };
-    // Twitchrequest
+    // Twitch
     static twitchTokenRequest(id) {
         let data;
         globalclient.delTwitchToken = sql_TwitchRequest.prepare("DELETE FROM twitchrequest WHERE TwitchRequestID = ?");
@@ -213,45 +215,37 @@ class Del {
         data = globalclient.delMessageDel.run(id);
         return data;
     };
-    // All AuditLog
-    static allAuditLogs(id) {
-        let data;
-        globalclient.delAuditLogs = sql_AuditLogs.prepare("DELETE FROM auditlog WHERE AuditLogID = ?");
-        data = globalclient.delAuditLogs.run(id);
-        return data;
-    };
-    static allAuditLogsMsgDel(id) {
-        let data;
-        globalclient.delMessageDel = sql_AuditLogs.prepare("DELETE FROM messagedel WHERE AuditLogID = ?");
-        data = globalclient.delMessageDel.run(id);
-        return data;
-    };
     // Member
-    static memberProfile(id) {
-        let data;
-        globalclient.delMemberProfile = sql_MemberProfile.prepare("DELETE FROM member WHERE ProfileID = ?");
-        data = globalclient.delMemberProfile.run(id);
-        return data;
-    };
-    static memberScore(id) {
-        let data;
-        globalclient.delMemberScore = sql_MemberProfile.prepare("DELETE FROM score WHERE ProfileID = ?");
-        data = globalclient.delMemberScore.run(id);
-        return data;
-    };
-    // 
-    // 
-    // 
-    // 
+    // static profile(id) {
+    //     let data;
+    //     globalclient.delProfile = sql_Profile.prepare("DELETE FROM members WHERE ProfileID = ?");
+    //     data = globalclient.delProfile.run(id);
+    //     return data;
+    // };
+    // static scores(id) {
+    //     let data;
+    //     globalclient.delScores = sql_Profile.prepare("DELETE FROM scores WHERE ProfileID = ?");
+    //     data = globalclient.delScores.run(id);
+    //     return data;
+    // };
+    // static achievements(id) {
+    //     let data;
+    //     globalclient.delAchievements = sql_Achievements.prepare("DELETE FROM achievements WHERE AchievementsID = ?");
+    //     data = globalclient.delAchievements.run(id);
+    //     return data;
+    // };
+
+
+
     // By Guild
-    // Config
+    // Config By Guild
     static botConfigByGuild(id) {
         let data;
         globalclient.delConfigByGuild = sql_Config.prepare("DELETE FROM config WHERE GuildID = ?");
         data = globalclient.delConfigByGuild.run(id);
         return data;
     };
-    // OnOff
+    // OnOff By Guild
     static onOffForCommandAdminByGuild(id) {
         let data;
         globalclient.delOnOffCommandAdminByGuild = sql_OnOff.prepare("DELETE FROM command_admin WHERE GuildID = ?");
@@ -288,7 +282,7 @@ class Del {
         data = globalclient.delOnOffTwitchByGuild.run(id);
         return data;
     };
-    // Logs
+    // Logs By Guild
     static logsBanByGuild(id) {
         let data;
         globalclient.delLogsBanByGuild = sql_Logs.prepare("DELETE FROM ban WHERE GuildID = ?");
@@ -349,8 +343,7 @@ class Del {
         data = globalclient.delLogsRoleByGuild.run(id);
         return data;
     };
-    // ChannelRole
-    // Channel
+    // Channel By Guild
     static channelForAdminByGuild(id) {
         let data;
         globalclient.delChannelAdminByGuild = sql_ChannelRole.prepare("DELETE FROM channel_admin WHERE GuildID = ?");
@@ -387,7 +380,7 @@ class Del {
         data = globalclient.delChannelUserByGuild.run(id);
         return data;
     };
-    // Role
+    // Role By Guild
     static roleForAdminByGuild(id) {
         let data;
         globalclient.delRoleAdminByGuild = sql_ChannelRole.prepare("DELETE FROM role_admin WHERE GuildID = ?");
@@ -406,7 +399,7 @@ class Del {
         data = globalclient.delRoleUserByGuild.run(id);
         return data;
     };
-    // Reaction
+    // Reaction By Guild
     static reactionForActionByGuild(id) {
         let data;
         globalclient.delReactionByGuild = sql_Reaction.prepare("DELETE FROM reaction WHERE GuildID = ?");
@@ -419,21 +412,21 @@ class Del {
         data = globalclient.delPollByGuild.run(id);
         return data;
     };
-    // Twitchrequest
+    // Twitch  By Guild
     static twitchTokenRequestByGuild(id) {
         let data;
         globalclient.delTwitchTokenByGuild = sql_TwitchRequest.prepare("DELETE FROM twitchrequest WHERE GuildID = ?");
         data = globalclient.delTwitchTokenByGuild.run(id);
         return data;
     };
-    // Calender
+    // Calender By Guild
     static calenderForBirthdaysByGuild(id) {
         let data;
         globalclient.delBirthdaysByGuild = sql_Birthday.prepare("DELETE FROM birthdays WHERE GuildID = ?");
         data = globalclient.delBirthdaysByGuild.run(id);
         return data;
     };
-    // AuditLog
+    // AuditLog By Guild
     static auditLogsByGuild(id) {
         let data;
         globalclient.delAuditLogsByGuild = sql_AuditLogs.prepare("DELETE FROM auditlog WHERE GuildID = ?");
@@ -446,17 +439,23 @@ class Del {
         data = globalclient.delMessageDelByGuild.run(id);
         return data;
     };
-    // // Member
-    // static memberProfileByGuild(id) {
+    // Member By Guild
+    // static profileByGuild(id) {
     //     let data;
-    //     globalclient.delMemberProfileByGuild = sql_MemberProfile.prepare("DELETE FROM member WHERE GuildID = ?");
-    //     data = globalclient.delMemberProfileByGuild.run(id);
+    //     globalclient.delProfileByGuild = sql_Profile.prepare("DELETE FROM member WHERE GuildID = ?");
+    //     data = globalclient.delProfileByGuild.run(id);
     //     return data;
     // };
-    // static memberScoresByGuild(id) {
+    // static scoresByGuild(id) {
     //     let data;
-    //     globalclient.delMemberScoreByGuild = sql_MemberProfile.prepare("DELETE FROM scores WHERE GuildID = ?");
-    //     data = globalclient.delMemberScoreByGuild.run(id);
+    //     globalclient.delScoreByGuild = sql_Profile.prepare("DELETE FROM scores WHERE GuildID = ?");
+    //     data = globalclient.delScoreByGuild.run(id);
+    //     return data;
+    // };
+    // static achievementsByGuild(id) {
+    //     let data;
+    //     globalclient.delAchievementsByGuild = sql_Achievements.prepare("DELETE FROM achievements WHERE GuildID = ?");
+    //     data = globalclient.delAchievementsByGuild.run(id);
     //     return data;
     // };
 };

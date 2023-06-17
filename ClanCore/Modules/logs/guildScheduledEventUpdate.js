@@ -32,7 +32,7 @@ module.exports = {
         if (dataLogs == null) {return};
         if (dataAuditLogID != null) {return;};
         if (dataLogs.Updating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+            const { targetType, actionType, executor, changes, id, target } = botLog;
             let createdTimestampLog = botLog.createdTimestamp;
             let dt = DateTime.now().minus({ seconds: 5 });
             let time = dt.toMillis();

@@ -38,12 +38,24 @@ module.exports = {
         dataLogs = Get.logsForMember(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Updating === 'true') {
+            if (memberUpdateLog == null) {
+                // console.log('MemberUpdate');
+                // console.log(oldMember);
+                // console.log(newMember);
+                return;
+            };
+            if (memberRoleUpdateLog == null) {
+                // console.log('MemberRoleUpdate');
+                // console.log(oldMember);
+                // console.log(newMember);
+                return;
+            };
             if (memberUpdateLog && memberRoleUpdateLog == null || memberUpdateLog && memberRoleUpdateLog) {
                 if (memberUpdateLog.createdTimestamp > memberRoleUpdateLog.createdTimestamp) {
                     if (memberUpdateLog != null) {
                         dataAuditLogID = Get.auditLogs(memberUpdateLog.id);
                     };
-                    const { targetType, actionType, action, reason, executor, changes, id, extra, target } = memberUpdateLog;
+                    const { targetType, actionType, executor, changes, id, target } = memberUpdateLog;
                     let createdTimestampLog = memberUpdateLog.createdTimestamp;
                     let dt = DateTime.now().minus({ seconds: 5 });
                     let time = dt.toMillis();
@@ -107,7 +119,7 @@ module.exports = {
                     if (memberRoleUpdateLog != null) {
                         dataAuditLogID = Get.auditLogs(memberRoleUpdateLog.id);
                     };
-                    const { targetType, actionType, action, reason, executor, changes, id, extra, target } = memberRoleUpdateLog;
+                    const { targetType, actionType, executor, changes, id, target } = memberRoleUpdateLog;
                     let createdTimestampLog = memberRoleUpdateLog.createdTimestamp;
                     let dt = DateTime.now().minus({ seconds: 5 });
                     let time = dt.toMillis();
@@ -137,12 +149,22 @@ module.exports = {
                         });
                         let stringKey = arrayOfKey.toString()
                         let stringNewName = arrayOfNewName.toString()
+                        const embedsMemberUpdate = new EmbedBuilder()
+                        if (executor == null) {
+                            let icon2 = 'attachment://discord_logo_gray.png';
+                            embedsMemberUpdate.setColor('Yellow')
+                            embedsMemberUpdate.setDescription(`${target} was given the \`${stringNewName}\` role by \`Intergration\`.`)
+                            embedsMemberUpdate.setAuthor({name: `Intergration`, iconURL: `${icon2}`})
+                                .setFooter({text: `MemberID: ${target.id}`})
+                                .setTimestamp(new Date());
+                            globalclient.channels.cache.get(dataChannellog.ChannelID).send({embeds: [embedsMemberUpdate]});
+                            return;
+                        };
                         let name2 = executor.tag;
                         let icon2 = executor.avatarURL();
                         if(executor.avatar == null) {
                             icon2 = 'attachment://discord_logo_gray.png';
                         };
-                        const embedsMemberUpdate = new EmbedBuilder()
                         if (stringKey === '$add') {
                             embedsMemberUpdate.setColor('Yellow')
                             if (executor.id === target.id) {

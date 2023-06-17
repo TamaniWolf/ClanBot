@@ -1,10 +1,16 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 const fs = require('node:fs');
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('patchnotes')
         .setDescription('Displays what has been changed in the Bot.')
@@ -13,7 +19,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -47,10 +53,7 @@ module.exports = {
                         .setRequired(true)
                 )
         )
-        ,
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
             // SQLite
@@ -73,124 +76,130 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Patchnotes: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Patchnotes === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
-                if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
-                    if (interaction.options.getSubcommand() === 'help') {
-                        const configEmbed = new EmbedBuilder()
-                        configEmbed.setTitle('Patchnotes - Help')
-                        .addFields([
-                            { name: 'commands', value: '`patchnotes` - Commands relating to patchnotes.\n` ⤷help` - Displays this help text.\n` ⤷list` - A List of patchnotes.\n` ⤷get` - Get a spesific patchnote.', inline: false },
-                        ]);
-                        await interaction.reply({ embeds: [configEmbed] });
-                    };
-                    if (interaction.options.getSubcommand() === 'list') {
-                        const patchListEmbed = new EmbedBuilder()
-                            .setColor('DarkGreen')
-                        const stringGetYear = interaction.options.getString('year');
-                        const patchnote_files = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json'));
-                        if  (!stringGetYear) {
-                            let patchDate = [];
-                            let patchName = [];
-                            let patchVersion = [];
-                            for (const file of patchnote_files) {
-                                let rawData = fs.readFileSync(`./Database/patchnotes/${file}`);
-                                let patchRead = JSON.parse(rawData);
-                                patchDate.push(patchRead[0].date);
-                                patchName.push(patchRead[0].number);
-                                patchVersion.push(patchRead[0].version);
-                            };
-                            let stringPatchDate = patchDate.toString();
-                            let stringPatchName = patchName.toString();
-                            let stringPatchVersion = patchVersion.toString();
-                            let StringPatchDateOne = stringPatchDate.replace(/[,]/gi, '\n');
-                            let StringPatchNameOne = stringPatchName.replace(/[,]/gi, '\n');
-                            let StringPatchVersionOne = stringPatchVersion.replace(/[,]/gi, '\n');
-                            let spno = StringPatchNameOne.replace(/[\n]/gi, '');
-                            let spdo = StringPatchDateOne.replace(/[\n]/gi, '');
-                            let spvo = StringPatchVersionOne.replace(/[\n]/gi, '');
-                            if (!spno) {StringPatchNameOne = 'No Data Found.';};
-                            if (!spdo) {StringPatchDateOne = 'No Data Found.';};
-                            if (!spvo) {StringPatchVersionOne = 'No Data Found.';};
-                            patchListEmbed
-                                .setTitle('Patchnotes List')
+                let permissions = interaction.member.permissions;
+                if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+                    if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
+                        if (interaction.options.getSubcommand() === 'help') {
+                            const configEmbed = new EmbedBuilder()
+                            configEmbed.setTitle(`${lang.admin.patchnotes.titlehelp}`)
+                            .addFields([
+                                { name: `${lang.admin.patchnotes.helpfield1}`, value: `${lang.admin.patchnotes.helpfield2}`, inline: false },
+                            ]);
+                            await interaction.reply({ embeds: [configEmbed] });
+                        };
+                        if (interaction.options.getSubcommand() === 'list') {
+                            const patchListEmbed = new EmbedBuilder()
+                                .setColor('DarkGreen')
+                            const stringGetYear = interaction.options.getString('year');
+                            const patchnote_files = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json'));
+                            if  (!stringGetYear) {
+                                let patchDate = [];
+                                let patchName = [];
+                                let patchVersion = [];
+                                for (const file of patchnote_files) {
+                                    let rawData = fs.readFileSync(`./Database/patchnotes/${file}`);
+                                    let patchRead = JSON.parse(rawData);
+                                    patchDate.push(patchRead[0].date);
+                                    patchName.push(patchRead[0].number);
+                                    patchVersion.push(patchRead[0].version);
+                                };
+                                let stringPatchDate = patchDate.toString();
+                                let stringPatchName = patchName.toString();
+                                let stringPatchVersion = patchVersion.toString();
+                                let StringPatchDateOne = stringPatchDate.replace(/[,]/gi, '\n');
+                                let StringPatchNameOne = stringPatchName.replace(/[,]/gi, '\n');
+                                let StringPatchVersionOne = stringPatchVersion.replace(/[,]/gi, '\n');
+                                let spno = StringPatchNameOne.replace(/[\n]/gi, '');
+                                let spdo = StringPatchDateOne.replace(/[\n]/gi, '');
+                                let spvo = StringPatchVersionOne.replace(/[\n]/gi, '');
+                                if (!spno) {StringPatchNameOne = `${lang.admin.patchnotes.nodata}`;};
+                                if (!spdo) {StringPatchDateOne = `${lang.admin.patchnotes.nodata}`;};
+                                if (!spvo) {StringPatchVersionOne = `${lang.admin.patchnotes.nodata}`;};
+                                patchListEmbed
+                                    .setTitle(`${lang.admin.patchnotes.titlelist}`)
+                                    .addFields(
+                                    { name: `${lang.admin.patchnotes.listfield1}`, value: `\`\`\`\n${StringPatchNameOne}\n\`\`\``, inline: true },
+                                    { name: `${lang.admin.patchnotes.listfield2}`, value: `\`\`\`\n${StringPatchDateOne}\n\`\`\``, inline: true },
+                                    { name: `${lang.admin.patchnotes.listfield3}`, value: `\`\`\`\n${StringPatchVersionOne}\n\`\`\``, inline: true },
+                                );
+                                await interaction.reply({embeds: [patchListEmbed]});
+                            } else if (stringGetYear) {
+                                let stringYear = stringGetYear.replace('20', '');
+                                const patchnote_files_year = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json') && file.startsWith(stringYear));
+                                let patchDateYear = [];
+                                let patchNameYear = [];
+                                let patchVersionYear = [];
+                                for (const file of patchnote_files_year) {
+                                    let rawDataYear = fs.readFileSync(`./Database/patchnotes/${file}`);
+                                    let patchRead = JSON.parse(rawDataYear);
+                                    patchDateYear.push(patchRead[0].date);
+                                    patchNameYear.push(patchRead[0].number);
+                                    patchVersionYear.push(patchRead[0].version);
+                                };
+                                let stringPatchDateYear = patchDateYear.toString();
+                                let stringPatchNameYear = patchNameYear.toString();
+                                let stringPatchVersionYear = patchVersionYear.toString();
+                                let StringPatchDateYearOne = stringPatchDateYear.replace(/[,]/gi, '\n');
+                                let StringPatchNameYearOne = stringPatchNameYear.replace(/[,]/gi, '\n');
+                                let StringPatchVersionYearOne = stringPatchVersionYear.replace(/[,]/gi, '\n');
+                                let spno = StringPatchNameYearOne.replace(/[\n]/gi, '');
+                                let spdo = StringPatchDateYearOne.replace(/[\n]/gi, '');
+                                let spvo = StringPatchVersionYearOne.replace(/[\n]/gi, '');
+                                if (!spno) {StringPatchNameYearOne = `${lang.admin.patchnotes.nodata}`;};
+                                if (!spdo) {StringPatchDateYearOne = `${lang.admin.patchnotes.nodata}`;};
+                                if (!spvo) {StringPatchVersionYearOne = `${lang.admin.patchnotes.nodata}`;};
+                                patchListEmbed
+                                .setTitle(`${lang.admin.patchnotes.titlelist} - 20${stringYear}`)
                                 .addFields(
-                                { name: 'Name', value: `\`\`\`\n${StringPatchNameOne}\n\`\`\``, inline: true },
-                                { name: 'Date', value: `\`\`\`\n${StringPatchDateOne}\n\`\`\``, inline: true },
-                                { name: 'Version', value: `\`\`\`\n${StringPatchVersionOne}\n\`\`\``, inline: true },
-                            );
-                            await interaction.reply({embeds: [patchListEmbed]});
-                        } else if (stringGetYear) {
-                            let stringYear = stringGetYear.replace('20', '');
-                            const patchnote_files_year = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json') && file.startsWith(stringYear));
-                            let patchDateYear = [];
-                            let patchNameYear = [];
-                            let patchVersionYear = [];
-                            for (const file of patchnote_files_year) {
-                                let rawDataYear = fs.readFileSync(`./Database/patchnotes/${file}`);
-                                let patchRead = JSON.parse(rawDataYear);
-                                patchDateYear.push(patchRead[0].date);
-                                patchNameYear.push(patchRead[0].number);
-                                patchVersionYear.push(patchRead[0].version);
+                                    { name: `${lang.admin.patchnotes.listfield1}`, value: `\`\`\`\n${StringPatchNameYearOne}\n\`\`\``, inline: true },
+                                    { name: `${lang.admin.patchnotes.listfield2}`, value: `\`\`\`\n${StringPatchDateYearOne}\n\`\`\``, inline: true },
+                                    { name: `${lang.admin.patchnotes.listfield3}`, value: `\`\`\`\n${StringPatchVersionYearOne}\n\`\`\``, inline: true },
+                                );
+                                await interaction.reply({embeds: [patchListEmbed]});
                             };
-                            let stringPatchDateYear = patchDateYear.toString();
-                            let stringPatchNameYear = patchNameYear.toString();
-                            let stringPatchVersionYear = patchVersionYear.toString();
-                            let StringPatchDateYearOne = stringPatchDateYear.replace(/[,]/gi, '\n');
-                            let StringPatchNameYearOne = stringPatchNameYear.replace(/[,]/gi, '\n');
-                            let StringPatchVersionYearOne = stringPatchVersionYear.replace(/[,]/gi, '\n');
-                            let spno = StringPatchNameYearOne.replace(/[\n]/gi, '');
-                            let spdo = StringPatchDateYearOne.replace(/[\n]/gi, '');
-                            let spvo = StringPatchVersionYearOne.replace(/[\n]/gi, '');
-                            if (!spno) {StringPatchNameYearOne = 'No Data Found.';};
-                            if (!spdo) {StringPatchDateYearOne = 'No Data Found.';};
-                            if (!spvo) {StringPatchVersionYearOne = 'No Data Found.';};
-                            patchListEmbed
-                            .setTitle(`Patchnotes List - 20${stringYear}`)
-                            .addFields(
-                                { name: 'Name', value: `\`\`\`\n${StringPatchNameYearOne}\n\`\`\``, inline: true },
-                                { name: 'Date', value: `\`\`\`\n${StringPatchDateYearOne}\n\`\`\``, inline: true },
-                                { name: 'Version', value: `\`\`\`\n${StringPatchVersionYearOne}\n\`\`\``, inline: true },
-                            );
-                            await interaction.reply({embeds: [patchListEmbed]});
                         };
-                    };
-                    if (interaction.options.getSubcommand() === 'get') {
-                        const stringGetNotes = interaction.options.getString('notes');
-                        let stringNotes = `${stringGetNotes}.json`;
-                        const patchnote_files_get = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json'));
-                        const stringPatchNote = patchnote_files_get.filter(file => file === stringNotes);
-                        let stringCleanPatch = stringPatchNote.toString();
-                        if (stringCleanPatch === '') {
-                            return;
-                        } else {
-                            let rawdata = fs.readFileSync(`./Database/patchnotes/${stringCleanPatch}`);
-                            let patchRead = JSON.parse(rawdata);
-                            let stringEmbedRead = patchRead.map(function(obj){
-                                return obj.embed;
-                            });
-                            let stringDateRead = patchRead.map(function(obj){
-                                return obj.date;
-                            });
-                            let stringNumberRead = patchRead.map(function(obj){
-                                return obj.number;
-                            });
-                            let stringPatchEmbed = stringEmbedRead.toString();
-                            let stringPatchDate = stringDateRead.toString();
-                            let stringPatchNumber = stringNumberRead.toString();
-                            let patchEmbed = stringPatchEmbed.replaceAll(' ,', '');
-                            let patchDate = stringPatchDate.replaceAll(/[,]/gi, '');
-                            let patchNumber = stringPatchNumber.replaceAll(/[,]/gi, '');
-                            let embed = `**Patchnotes - ${patchDate}**\n\n${patchNumber}\n\`\`\`\n${patchEmbed}\n\`\`\``;
-                            await interaction.reply({content: embed});
+                        if (interaction.options.getSubcommand() === 'get') {
+                            const stringGetNotes = interaction.options.getString('notes');
+                            let stringNotes = `${stringGetNotes}.json`;
+                            const patchnote_files_get = fs.readdirSync('./Database/patchnotes/').filter(file => file.endsWith('.json'));
+                            const stringPatchNote = patchnote_files_get.filter(file => file === stringNotes);
+                            let stringCleanPatch = stringPatchNote.toString();
+                            if (stringCleanPatch === '') {
+                                return;
+                            } else {
+                                let rawdata = fs.readFileSync(`./Database/patchnotes/${stringCleanPatch}`);
+                                let patchRead = JSON.parse(rawdata);
+                                let stringEmbedRead = patchRead.map(function(obj){
+                                    return obj.embed;
+                                });
+                                let stringDateRead = patchRead.map(function(obj){
+                                    return obj.date;
+                                });
+                                let stringNumberRead = patchRead.map(function(obj){
+                                    return obj.number;
+                                });
+                                let stringPatchEmbed = stringEmbedRead.toString();
+                                let stringPatchDate = stringDateRead.toString();
+                                let stringPatchNumber = stringNumberRead.toString();
+                                let patchEmbed = stringPatchEmbed.replaceAll(' ,', '');
+                                let patchDate = stringPatchDate.replaceAll(/[,]/gi, '');
+                                let patchNumber = stringPatchNumber.replaceAll(/[,]/gi, '');
+                                let embed = `**${lang.admin.patchnotes.patch} - ${patchDate}**\n\n${patchNumber}\n\`\`\`\n${patchEmbed}\n\`\`\``;
+                                await interaction.reply({content: embed});
+                            };
                         };
+                        // Error Messages
+                    } else {
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
-                // Error Messages
                 } else {
-                    await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'patchnotes\' returned \'null / undefined\'.`);

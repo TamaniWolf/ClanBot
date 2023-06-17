@@ -1,9 +1,15 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('reaction')
         .setDescription('Add/Edit/Remove reactions')
@@ -12,7 +18,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -177,10 +183,8 @@ module.exports = {
                             .setRequired(true)
                     )
                 )
-        ),
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
+        )
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -205,17 +209,18 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Reaction: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${getChannelID}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Reaction === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && getChannelID === dataChannelAdmin.ChannelID) {
                         const configembed = new EmbedBuilder()
                         .setColor('DarkGreen')
-                        .setTitle('Config - Reaction action')
+                        .setTitle(`${lang.admin.reaction.titlehelp}`)
                         if(interaction.options.getSubcommand() === 'help') {
                             configembed.addFields(
-                                { name: 'Commands', value: '`reaction` - Commands relating to reaction.\n`  ⤷ help`             - Displays this help text.\n`  ⤷ list`             - A list of set Reactions.\n`  ⤷ set role`         - Set\'s a Reaction Role.\n`  ⤷ set reactions`    - Adds a Reaction to a Message.\n`  ⤷ edit`             - Edits a Reaction Role.\n`  ⤷ remove role`      - Removes a Reaction Role.\n`  ⤷ remove name`      - Removes a Reaction or Reaction Role by Name.\n`  ⤷ remove reactions` - Removes a Reaction.', inline: false },
+                                { name: `${lang.admin.reaction.helpfield1}`, value: `${lang.admin.reaction.helpfield2}`, inline: false },
                             );
                             await interaction.reply({embeds: [configembed]});
                         };
@@ -249,23 +254,23 @@ module.exports = {
                             let replaceAction = stringAction.replace(/[,]/gi, '\n');
                             let replaceRole = stringRole.replace(/[,]/gi, '>\n<@&');
                             let replaceRole2 = replaceRole.replace(/[abcdefghijklmnopqrstuvwxyz]/gi, '100000000000000000');
-                            let resultName = 'No Data Found.';
-                            let resultEmoji = 'No Data Found.';
-                            let resultAction = 'No Data Found.';
-                            let resultRole = 'No Data Found.';
+                            let resultName = `${lang.admin.reaction.nodata}`;
+                            let resultEmoji = `${lang.admin.reaction.nodata}`;
+                            let resultAction = `${lang.admin.reaction.nodata}`;
+                            let resultRole = `${lang.admin.reaction.nodata}`;
                             if (replaceName) {resultName = replaceName;};
                             if (replaceEmoji) {resultEmoji = replaceEmoji;};
                             if (replaceAction) {resultAction = replaceAction;};
                             if (replaceRole2) {resultRole = `<@&${replaceRole2}`;};
                             const reactionroleembed = new EmbedBuilder()
                                 .setColor('DarkGreen')
-                                .setTitle('Reaction action - List')
+                                .setTitle(`${lang.admin.reaction.titlelist}`)
                                 .setDescription(`<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>`)
                                 .addFields([
-                                    { name: `Name`, value: `${resultName}`, inline: true },
-                                    { name: `Emoji`, value: `${resultEmoji}`, inline: true },
-                                    { name: `Action`, value: `${resultAction}`, inline: true },
-                                    { name: `Role`, value: `${resultRole}`, inline: true },
+                                    { name: `${lang.admin.reaction.listfield1}`, value: `${resultName}`, inline: true },
+                                    { name: `${lang.admin.reaction.listfield2}`, value: `${resultEmoji}`, inline: true },
+                                    { name: `${lang.admin.reaction.listfield3}`, value: `${resultAction}`, inline: true },
+                                    { name: `${lang.admin.reaction.listfield4}`, value: `${resultRole}`, inline: true },
                                 ]);
                             await interaction.reply({embeds: [reactionroleembed]});
                         };
@@ -296,17 +301,17 @@ module.exports = {
                                             // console.log(stringGetName);
                                             // console.log(dataReactionRoleAdd);
                                             if (dataReactionRoleAdd && stringGetName === dataReactionRoleAdd.Name) {
-                                                await interaction.reply('Name already in use.');
+                                                await interaction.reply(`${lang.admin.reaction.inuse}`);
                                                 return;
                                             } else {
                                                 // React on to Message.
                                                 messageObject.react(stringGetEmoji);
                                                 dataReactionRoleAdd = { ReactionID: `${getBotConfigID}-${stringGetMessage}-${stringGetEmoji}`, GuildID: `${getGuildID}`, MessageID: `${stringGetMessage}`, ChannelID: `${stringGetChannel.id}`, RoleID: `${stringGetRole.id}`, Type: `Role_Reaction`, Emoji: `${stringGetEmoji}`, Action: `ADD-ROLE`, Name: `${stringGetName}` }
                                                 Set.reactionForAction(dataReactionRoleAdd);
-                                                await interaction.reply(`Reaction Role has been Added.`);
+                                                await interaction.reply(`${lang.admin.reaction.rradded}`);
                                             };
                                         } else {
-                                            await interaction.reply('No Emoji is found!');
+                                            await interaction.reply(`${lang.admin.reaction.emoji404}`);
                                         };
                                     };
                                 };
@@ -328,16 +333,16 @@ module.exports = {
                                             let reaction = await messageObject.reactions.cache.get(stringGetEmoji);
                                             if (reaction != null) {
                                                 if (reaction.me === true) {
-                                                    await interaction.reply({ content: `I already reacted to this message with ${stringGetEmoji}.`, ephemeral: true });
+                                                    await interaction.reply({ content: `${lang.admin.reaction.reactionis} ${stringGetEmoji}.`, ephemeral: true });
                                                     return;
                                                 };
                                             };
-                                            let interactionReply2 = await interaction.reply({ content: `Reacted to this message with ${stringGetEmoji}.`, ephemeral: true });
+                                            let interactionReply2 = await interaction.reply({ content: `${lang.admin.reaction.reacted} ${stringGetEmoji}.`, ephemeral: true });
                                             messageObject.react(stringGetEmoji)
                                                 .then(() => { interactionReply2 })
                                                 .catch(() => {});
                                         } else if (serverEmojis != null) {
-                                            let interactionReply = await interaction.reply({ content: `This Emoji is not in this server.`, ephemeral: true });
+                                            let interactionReply = await interaction.reply({ content: `${lang.admin.reaction.semoji404}`, ephemeral: true });
                                             messageObject.react(stringGetEmoji)
                                                 .catch(error => interactionReply);
                                         };
@@ -346,7 +351,7 @@ module.exports = {
                             };
                         };
                         if (interaction.options.getSubcommand() === 'edit') {
-                            await interaction.reply('Command not in use.');
+                            await interaction.reply(`${lang.admin.reaction.cmdnouse}`);
                             return;
                             const stringGetChannel = interaction.options.getChannel('channel');
                             const stringGetMessage = interaction.options.getString('message');
@@ -361,7 +366,7 @@ module.exports = {
                                             if (emojis != null) {
                                                 // Check if Name is given.
                                                 if (!stringGetName) {
-                                                    await interaction.reply('You must name it.\n\n```\nc.reactionrole edit <role> <Channel> <messageID> <emoji> \"c.reactionrole add #general 200000000000000000 😀 @YT\"```\n');
+                                                    await interaction.reply(`${lang.admin.reaction.mustname}`);
                                                 };
                                                 // Getting Database row by name.
                                                 let dataReactionRoleEdit;
@@ -372,7 +377,7 @@ module.exports = {
                                                 };
                                                 // Check if name is already in use.
                                                 if (stringGetName === dataReactionRoleEdit.Name) {
-                                                    await interaction.reply('Name already in use.');
+                                                    await interaction.reply(`${lang.admin.reaction.inuse}`);
                                                 };
                                                 // Check if name is not in use.
                                                 if (stringGetName != dataReactionRoleEdit.Name) {
@@ -398,10 +403,10 @@ module.exports = {
                                                     let dataReactionRoleEditNew;
                                                     dataReactionRoleEditNew = { ReactionID: `${getGuildID}-${stringGetMessage}-${stringGetEmoji}` , Message: `${stringGetMessage}`, Channel: `${stringGetChannel.id}`, Emoji: `${stringGetEmoji}` , Role: `${stringGetRole.id}`, Action: `ADD-ROLE`, Name: `${getGuildRole.name}` }
                                                     Set.reactionForAction(dataReactionRoleEditNew);
-                                                    await interaction.reply(`Reaction Role has been Changed.`);
+                                                    await interaction.reply(`${lang.admin.reaction.rrchange}`);
                                                 };
                                             } else {
-                                                await interaction.reply('No Emoji is found!');
+                                                await interaction.reply(`${lang.admin.reaction.emoji404}`);
                                             };
                                     };
                         };
@@ -414,7 +419,7 @@ module.exports = {
                                 dataReactionRoleRemove = Get.reactionForRole(stringGetRole.id);
                                 // Return if Data is 'undefined' or 'null'.
                                 if (dataReactionRoleRemove == null) {
-                                    await interaction.reply('No Database Entry found.')
+                                    await interaction.reply(`${lang.admin.reaction.nodbentry}`)
                                 };
                                 // Get Channel and Message by id and remove reaction and Database Entry
                                 let getGuildChannel = interaction.client.channels.cache.get(dataReactionRoleRemove.ChannelID);
@@ -439,7 +444,7 @@ module.exports = {
                                     };
                                 };
                                 Del.reactionForAction(dataReactionRoleRemove.ReactionID);
-                                await interaction.reply({ content: `Reaction action has been removed.`, ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.reaction.raremoved}`, ephemeral: true});
                             };
                             if (interaction.options.getSubcommand() === 'name') {
                                 const stringGetName = interaction.options.getString('name');
@@ -448,7 +453,7 @@ module.exports = {
                                 dataReactionRoleRemove = Get.reactionForName(stringGetName);
                                 // Return if Data is 'undefined' or 'null'.
                                 if (dataReactionRoleRemove == null) {
-                                    await interaction.reply('No Database Entry found.')
+                                    await interaction.reply(`${lang.admin.reaction.nodbentry}`)
                                 };
                                 // Get Channel and Message by id and remove reaction and Database Entry
                                 let getGuildChannel = await interaction.client.channels.fetch(dataReactionRoleRemove.ChannelID);
@@ -473,7 +478,7 @@ module.exports = {
                                     };
                                 };
                                 Del.reactionForAction(dataReactionRoleRemove.ReactionID);
-                                await interaction.reply({ content: `Reaction action has been removed.`, ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.reaction.raremoved}`, ephemeral: true});
                             };
                             if (interaction.options.getSubcommand() === 'reactions') {
                                 const stringGetChannel = interaction.options.getChannel('channel');
@@ -492,19 +497,19 @@ module.exports = {
                                             let reaction = await messageObject.reactions.fetch(stringGetEmoji);
 
                                             if (reaction != null) {
-                                                let interactionReply2 = await interaction.reply({ content: `Reactions with ${stringGetEmoji} in this message got deleted.`, ephemeral: true });
+                                                let interactionReply2 = await interaction.reply({ content: `${lang.admin.reaction.with} ${stringGetEmoji} ${lang.admin.reaction.gotdeleted}`, ephemeral: true });
                                                 reaction.remove()
                                                     .then(() => { interactionReply2 })
                                                     .catch(error => console.error('Failed to remove reactions.', error));
                                             } else if (reaction == null) {
-                                                await interaction.reply({ content: `There is no reaction with this emoji.`, ephemeral: true });
+                                                await interaction.reply({ content: `${lang.admin.reaction.noremoji}`, ephemeral: true });
                                             };
                                         } else if (newEmojis.startsWith('<') || emojis == null) {
                                             let newMessageObject = messageObject;
                                             let reactions = newMessageObject.reactions.cache.filter(reaction => reaction._emoji.id);
                                             for (const reaction of reactions.values()) {
                                                 if (newEmojis.includes(reaction._emoji.id)) {
-                                                    let interactionReply = await interaction.reply({ content: `Reactions with ${stringGetEmoji} in this message got deleted.`, ephemeral: true });
+                                                    let interactionReply = await interaction.reply({ content: `${lang.admin.reaction.with} ${stringGetEmoji} ${lang.admin.reaction.gotdeleted}`, ephemeral: true });
                                                     reaction.remove()
                                                         .then(() => { interactionReply })
                                                         .catch(error => console.error('Failed to remove reactions.', error));
@@ -517,13 +522,13 @@ module.exports = {
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'reaction\' returned \'null / undefined\'.`);

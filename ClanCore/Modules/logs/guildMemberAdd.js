@@ -34,7 +34,23 @@ module.exports = {
                 .setColor('Green')
                 .setTimestamp(new Date());
             
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botAddLog;
+            // Member no AuditLog
+            if (botAddLog == null) {
+                let iconmember = member.user.avatarURL();
+                if(member.user.avatar == null) {
+                    iconmember = 'attachment://discord_logo_gray.png';
+                };
+                let memberlogged = guild.members.cache.get(member.user.id);
+                logembed.setAuthor({name: `${member.user.username}${member.user.discriminator}`, iconURL: `${iconmember}`})
+                    .setDescription(`User <@${member.user.id}> **Joined** the server`)
+                    .addFields(
+                        { name: `Account age`, value: `<t:${parseInt(memberlogged.user.createdTimestamp / 1000)}:R>`, inline: false },
+                    )
+                    .setFooter({text: `MemberID: ${member.user.id}`})
+                channel.send({ embeds: [logembed] });
+                return;
+            };
+            const { executor, target } = botAddLog;
             // Bot
             if (target.id === member.id) {
                 let iconbot = executor.avatarURL();
@@ -47,13 +63,17 @@ module.exports = {
                 channel.send({ embeds: [logembed] });
             };
             // Member
-            if (target.id !== member.id) {
+            if (target.id !== member.user.id) {
                 let iconmember = member.user.avatarURL();
                 if(member.user.avatar == null) {
                     iconmember = 'attachment://discord_logo_gray.png';
                 };
+                let memberlogged = guild.members.cache.get(member.user.id);
                 logembed.setAuthor({name: `${member.user.username}${member.user.discriminator}`, iconURL: `${iconmember}`})
                     .setDescription(`User <@${member.user.id}> **Joined** the server`)
+                    .addFields(
+                        { name: `Account age`, value: `<t:${parseInt(memberlogged.user.createdTimestamp / 1000)}:R>`, inline: false },
+                    )
                     .setFooter({text: `MemberID: ${member.user.id}`})
                 channel.send({ embeds: [logembed] });
             };

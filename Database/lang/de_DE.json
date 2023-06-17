@@ -1,6 +1,6 @@
 {
-    "name":"English",
-    "code":"en_US",
+    "name":"Deutsch",
+    "code":"de_DE",
     "error": {
         "notag":"you need to tag a user in order to use this command!",
         "notagnsfw":"you need to tag a user to have fun with this command~",
@@ -298,15 +298,7 @@
         },
         "eval": {
             "help":"eval - Commands relating to eval.\n    ⤷ help     - Displays this help text.\n    ⤷ equation - Evaluats the given equation (Math).",
-            "restricted":"Im sorry, but your equation contains restricted code."
-        },
-        "achievement": {
-            "help":".",
-            "noconsent":"You did not consent to the Data Protection policy yet."
-        },
-        "profile": {
-            "help":".",
-            "noconsent":"You did not consent to the Data Protection policy yet."
+            "restricted":"Im sorry, but nur equation contains restricted code."
         }
     },
     "logs":{

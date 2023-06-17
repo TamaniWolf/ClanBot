@@ -1,22 +1,24 @@
 
-const { PermissionsBitField, SlashCommandBuilder } = require('discord.js');
+// Require and set
+const Discord = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('unmute')
         .setDescription('unmute someone')
-        .addUserOption(option =>
-            option
-                .setName('user')
-                .setDescription('user')
-                .setRequired(true)
-        )
+        .setDMPermission(false)
         .setDefaultMemberPermissions(
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -24,9 +26,13 @@ module.exports = {
             | PermissionsBitField.Flags.ManageThreads
             | PermissionsBitField.Flags.ManageWebhooks
         )
-        ,
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
+        .addUserOption(option =>
+            option
+                .setName('user')
+                .setDescription('user')
+                .setRequired(true)
+        )
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
             // SQLite
@@ -48,6 +54,8 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Unmute: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Unmute === 'true') {
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
@@ -56,7 +64,7 @@ module.exports = {
                     let getRoleID = `${getBotConfigID}-mute`;
                     dataRoleUser = Get.roleForUser(getRoleID);
                     if (dataRoleUser == null) {
-                        await interaction.reply({ content: 'The Mute Role is not set yet.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.admin.unmute.notset}`, ephemeral: true });
                         return;
                     };
                     const stringUserOption = interaction.options.getUser('user');
@@ -64,16 +72,16 @@ module.exports = {
                     let member = guild.members.cache.get(stringUserOption.id);
                     let role = member.roles.cache.get(dataRoleUser.RoleID);
                     if (role == null) {
-                        await interaction.reply({ content: 'This Member does not have the Mute role right now.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.admin.unmute.norole}`, ephemeral: true });
                     };
                     member.roles.remove(dataRoleUser.RoleID);
-                    await interaction.reply({ content: `You just unmuted ${stringUserOption}.`, ephemeral: true });
+                    await interaction.reply({ content: `${lang.admin.unmute.remove} ${stringUserOption}.`, ephemeral: true });
                 // Error Messages
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'unmute\' returned \'null / undefined\'.`);

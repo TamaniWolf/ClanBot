@@ -1,21 +1,28 @@
 
-const { SlashCommandBuilder } = require('discord.js');
+// Require and set
+const Discord = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'false',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('blush')
         .setDescription('You or someone else made someone else Blush.')
         .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
         .addUserOption(option =>
             option
                 .setName('member')
                 .setDescription('The Member to be mentioned.')
-                .setRequired(false)),
-    nsfw: 'true',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'false',      // Admin Command = 'true', No Admin Command = 'false'.
+                .setRequired(false))
+    ,
     async execute(interaction) {
-        if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
+        if (interaction != null || interaction.channel.id != null) {
             // SQLite
             const { Get } = require('../../../../ClanCore/Modules/functions/sqlite/prepare');
             // Data Null
@@ -29,17 +36,19 @@ module.exports = {
             if (dataLang == null) { dataLang = { Lang: './Database/lang/en_US.json' }; };
             if (dataCommandMember == null) { dataCommandMember = { Blush: 'true' }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandMember.Blush === 'true') {
                 const stringGetUser = interaction.options.getUser('member');
                 if (!stringGetUser) {
                     // Send Message.
-                    await interaction.reply(`Nooo! You made <@${interaction.user.id}> blush!`);
+                    await interaction.reply(`${lang.default.blush.no} <@${interaction.user.id}> ${lang.default.blush.blush}`);
                 } else if (stringGetUser) {
                     // Send Message.
-                    await interaction.reply(`Nooo! <@${interaction.user.id}> You made ${stringGetUser} blush!`);
+                    await interaction.reply(`${lang.default.blush.no} ${stringGetUser} ${lang.default.blush.blush}`);
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'blush\' returned \'null / undefined\'.`);

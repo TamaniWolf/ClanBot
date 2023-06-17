@@ -12,6 +12,10 @@ module.exports = () => {
     if (!convert['count(*)']) {
         DB.onOff().prepare("ALTER TABLE command_member ADD COLUMN Convert TEXT;").run();
     };
+    const eval = DB.onOff().prepare("SELECT count(*) FROM pragma_table_info('command_member') WHERE name = 'Eval';").get();
+    if (!eval['count(*)']) {
+        DB.onOff().prepare("ALTER TABLE command_member ADD COLUMN Eval TEXT;").run();
+    };
     const birthday = DB.onOff().prepare("SELECT count(*) FROM pragma_table_info('command_member') WHERE name = 'Birthday';").get();
     if (!birthday['count(*)']) {
         DB.onOff().prepare("ALTER TABLE command_member ADD COLUMN Birthday TEXT;").run();

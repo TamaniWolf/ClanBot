@@ -31,7 +31,7 @@ module.exports = {
         };
         // Context
         if (dataLogs.Creating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = channelCreateLog;
+            const { targetType, actionType, executor, target } = channelCreateLog;
             if(targetType === 'Channel' && actionType === 'Create') {
                 // Embed
                 let icon2 = executor.avatarURL();

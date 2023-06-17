@@ -2,6 +2,8 @@
 // Require and set
 const Discord = require('discord.js');
 const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const fs = require('node:fs');
+const { glob, globSync, globStream, globStreamSync, Glob, } = require('glob')
 const { DateTime } = require('luxon');
 const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
@@ -11,8 +13,8 @@ module.exports = {
 	admin: 'true',
 	nsfw: 'false',
     data: new SlashCommandBuilder()
-        .setName('restart')
-        .setDescription('restarting the bot')
+        .setName('reload')
+        .setDescription('Reloads a command.')
         .setDMPermission(false)
         .setDefaultMemberPermissions(
             PermissionsBitField.Flags.ViewAuditLog
@@ -26,8 +28,12 @@ module.exports = {
             | PermissionsBitField.Flags.ManageThreads
             | PermissionsBitField.Flags.ManageWebhooks
         )
+        .addStringOption(option =>
+			option.setName('command')
+				.setDescription('The command to reload.')
+				.setRequired(true))
     ,
-    async execute(interaction) {
+	async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
             const { Get } = require('../../../../ClanCore/Modules/functions/sqlite/prepare');
@@ -56,13 +62,29 @@ module.exports = {
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
-                        // console.log('[' + DateTime.utc().toFormat(timeFormat) + '] Restarting...');
-                        // await interaction.reply({ content: 'Restarting...' });
-                        await interaction.reply({ content: `${lang.admin.restart.nope}`, ephemeral: true });
-                        // running the script to start the bot.
-                        //
-                        // Stop the bot so it can be started by the script.
-                        // process.exit(0);
+                        const commandName = interaction.options.getString('command', true).toLowerCase();
+                        const command = interaction.client.slashCommands.get(commandName);
+
+                        if (!command) {
+                            return interaction.reply(`${lang.admin.reload.nocmd} \`${commandName}\`!`);
+                        };
+                        
+                        let rawDir = globSync(`./ClanSys/commands/**/**/${command.data.name}.js`);
+                        let stringRawDir = rawDir.toString();
+                        let replacedRawDir = stringRawDir.replace(/\\/gi, '/');
+                        let dir1 = replacedRawDir.replace('ClanSys/commands', '../..');
+
+                        delete require.cache[require.resolve(`${dir1}`)];
+
+                        try {
+                            interaction.client.slashCommands.delete(command.data.name);
+                            const newCommand = require(`${dir1}`);
+                            interaction.client.slashCommands.set(newCommand.data.name, newCommand);
+                            await interaction.reply(`${lang.admin.reload.cmd} \`${newCommand.data.name}\` ${lang.admin.reload.reloaded}`);
+                        } catch (error) {
+                            console.error(error);
+                            await interaction.reply(`${lang.admin.reload.reloaderror} \`${command.data.name}\`:\n\`${error.message}\``);
+                        };
                         // Error Messages
                     } else {
                         await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
@@ -74,7 +96,7 @@ module.exports = {
                 await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
-            console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'restart\' returned \'null / undefined\'.`);
+            console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'reload\' returned \'null / undefined\'.`);
         };
     },
 };

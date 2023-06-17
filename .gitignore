@@ -33,6 +33,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 node_modules/
 ClanSys/config/
 backup/
+Database/sqlite
 
 # Files #
 #########

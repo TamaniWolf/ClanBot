@@ -22,18 +22,19 @@ module.exports = {
         // Data Get
         let getBotConfigID = `${role.guild.id}-${role.guild.shardId}`;
         dataChannellog = Get.channelForLog(getBotConfigID);
-        dataAuditLogID = Get.auditLogs(roleLog.id);
         // Data Check
         if (dataChannellog == null) {
             console.log('No logging Channel in database')
             return;
         };
+        if (roleLog == null) {return;};
+        dataAuditLogID = Get.auditLogs(roleLog.id);
         // Context
         let dataLogs;
         dataLogs = Get.logsForChannel(getBotConfigID);
-        if (dataLogs == null) {return};
+        if (dataLogs == null) {return;};
         if (dataLogs.Deleting === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = roleLog;
+            const { targetType, actionType, executor, changes, id } = roleLog;
             if(dataAuditLogID == null) {
                 if(targetType === 'Role' && actionType === 'Delete') {
                     var key = changes.filter(function(obj) {

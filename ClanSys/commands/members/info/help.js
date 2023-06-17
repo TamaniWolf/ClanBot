@@ -1,19 +1,23 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
-
 const cmdPrefix = process.env.PREFIX;
 
 module.exports = {
+	cooldown: 5,
+	admin: 'false',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('help')
         .setDescription('help')
         .setDMPermission(false)
-        ,
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'false',      // Admin Command = 'true', No Admin Command = 'false'.
-    async execute(interaction){
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages)
+    ,
+    async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
             const { Get } = require('../../../../ClanCore/Modules/functions/sqlite/prepare');
@@ -28,8 +32,9 @@ module.exports = {
             if (dataLang == null) { dataLang = { Lang: './Database/lang/en_US.json' }; };
             if (dataCommandMember == null) { dataCommandMember = { Grouphug: 'true' }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandMember.Grouphug === 'true') {
-                let lang = require(`../../../.${dataLang.Lang}`);
                 let dataNew = interaction.client.slashCommands.filter(f => f.admin === 'false');
                 let dataPcName = dataNew.map(cmd =>{
                     return `${cmd.data.name}`;
@@ -48,19 +53,18 @@ module.exports = {
                 let replaceCommaPcPrefix = stringPcPrefix.replace(/[,]/gi, '\n');
                 let replaceTruePcPrefix = replaceCommaPcPrefix.replaceAll('true', `${cmdPrefix}`);
                 let replacePcPrefix = replaceTruePcPrefix.replaceAll('false', '/'); /**replaceFalsePcPRefix */
-                // let replacePcPrefix = replaceTruePcPrefix.replaceAll('false', 'ㅤ'); /**replaceFalsePcPRefix */
                 const cmdembed = new EmbedBuilder()
-                .setTitle('Commands And Info')
+                .setTitle(`${lang.default.help.title}`)
                 .setColor('Orange')
                 .setDescription(`<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>`)
                 .addFields([
-                    { name: 'prefix:', value: `${replacePcPrefix}`, inline: true },
-                    { name: 'Commands:', value: `${replacePcName}`, inline: true },
-                    { name: 'Description', value: `${replacePcDescrition}`, inline: true },
+                    { name: `${lang.default.help.field1}`, value: `${replacePcPrefix}`, inline: true },
+                    { name: `${lang.default.help.field2}`, value: `${replacePcName}`, inline: true },
+                    { name: `${lang.default.help.field3}`, value: `${replacePcDescrition}`, inline: true },
                 ]);
                 await interaction.reply({ embeds: [cmdembed] });
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'help\' returned \'null / undefined\'.`);

@@ -25,7 +25,7 @@ module.exports = {
         dataLogs = Get.logsForChannel(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Deleting === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+            const { executor, target } = botLog;
             // console.log(botLog);
             let channel = await invite.guild.channels.fetch(target.channelId);
             let icon2 = executor.avatarURL();

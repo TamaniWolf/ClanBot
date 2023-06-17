@@ -45,6 +45,7 @@ console.log(`[Time] ${DateTime.utc().toFormat(timeFormat)} [UTC]`);
 console.log(`[NodeJS] ▪ ▪ ▪ ▪ ▪  DiscordBot Start  ▪ ▪ ▪ ▪ ▪ `);
 
     //Command Event Database handler
+    client.cooldowns = new Collection();
     client.slashCommands = new Collection();
     ['command_handler', 'event_handler'].forEach(commenHandler =>{
         require(`./ClanCore/Commen/handlers_commen/${commenHandler}.js`)(client, Discord, fs);

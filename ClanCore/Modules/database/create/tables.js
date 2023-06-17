@@ -269,7 +269,7 @@ module.exports = () => {
     const tableOnOffCommandMember = DB.onOff().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'command_member';").get();
     if (!tableOnOffCommandMember['count(*)']) {
         // If the table isn't there, create it and setup the database correctly.
-        DB.onOff().prepare("CREATE TABLE command_member (OnOffID VARCHAR PRIMARY KEY, GuildID VARCHAR, Convert TEXT, Birthday TEXT, Blush TEXT, Grouphug TEXT, Growl TEXT, Hug TEXT, Hydrate TEXT, Slap TEXT, Help TEXT);").run();
+        DB.onOff().prepare("CREATE TABLE command_member (OnOffID VARCHAR PRIMARY KEY, GuildID VARCHAR, Convert TEXT, Eval TEXT, Birthday TEXT, Blush TEXT, Grouphug TEXT, Growl TEXT, Hug TEXT, Hydrate TEXT, Slap TEXT, Help TEXT);").run();
         // Ensure that the "id" row is always unique and indexed.
         DB.onOff().prepare("CREATE UNIQUE INDEX idx_commandmember_id ON command_member (OnOffID);").run();
         DB.onOff().pragma("synchronous = 1");
@@ -394,9 +394,41 @@ module.exports = () => {
     } else if (tableTwitchRequest['count(*)']) {
         require('./column/twitch/twitchrequest')();
     };
+    //
+    //
+    // // Member
+    // // Check if the table member exists.
+    // const tableMembers = DB.profile().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'members';").get();
+    // if (!tableMembers['count(*)']) {
+    //     // If the table isn't there, create it and setup the database correctly.
+    //     DB.profile().prepare("CREATE TABLE members (ProfileID VARCHAR PRIMARY KEY, GuildID TEXT, MemberID TEXT, DisplayName TEXT, Nickname TEXT, Consent TEXT);").run();
+    //     // Ensure that the "id" row is always unique and indexed.
+    //     DB.profile().prepare("CREATE UNIQUE INDEX idx_members_id ON members (ProfileID);").run();
+    //     DB.profile().pragma("synchronous = 1");
+    //     DB.profile().pragma("journal_mode = wal");
+    // } else if (tableMembers['count(*)']) {
+    //     require('./column/profile/members')();
+    // };
+    // // Check if the table achievements exists.
+    // const tableAchievements = DB.achievements().prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'achievements';").get();
+    // if (!tableAchievements['count(*)']) {
+    //     // If the table isn't there, create it and setup the database correctly.
+    //     DB.achievements().prepare("CREATE TABLE achievements (AchivementsID VARCHAR PRIMARY KEY, GuildID VARCHAR, Bitfield VARCHAR, Background VARCHAR, Icon VARCHAR, Rarity VARCHAR);").run();
+    //     // Ensure that the "id" row is always unique and indexed.
+    //     DB.achievements().prepare("CREATE UNIQUE INDEX idx_achievements_id ON achievements (AchievementsID);").run();
+    //     DB.achievements().pragma("synchronous = 1");
+    //     DB.achievements().pragma("jornal_mode = wal");
+    // } else if (tableAchievements['count(*)']) {
+    //     require('./column/profile/achievements')();
+    // };
+    //
+    // Get Guilds data and pass it on.
     let guildsCache = globalclient.guilds.cache.size;
     if (guildsCache != 0) {
-        require('./startData.js')();
+        globalclient.guilds.cache.each(guild => {
+            const { SQLiteTableData } = require('./startData.js');
+            SQLiteTableData.data(guild);
+        });
     };
     console.log(`[${DateTime.utc().toFormat(timeFormat)}][Discord] Database created.`);
 };

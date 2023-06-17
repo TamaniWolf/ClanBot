@@ -1,6 +1,7 @@
 
+const { Events } = require('discord.js');
 module.exports = {
-    name: 'guildCreate',
+    name: Events.GuildCreate,
     description: 'Loggin bot\'s beeing added to the server.',
     once: true,
     async execute(guild) {

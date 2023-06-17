@@ -32,7 +32,12 @@ module.exports = {
         };
         // Context
         if (dataLogs.Creating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = log;
+            if (log == null) {
+                // console.log('EmojiCreate');
+                // console.log(emoji);
+                return;
+            };
+            const { actionType, executor, target } = log;
             let icon2 = executor.avatarURL();
             if(executor.avatar == null) {
                 icon2 = 'attachment://discord_logo_gray.png';

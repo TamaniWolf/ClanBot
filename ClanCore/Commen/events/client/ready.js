@@ -1,10 +1,11 @@
 
+const { Events } = require('discord.js');
 const { DateTime } = require('luxon');
 const fs = require('node:fs');
 const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 
 module.exports = {
-    name: 'ready',
+    name: Events.ClientReady,
     once: true,
     async execute(client){
         // Set Client (Bot) Activity.

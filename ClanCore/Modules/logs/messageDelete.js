@@ -78,7 +78,7 @@ module.exports = {
                 };
             };
             if (botLog != null) {
-                const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+                const { executor, id, extra, target } = botLog;
                 let createdTimestampLog = botLog.createdTimestamp;
                 let dt = DateTime.now().minus({ seconds: 5 });
                 let time = dt.toMillis();
@@ -169,8 +169,14 @@ module.exports = {
                         if (dataAuditLog === '0') {
                             // New AuditLog Entry + New Message
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {
@@ -195,8 +201,14 @@ module.exports = {
                         if (dataAuditLog.AuditLogID === id && dataAuditLog.Count < extra.count) {
                             // Highter counter + New Message
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {
@@ -225,8 +237,14 @@ module.exports = {
                                 icon2 = 'attachment://discord_logo_gray.png';
                             };
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {
@@ -254,8 +272,14 @@ module.exports = {
                         if (dataAuditLog === '0') {
                             // New AuditLog Entry + New Message
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {
@@ -280,8 +304,14 @@ module.exports = {
                         if (dataAuditLog.AuditLogID === id && dataAuditLog.Count < extra.count) {
                             // Highter counter + New Message
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {
@@ -306,8 +336,14 @@ module.exports = {
                         if (dataAuditLog.AuditLogID === id && dataAuditLog.Count >= extra.count) {
                             // Old AuditLog Entry + New Message
                             if (message.content) {
+                                let msgCont = message.content;
+                                if (msgCont.length > 1024) {
+                                    let slcmsgcont = msgCont.slice(1020)
+                                    let rplcmsgcont = msgCont.replace(slcmsgcont, '...');
+                                    msgCont = rplcmsgcont
+                                };
                                 embedMsgDel.addFields(
-                                    { name: 'Content:', value: `${message.content}` },
+                                    { name: 'Content:', value: `${msgCont}` },
                                 )
                             };
                             if (message.embeds.length !== 0) {

@@ -1,11 +1,15 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
 const { DateTime } = require('luxon');
 const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
 
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('pinging')
@@ -14,7 +18,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -22,10 +26,7 @@ module.exports = {
             | PermissionsBitField.Flags.ManageThreads
             | PermissionsBitField.Flags.ManageWebhooks
         )
-        ,
-    permissions: ['VIEW_AUDIT_LOG'],
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null || interaction.guild.id != null) {
             // SQLite
@@ -48,22 +49,23 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Ping: 'true' } };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Ping === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
-                        await interaction.reply('F*ck off! i\'m bussy! -.-#');
+                        await interaction.reply(`${lang.admin.ping.text}`);
                         console.log('[' + DateTime.utc().toFormat(timeFormat) + ']' + lang.prefix.clan, lang.admin.ping.log);
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'ping\' returned \'null / undefined\'.`);

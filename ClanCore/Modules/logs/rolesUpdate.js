@@ -23,6 +23,7 @@ module.exports = {
         // Data Get
         let getBotConfigID = `${newRole.guild.id}-${newRole.guild.shardId}`;
         dataChannellog = Get.channelForLog(getBotConfigID);
+        if (botLog == null) {return;};
         dataAuditLogID = Get.auditLogs(botLog.id);
         // Data Check
         if (dataChannellog == null) {
@@ -34,7 +35,7 @@ module.exports = {
         dataLogs = Get.logsForChannel(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Updating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+            const { targetType, actionType, executor, changes, id, target } = botLog;
             let createdTimestampLog = botLog.createdTimestamp;
             let dt = DateTime.now().minus({ seconds: 5 });
             let time = dt.toMillis();
@@ -83,7 +84,7 @@ module.exports = {
                 };
                 // New
                 if (changeName && changeName.length !== 0) { runew += `**Name:** ${changeName[0].new}\n`; };
-                if (changeColor && changeHoist.length !== 0) {
+                if (changeColor && changeHoist.length !== 0 && changeColor[0]) {
                     let colorNew = await ColorConvert.IntToHex(changeColor[0].new);
                     runew += `**Color:** ${colorNew}\n`;
                 };

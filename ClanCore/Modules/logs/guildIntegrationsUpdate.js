@@ -1,5 +1,6 @@
 
 const { EmbedBuilder, AuditLogEvent, Events } = require('discord.js');
+const { DateTime } = require('luxon');
 require('dotenv').config();
 module.exports = {
     name: 'guildIntegrationsUpdate',
@@ -42,7 +43,7 @@ module.exports = {
             if (dataLogs == null) {return};
             if (dataLogs.Updating === 'true') {
                 if (createLog.createdTimestamp > updateLog.createdTimestamp && createLog.createdTimestamp > deleteLog.createdTimestamp) {
-                    const { targetType, actionType, action, reason, executor, changes, id, extra, target } = createLog;
+                    const { executor, target } = createLog;
                     let icon2 = executor.avatarURL();
                     if(executor.avatar == null) {
                         icon2 = 'attachment://discord_logo_gray.png';
@@ -57,7 +58,7 @@ module.exports = {
                     globalclient.channels.cache.get(dataChannellog.ChannelID).send({embeds: [embed]});
                 };
                 if (deleteLog.createdTimestamp > createLog.createdTimestamp && deleteLog.createdTimestamp > updateLog.createdTimestamp) {
-                    const { targetType, actionType, action, reason, executor, changes, id, extra, target } = deleteLog;
+                    const { executor, target } = deleteLog;
                     let icon2 = executor.avatarURL();
                     if(executor.avatar == null) {
                         icon2 = 'attachment://discord_logo_gray.png';
@@ -72,7 +73,11 @@ module.exports = {
                     globalclient.channels.cache.get(dataChannellog.ChannelID).send({embeds: [embed]});
                 };
                 if (updateLog.createdTimestamp > createLog.createdTimestamp && updateLog.createdTimestamp > deleteLog.createdTimestamp) {
-                    const { targetType, actionType, action, reason, executor, changes, id, extra, target } = updateLog;
+                    const { executor, target } = updateLog;
+                    // console.log(updateLog);
+                    let timeNow = DateTime.now();
+                    let timeMilli = timeNow.toMillis();
+                    if (timeMilli >= updateLog.createdTimestamp) {return;};
                     let icon2 = executor.avatarURL();
                     if(executor.avatar == null) {
                         icon2 = 'attachment://discord_logo_gray.png';
@@ -89,7 +94,8 @@ module.exports = {
             };
         } catch(err) {
             let errData;
-            if (err.code === 50013) {errData = `${err}\n[Client] Ether the Bot/Member is Missing the requiered Permission or the Bot left a Server.`};
+            if (globalclient.servers.get(guild.id) && err.code === 50013) {errData = `${err}\n[Client] The Bot/Member is Missing the requiered Permission.`};
+            if (!globalclient.servers.get(guild.id) && err.code === 50013) {errData = `${err}\n[Client] The Bot left the Server ${guild.name}.`};
             if (err.code !== 50013) {errData = err};
             console.log(errData);
         };

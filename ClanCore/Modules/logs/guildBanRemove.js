@@ -22,7 +22,7 @@ module.exports = {
         if (dataChannellog.ChannelID === '100000000000000000') {
             return;
         };
-        const { targetType, actionType, action, reason, executor, changes, id, extra, target } = banLog;
+        const { reason, executor, target } = banLog;
         let dataLogs;
         dataLogs = Get.logsForBan(getBotConfigID);
         if (dataLogs == null) {return};

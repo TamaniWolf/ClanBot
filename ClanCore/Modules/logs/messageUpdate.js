@@ -44,7 +44,18 @@ module.exports = {
                 if(newMessage.content == null || oldMessage.content === newMessage.content) {
                     return;
                 };
-                let after = newMessage;
+                let before = oldMessage.content;
+                let after = newMessage.content;
+                if (before.length > 1024) {
+                    let slcbef = before.slice(1020)
+                    let rplcbef = before.replace(slcbef, '...');
+                    before = rplcbef
+                };
+                if (after.length > 1024) {
+                    let slcaft = after.slice(1020)
+                    let rplcaft = after.replace(slcaft, '...');
+                    after = rplcaft
+                };
                 if (newMessage.content == null) {
                     after = '*Uncached*';
                 };
@@ -57,7 +68,7 @@ module.exports = {
                     .setColor('Blue')
                     .setDescription(`${oldMessage.author} **Edited** Their [Message](https://discord.com/channels/${oldMessage.guild.id}/${oldMessage.channel.id}/${oldMessage.id} 'The Message ${oldMessage.author.username} Edited.') in Channel ${oldMessage.channel}`)
                     .addFields([
-                        { name: 'Before',value: `${oldMessage}` },
+                        { name: 'Before',value: `${before}` },
                         { name: 'After', value: `${after}` },
                     ])
                     .setFooter({text: `MemberID: ${newMessage.author.id}`})
@@ -74,7 +85,20 @@ module.exports = {
                 if(newMessage.content == null || newMessage.content === oldMessage.content) {
                     return;
                 };
-                let before = oldMessage;
+                let before = oldMessage.content || '';
+                let after = newMessage.content || '';
+                if (before) {return;};
+                if (after) {return;};
+                if (before.length > 1024) {
+                    let slcbef = before.slice(1020)
+                    let rplcbef = before.replace(slcbef, '...');
+                    before = rplcbef
+                };
+                if (after.length > 1024) {
+                    let slcaft = after.slice(1020)
+                    let rplcaft = after.replace(slcaft, '...');
+                    after = rplcaft
+                };
                 if (oldMessage.content == null) {
                     before = '*Uncached*';
                 };
@@ -91,7 +115,7 @@ module.exports = {
                     .setDescription(`${newMessage.author} **Edited** Their [Message](https://discord.com/channels/${newMessage.guild.id}/${newMessage.channel.id}/${newMessage.id} 'The Message ${newMessage.author.username} Edited.') in Channel ${newMessage.channel}`)
                     .addFields([
                         { name: 'Before:',value: `${before}`, inline: true },
-                        { name: 'After:', value: `${newMessage}`, inline: true },
+                        { name: 'After:', value: `${after}`, inline: true },
                     ])
                     .setFooter({text: `MemberID: ${newMessage.author.id}`})
                     .setTimestamp(new Date());

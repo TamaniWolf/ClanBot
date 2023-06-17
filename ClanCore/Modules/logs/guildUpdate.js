@@ -34,7 +34,7 @@ module.exports = {
         dataLogs = Get.logsForChannel(getBotConfigID);
         if (dataLogs == null) {return};
         if (dataLogs.Updating === 'true') {
-            const { targetType, actionType, action, reason, executor, changes, id, extra, target } = guildUpdateLog;
+            const { executor, changes } = guildUpdateLog;
             let changeName = changes.filter(function(obj) {
                 return obj.key === 'name';
             });

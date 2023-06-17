@@ -1,8 +1,15 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
+const { DateTime } = require('luxon');
+const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
+
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('config')
         .setDescription('editing config')
@@ -11,7 +18,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -233,11 +240,7 @@ module.exports = {
                         )
                 )
         )
-        ,
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
-    guildOnly: true,
+    ,
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -261,17 +264,18 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Config: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${interaction.channel.id}` }; };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Config === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                     if (dataChannelAdmin != null && interaction.channel.id === dataChannelAdmin.ChannelID) {
                         const configembed = new EmbedBuilder()
                         .setColor('DarkGreen')
-                        .setTitle('Configs')
+                        .setTitle(`${lang.admin.config.title}`)
                         if(interaction.options.getSubcommand() === 'help') {
                             configembed.addFields(
-                                { name: 'Commands', value: '`config` - Commands relating to config.\n`  ⤷ help`           - Displays this help text.\n`  ⤷ list`           - A list of set Configurations.\n`  ⤷ command admin`  - Set\'s the configs and commands for admins \'ON\' or \'OFF\'.\n`  ⤷ command member` - Set\'s the configs and commands for members \'ON\' or \'OFF\'.\n`  ⤷ database`       - Set\'s the database functions \'ON\' or \'OFF\'.\n`  ⤷ logs`           - Set\'s the logging for bots and commands \'ON\' or \'OFF\'.\n`  ⤷ reaction`       - Set\'s the word and emoji reactions \'ON\' or \'OFF\'.\n`  ⤷ twitch`         - Set\'s the twitch handler and functions \'ON\' or \'OFF\'.\n', inline: false},
+                                { name: `${lang.admin.config.field1}`, value: `${lang.admin.config.field2}`, inline: false},
                             );
                             await interaction.reply({embeds: [configembed]});
                         };
@@ -299,18 +303,18 @@ module.exports = {
                                 const stringGetCommandAdmin1 = interaction.options.getString('admin-command1');
                                 const stringGetCommandAdmin2 = interaction.options.getString('admin-command2');
                                 let stringGCA = stringGetCommandAdmin1;
-                                if (stringGetCommandAdmin1 === 'none') {if(stringGetCommandAdmin2 === 'none'){await interaction.reply({ content: 'Editing Config Canceled', ephemeral: true});return;};stringGCA = stringGetCommandAdmin2};
+                                if (stringGetCommandAdmin1 === 'none') {if(stringGetCommandAdmin2 === 'none'){await interaction.reply({ content: `${lang.admin.config.editcanceled}`, ephemeral: true});return;};stringGCA = stringGetCommandAdmin2};
                                 let splitSGCA = stringGCA.split('-');
                                 if (stringGetOnOff === 'true') {
-                                    if (dataCommandAdmin[splitSGCA[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                    if (dataCommandAdmin[splitSGCA[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                     dataCommandAdmin[splitSGCA[1]] = 'true';
                                     Set.onOffForCommandAdmin(dataCommandAdmin);
-                                    await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                    await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                                 } else if (stringGetOnOff === 'false') {
-                                    if (dataCommandAdmin[splitSGCA[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                    if (dataCommandAdmin[splitSGCA[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                     dataCommandAdmin[splitSGCA[1]] = 'false';
                                     Set.onOffForCommandAdmin(dataCommandAdmin);
-                                    await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                    await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                                 };
                             };
                             //
@@ -325,18 +329,18 @@ module.exports = {
                                     dataCommandMember = { Convert: 'true', Birthday: 'true', Blush: 'true', Grouphug: 'true', Growl: 'true', Hug: 'true', Hydrate: 'true', Slap: 'true', Help: 'true' }
                                 };
                                 let stringGCM = stringGetCommandMember1;
-                                if (stringGetCommandMember1 === 'none') {if(stringGetCommandMember2 === 'none'){await interaction.reply({ content: 'Editing Config Canceled', ephemeral: true});return;};stringGCM = stringGetCommandMember2};
+                                if (stringGetCommandMember1 === 'none') {if(stringGetCommandMember2 === 'none'){await interaction.reply({ content: `${lang.admin.config.editcanceled}`, ephemeral: true});return;};stringGCM = stringGetCommandMember2};
                                 let splitSGCM = stringGCM.split('-');
                                 if (stringGetOnOff === 'true') {
-                                    if (dataCommandMember[splitSGCM[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                    if (dataCommandMember[splitSGCM[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                     dataCommandMember[splitSGCM[1]] = 'true';
                                     Set.onOffForCommandMember(dataCommandMember);
-                                    await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                    await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                                 } else if (stringGetOnOff === 'false') {
-                                    if (dataCommandMember[splitSGCM[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                    if (dataCommandMember[splitSGCM[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                     dataCommandMember[splitSGCM[1]] = 'false';
                                     Set.onOffForCommandMember(dataCommandMember);
-                                    await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                    await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                                 };
                             };
                         };
@@ -352,15 +356,15 @@ module.exports = {
                             };
                             let splitSGD = stringGetDatabase.split('-');
                             if (stringGetOnOff === 'true') {
-                                if (datadatabase[splitSGD[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (datadatabase[splitSGD[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                 datadatabase[splitSGD[1]] = 'true';
                                 Set.onOffForDatabase(datadatabase);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (datadatabase[splitSGD[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (datadatabase[splitSGD[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                 datadatabase[splitSGD[1]] = 'false';
                                 Set.onOffForDatabase(datadatabase);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -375,15 +379,15 @@ module.exports = {
                             };
                             let splitSGM = stringGetLog.split('-');
                             if (stringGetOnOff === 'true') {
-                                if (datamisc[splitSGM[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (datamisc[splitSGM[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                 datamisc[splitSGM[1]] = 'true';
                                 Set.onOffForMisc(datamisc);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (datamisc[splitSGM[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (datamisc[splitSGM[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                 datamisc[splitSGM[1]] = 'false';
                                 Set.onOffForMisc(datamisc);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -398,15 +402,15 @@ module.exports = {
                             };
                             let splitSGR = stringGetReaction.split('-');
                             if (stringGetOnOff === 'true') {
-                                if (datareaction[splitSGR[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (datareaction[splitSGR[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                 datareaction[splitSGR[1]] = 'true';
                                 Set.onOffForReaction(datareaction);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (datareaction[splitSGR[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (datareaction[splitSGR[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                 datareaction[splitSGR[1]] = 'false';
                                 Set.onOffForReaction(datareaction);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                             };
                         };
                         //
@@ -421,26 +425,26 @@ module.exports = {
                             };
                             let splitSGT = stringGetTwitch.split('-');
                             if (stringGetOnOff === 'true') {
-                                if (datatwitch[splitSGT[1]] === 'true') {await interaction.reply({ content: 'This is already set to \`ON\`', ephemeral: true}); return;};
+                                if (datatwitch[splitSGT[1]] === 'true') {await interaction.reply({ content: `${lang.admin.config.ison}`, ephemeral: true}); return;};
                                 datatwitch[splitSGT[1]] = 'true';
                                 Set.onOffForTwitch(datatwitch);
-                                await interaction.reply({ content: 'Now set to \`ON\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.seton}`, ephemeral: true});
                             } else if (stringGetOnOff === 'false') {
-                                if (datatwitch[splitSGT[1]] === 'false') {await interaction.reply({ content: 'This is already set to \`OFF\`', ephemeral: true}); return;};
+                                if (datatwitch[splitSGT[1]] === 'false') {await interaction.reply({ content: `${lang.admin.config.isoff}`, ephemeral: true}); return;};
                                 datatwitch[splitSGT[1]] = 'false';
                                 Set.onOffForTwitch(datatwitch);
-                                await interaction.reply({ content: 'Now set to \`OFF\`', ephemeral: true});
+                                await interaction.reply({ content: `${lang.admin.config.setoff}`, ephemeral: true});
                             };
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'config\' returned \'null / undefined\'.`);

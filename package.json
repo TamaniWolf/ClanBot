@@ -1,6 +1,6 @@
 {
   "name": "clanbot",
-  "version": "4.4.7",
+  "version": "4.8.0",
   "description": "An Bot for the Royalty of the Eternal Clan.",
   "main": "clanbot.js",
   "scripts": {
@@ -9,15 +9,16 @@
   "author": "Tamani Wolf",
   "license": "ISC",
   "dependencies": {
-    "axios": "1.2.1",
-    "better-sqlite3": "8.0.1",
-    "discord.js": "14.7.1",
-    "dotenv": "16.0.3",
+    "axios": "1.4.0",
+    "better-sqlite3": "8.4.0",
+    "discord.js": "14.11.0",
+    "dotenv": "16.3.0",
     "feedparser": "2.2.10",
-    "humanize-duration": "3.27.3",
-    "luxon": "3.1.1",
+    "glob": "10.2.6",
+    "humanize-duration": "3.28.0",
+    "luxon": "3.3.0",
     "markdown-escape": "2.0.0",
-    "mathjs": "11.5.0",
-    "octokit": "2.0.10"
+    "mathjs": "11.8.1",
+    "octokit": "2.0.22"
   }
 }

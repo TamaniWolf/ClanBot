@@ -66,7 +66,7 @@ module.exports = {
                 if (channelUpdateLog != null) {
                     dataAuditLogIDCU = Get.auditLogs(channelUpdateLog.id);
                 };
-                const { targetType, actionType, action, reason, executor, changes, id, extra, target } = channelUpdateLog;
+                const { targetType, actionType, executor, changes, id, target } = channelUpdateLog;
                 // console.log('CU');
                 // console.log(changes);
                 // return;
@@ -182,7 +182,7 @@ module.exports = {
                 if (channelOverwriteUpdate != null) {
                     dataAuditLogIDCOU = Get.auditLogs(channelOverwriteUpdate.id);
                 };
-                const { targetType, actionType, action, reason, executor, changes, id, extra, target } = channelOverwriteUpdate;
+                const { targetType, actionType, executor, changes, id, extra, target } = channelOverwriteUpdate;
                 // console.log('COU');
                 // console.log(changes);
                 // console.log(channelOverwriteUpdate);

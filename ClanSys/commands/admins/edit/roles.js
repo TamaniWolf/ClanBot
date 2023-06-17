@@ -1,10 +1,15 @@
 
+// Require and set
 const Discord = require('discord.js');
-const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } = Discord;
+const { PermissionsBitField, EmbedBuilder, SlashCommandBuilder } = Discord;
 const { DateTime } = require('luxon');
 const timeFormat = 'LL'+'/'+'dd'+'/'+'yyyy'+'-'+'h'+':'+'mm'+':'+'ss'+'-'+'a';
 require('dotenv').config();
+
 module.exports = {
+	cooldown: 5,
+	admin: 'true',
+	nsfw: 'false',
     data: new SlashCommandBuilder()
         .setName('roles')
         .setDescription('editing stuff')
@@ -13,7 +18,7 @@ module.exports = {
             PermissionsBitField.Flags.ViewAuditLog
             | PermissionsBitField.Flags.KickMembers
             | PermissionsBitField.Flags.ManageChannels
-            | PermissionsBitField.Flags.ManageEmojisAndStickers
+            | PermissionsBitField.Flags.ManageGuildExpressions
             | PermissionsBitField.Flags.ManageGuild
             | PermissionsBitField.Flags.ManageMessages
             | PermissionsBitField.Flags.ManageRoles
@@ -78,9 +83,6 @@ module.exports = {
                 )
         )
     ,
-    prefix: 'true',    // Prefix = 'true', No Prefix = 'false', Slash Command = '/'.
-    nsfw: 'false',       // NSFW variable = 'true', No NSFW variable = 'false'.
-    admin: 'true',      // Admin Command = 'true', No Admin Command = 'false'.
     async execute(interaction) {
         if (interaction != null || interaction.channel.id != null) {
             // SQLite
@@ -106,17 +108,18 @@ module.exports = {
             if (dataCommandAdmin == null) { dataCommandAdmin = { Roles: 'true' }; };
             if (dataChannelAdminGuild == null) { dataChannelAdmin = { ChannelID: `${getChannelID}` }; console.log(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Command \'channel\' executed outside the admin channels.`); };
             // Context
+
+            let lang = require(`../../../.${dataLang.Lang}`);
             if (dataCommandAdmin.Roles === 'true') {
-                let lang = require('../../../.' + dataLang.Lang);
                 let permissions = interaction.member.permissions;
                 if (permissions.has(PermissionsBitField.Flags.ViewAuditLog) || permissions.has(PermissionsBitField.Flags.ManageChannels)) {
                 if (dataChannelAdmin != null && getChannelID === dataChannelAdmin.ChannelID) {
                         const configembed = new EmbedBuilder()
                         .setColor('DarkGreen')
-                        .setTitle('Set/Remove/Edit Roles in the Database')
+                        .setTitle(`${lang.admin.roles.titlehelp}`)
                         if(interaction.options.getSubcommand() === 'help') {
                             configembed.addFields(
-                                { name: 'Commands', value: '`roles` - Commands relating to roles.\n`  ⤷ help`   - Displays this help text.\n`  ⤷ list`   - A list of set Roles.\n`  ⤷ set`    - Set\'s the Roles as Admin, Member or NSFW Roles.\n`  ⤷ remove` - Removes the Roles from Admin, Member or NSFW Roles.', inline: false },
+                                { name: `${lang.admin.roles.helpfield1}`, value: `${lang.admin.roles.helpfield2}`, inline: false },
                             );
                             await interaction.reply({embeds: [configembed]});
                         };
@@ -160,22 +163,22 @@ module.exports = {
                             let newStringAdmin = { Admin: `<@&${replaceStringAdmin}>` };
                             let newStringNsfw = { Nsfw: `<@&${replaceStringNsfw}>` };
                             if (newStringUser === undefined || newStringUser === null || newStringUser.User === '<@&>' || newStringUser.User === '<@&100000000000000000>' || newStringUser.User === '<@&200000000000000000>') {
-                                newStringUser = { User: 'No Role found.' };
+                                newStringUser = { User: `${lang.admin.roles.nodata}` };
                             };
                             if (newStringAdmin === undefined || newStringAdmin === null || newStringAdmin.Admin === '<@&>' || newStringAdmin.Admin === '<@&100000000000000000>' || newStringUser.User === '<@&200000000000000000>') {
-                                newStringAdmin = { Admin: 'No Role found.' };
+                                newStringAdmin = { Admin: `${lang.admin.roles.nodata}` };
                             };
                             if (newStringNsfw === undefined || newStringNsfw === null || newStringNsfw.Nsfw === '<@&>' || newStringNsfw.Nsfw === '<@&100000000000000000>' || newStringUser.User === '<@&200000000000000000>') {
-                                newStringNsfw = { Nsfw: 'No Role found.' };
+                                newStringNsfw = { Nsfw: `${lang.admin.roles.nodata}` };
                             };
                             const roleembed = new EmbedBuilder()
                                 .setColor('DarkGreen')
-                                .setTitle('Role List')
+                                .setTitle(`${lang.admin.roles.titlelist}`)
                                 .setDescription(`<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>..<<..>>`)
                                 .addFields([
-                                    { name: `User`, value: `${newStringUser.User}`, inline: true },
-                                    { name: `Admin`, value: `${newStringAdmin.Admin}`, inline: true },
-                                    { name: `Nsfw`, value: `${newStringNsfw.Nsfw}`, inline: true },
+                                    { name: `${lang.admin.roles.listfield1}`, value: `${newStringUser.User}`, inline: true },
+                                    { name: `${lang.admin.roles.listfield2}`, value: `${newStringAdmin.Admin}`, inline: true },
+                                    { name: `${lang.admin.roles.listfield3}`, value: `${newStringNsfw.Nsfw}`, inline: true },
                                 ]);
                                 await interaction.reply({embeds: [roleembed]});
                         };
@@ -190,7 +193,7 @@ module.exports = {
                             let roleString = mewStringGetRole.replace(/[/</>/@/&]/gi, '');
                             let channelRoleId = `${getBotConfigID}-${roleString}`;
                             if (channelRoleId === undefined || channelRoleId === null) {
-                                roleembed.setDescription('There is no Role with this Name nor ID on this Server.')
+                                roleembed.setDescription(`${lang.admin.roles.noroleserver}`)
                                 await interaction.reply({embeds: [roleembed]});
                             };
                             //Check if argument is Admin.
@@ -199,13 +202,13 @@ module.exports = {
                                 let dataAddRolesAdmin;
                                 dataAddRolesAdmin = Get.roleForAdmin(`${channelRoleId}`);
                                 if (dataAddRolesAdmin != undefined || dataAddRolesAdmin != null) {
-                                    roleembed.setDescription('This Role is already set as an Admin Role.')
+                                    roleembed.setDescription(`${lang.admin.roles.issetadmin}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 }else if (dataAddRolesAdmin === undefined || dataAddRolesAdmin === null) {
                                     dataAddRolesAdmin = { ChannelRoleID: `${channelRoleId}`, GuildID: `${getGuildID}`, RoleID: `${stringGetRole.id}`, BotID: `${getClientID}` }
                                     Set.roleForAdmin(dataAddRolesAdmin);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been added to the Admin Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.hasaddadmin}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else {
                                     return console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] There was a problem adding an Admin Role to the database: dataAddRolesAdmin could not return "undefined / null" nor "no undefined / no null" in "... /edit/roles.js"`)
@@ -216,13 +219,13 @@ module.exports = {
                                 let dataAddRolesUser;
                                 dataAddRolesUser = Get.roleForUser(`${channelRoleId}`);
                                 if (dataAddRolesUser != undefined || dataAddRolesUser != null) {
-                                    roleembed.setDescription('This Role is already set as an User Role.')
+                                    roleembed.setDescription(`${lang.admin.roles.issetuser}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataAddRolesUser === undefined || dataAddRolesUser === null) {
                                     dataAddRolesUser = { ChannelRoleID: `${channelRoleId}`, GuildID: `${getGuildID}`, RoleID: `${stringGetRole.id}`, BotID: `${getClientID}` }
                                     Set.roleForUser(dataAddRolesUser);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been added to the User Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.hasadduser}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else {
                                     return console.error('[' + DateTime.utc().toFormat(timeFormat) + `] There was a problem adding an User Role to the database: dataAddRolesUser could not return "undefined / null" nor "no undefined / no null" in "... /edit/roles.js"`)
@@ -233,13 +236,13 @@ module.exports = {
                                 let dataAddRolesNsfw;
                                 dataAddRolesNsfw = Get.roleForNsfw(`${channelRoleId}`);
                                 if (dataAddRolesNsfw != undefined || dataAddRolesNsfw != null) {
-                                    roleembed.setDescription('This Role is already set as an Nsfw Role.')
+                                    roleembed.setDescription(`${lang.admin.roles.issetnsfw}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataAddRolesNsfw === undefined || dataAddRolesNsfw === null) {
                                     dataAddRolesNsfw = { ChannelRoleID: `${channelRoleId}`, GuildID: `${getGuildID}`, RoleID: `${stringGetRole.id}`, BotID: `${getClientID}` }
                                     Set.roleForNsfw(dataAddRolesNsfw);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been added to the Nsfw Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.hasaddnsfw}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else {
                                     return console.error('[' + DateTime.utc().toFormat(timeFormat) + `] There was a problem adding an Nsfw Role to the database: dataAddRolesNsfw could not return "undefined / null" nor "no undefined / no null" in "... /edit/roles.js"`)
@@ -250,13 +253,13 @@ module.exports = {
                                 let dataAddRolesMute;
                                 dataAddRolesMute = Get.roleForUser(`${getBotConfigID}-mute`);
                                 if (dataAddRolesMute != undefined || dataAddRolesMute != null) {
-                                    roleembed.setDescription('This Role is already set as an Mute Role.')
+                                    roleembed.setDescription(`${lang.admin.roles.issetmute}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataAddRolesMute === undefined || dataAddRolesMute === null) {
                                     dataAddRolesMute = { ChannelRoleID: `${getBotConfigID}-mute`, GuildID: `${getGuildID}`, RoleID: `${stringGetRole.id}`, BotID: `${getClientID}` }
                                     Set.roleForUser(dataAddRolesMute);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been added to the User Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.hasadduser}`)
                                     await interaction.reply({ embeds: [roleembed] });
                                 } else {
                                     return console.error('[' + DateTime.utc().toFormat(timeFormat) + `] There was a problem adding an the Mute Role to the database: dataAddRolesUser could not return "undefined / null" nor "no undefined / no null" in "... /edit/roles.js"`)
@@ -264,7 +267,7 @@ module.exports = {
                             };
                             //Check if argument is All.
                             if (stringChoicesValueSet === 'all') {
-                                roleembed.setDescription(`You can't add ALL Roles at once to the lists, plus i don't know with which list to begin with. 🤨 `)
+                                roleembed.setDescription(`${lang.admin.roles.nomassadd}`)
                                 await interaction.reply({embeds: [roleembed]});
                             };
                         };
@@ -282,12 +285,12 @@ module.exports = {
                                 let dataRemoveRoleAdmin;
                                 dataRemoveRoleAdmin = Get.roleForAdmin(channelRoleId);
                                 if (dataRemoveRoleAdmin === undefined || dataRemoveRoleAdmin == null) {
-                                    roleembed.setDescription('There is no Role with this Name nor ID on this List.')
+                                    roleembed.setDescription(`${lang.admin.roles.norolelist}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataRemoveRoleAdmin != undefined || dataRemoveRoleAdmin != null) {
                                     Del.roleForAdmin(channelRoleId);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been removed from the Admin Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.removeadmin}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 };
                             };
@@ -296,12 +299,12 @@ module.exports = {
                                 let dataRemoveRoleUser;
                                 dataRemoveRoleUser = Get.roleForUser(channelRoleId);
                                 if (dataRemoveRoleUser === undefined || dataRemoveRoleUser == null) {
-                                    roleembed.setDescription('There is no Role with this Name nor ID on this List.')
+                                    roleembed.setDescription(`${lang.admin.roles.norolelist}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataRemoveRoleUser != undefined || dataRemoveRoleUser != null) {
                                     Del.roleForUser(channelRoleId);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been removed from the User Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.removeuser}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 };
                             };
@@ -310,12 +313,12 @@ module.exports = {
                                 let dataRemoveRoleNsfw;
                                 dataRemoveRoleNsfw = Get.roleForNsfw(channelRoleId)
                                 if (dataRemoveRoleNsfw === undefined || dataRemoveRoleNsfw == null) {
-                                    roleembed.setDescription('There is no Role with this Name nor ID on this List.')
+                                    roleembed.setDescription(`${lang.admin.roles.norolelist}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataRemoveRoleNsfw != undefined || dataRemoveRoleNsfw != null) {
                                     Del.roleForNsfw(channelRoleId);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been removed from the Nsfw Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.removensfw}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 };
                             };
@@ -324,31 +327,31 @@ module.exports = {
                                 let dataRemoveRoleMute;
                                 dataRemoveRoleMute = Get.roleForNsfw(`${getBotConfigID}-mute`)
                                 if (dataRemoveRoleMute === undefined || dataRemoveRoleMute == null) {
-                                    roleembed.setDescription('There is no Role with this Name nor ID on this List.')
+                                    roleembed.setDescription(`${lang.admin.roles.norolelist}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 } else if (dataRemoveRoleMute != undefined || dataRemoveRoleMute != null) {
                                     Del.roleForUser(`${getBotConfigID}-mute`);
                                     roleembed.setColor('DarkGreen')
-                                        .setDescription(`The Role ${stringGetRole} has been removed from the User Roles.`)
+                                        .setDescription(`${lang.admin.roles.therole} ${stringGetRole} ${lang.admin.roles.removeuser}`)
                                     await interaction.reply({embeds: [roleembed]});
                                 };
                             };
                             //Check if argument is All.
                             if (stringChoicesValueRemove === 'all') {
                                 roleembed.setColor('Red')
-                                    .setDescription(`You can't Remove ALL Roles at once from the lists, plus i don't know with which list to begin with. 🤨 `)
+                                    .setDescription(`${lang.admin.roles.nomassremove}`)
                                 await interaction.reply({embeds: [roleembed]});
                             };
                         };
                     // Error Messages
                     } else {
-                        await interaction.reply({ content: 'Admin Commands can only be used in Admin Channels.', ephemeral: true });
+                        await interaction.reply({ content: `${lang.error.adminchannel}`, ephemeral: true });
                     };
                 } else {
-                    await interaction.reply({ content: 'You are either not an Admin or you have not enought permissions.', ephemeral: true });
+                    await interaction.reply({ content: `${lang.error.noadminperms}`, ephemeral: true });
                 };
             } else {
-                await interaction.reply({ content: 'This command is not available right now.', ephemeral: true });
+                await interaction.reply({ content: `${lang.error.cmdoff}`, ephemeral: true });
             };
         } else {
             console.error(`[${DateTime.utc().toFormat(timeFormat)}][ClanBot] Interaction of Command \'roles\' returned \'null / undefined\'.`);

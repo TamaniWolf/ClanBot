@@ -1,13 +1,12 @@
 
 // Require discord.js, fs, Luxon.
-const Discord = require('discord.js');
-const { Message, PermissionsBitField } = Discord;
+const { Events, Message, PermissionsBitField } = require('discord.js');
 // Require dotenv as config (.env).
 require('dotenv').config();
 const prefix = process.env.PREFIX;
 
 module.exports = {
-    name: 'messageCreate',
+    name: Events.MessageCreate,
     /**
      * @param {Message} message
      */
@@ -40,28 +39,28 @@ module.exports = {
             // Set Commands
             if (mentionIsClient === true && argsBot[1] === 'run' && argsBot[2] === 'command') {
                 if (argsBot[3] === 'local') {
-                    const rqir = require(`../../../../ClanSys/deployment/localadd.js`)(message, args, Discord);
+                    const rqir = require(`../../../../ClanSys/deployment/localadd.js`)(message, args);
                     rqir;
                 };
                 if (argsBot[3] === 'global') {
-                    const rqir2 = require(`../../../../ClanSys/deployment/globaladd.js`)(message, args, Discord);
+                    const rqir2 = require(`../../../../ClanSys/deployment/globaladd.js`)(message, args);
                     rqir2;
                 };
             };
             // Delete Commands
-            if (mentionIsClient === true && argsBot[1] === 'delete' && argsBot[2] === 'command') {
+            if (mentionIsClient === true && argsBot[1] === 'remove' && argsBot[2] === 'command') {
                 if (argsBot[3] === 'local') {
-                    const rqir3 = require(`../../../../ClanSys/deployment/localremove.js`)(message, args, Discord);
+                    const rqir3 = require(`../../../../ClanSys/deployment/localremove.js`)(message, args);
                     rqir3;
                 };
                 if (argsBot[3] === 'global') {
-                    const rqir4 = require(`../../../../ClanSys/deployment/globalremove.js`)(message, args, Discord);
+                    const rqir4 = require(`../../../../ClanSys/deployment/globalremove.js`)(message, args);
                     rqir4;
                 };
             };
             // Emit
             if (mentionIsClient === true && argsBot[1] === 'run' && argsBot[2] === 'emit') {
-                const rqir = require(`../../../../ClanSys/deployment/emit.js`)(message, argsBot, Discord);
+                const rqir = require(`../../../../ClanSys/deployment/emit.js`)(message, argsBot);
                 rqir;
             };
         };

@@ -6,7 +6,6 @@ module.exports = {
     description: 'Loggin bot\'s beeing added to the server.',
     call: 'on', // client.once = 'once', client.on = 'on'
     async execute(messages) {
-        console.log('0');
         const { DateTime } = require('luxon');
         // SQLite
         const { Get, Set, Del } = require('../functions/sqlite/prepare');
@@ -20,7 +19,7 @@ module.exports = {
             type: AuditLogEvent.MessageBulkDelete,
         });
         const botLog = fetchedLogs.entries.first();
-        const { targetType, actionType, action, reason, executor, changes, id, extra, target } = botLog;
+        const { executor, id, extra } = botLog;
         // Data Null
         let dataOnOff;
         let dataChannellog;

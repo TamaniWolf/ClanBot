@@ -1,4 +1,5 @@
 
+// Require SQLite and Databases
 const SQLite = require("better-sqlite3");
 const sql_Config = new SQLite('./Database/sqlite/config/config.sqlite');
 const sql_OnOff = new SQLite('./Database/sqlite/config/onoff.sqlite');
@@ -8,7 +9,8 @@ const sql_Reaction = new SQLite('./Database/sqlite/reaction/reaction.sqlite');
 const sql_TwitchRequest = new SQLite('./Database/sqlite/twitch/twitch.sqlite');
 const sql_Birthday = new SQLite('./Database/sqlite/calender/birthdays.sqlite');
 const sql_AuditLogs = new SQLite('./Database/sqlite/moderation/auditlog.sqlite');
-// const sql_MemberProfile = new SQLite('./Database/sqlite/member/profile.sqlite');
+// const sql_Profile = new SQLite('./Database/sqlite/member/profile.sqlite');
+// const sql_Achievements = new SQLite('./Database/sqlite/member/achievements.sqlite');
 
 class Set {
     // Config
@@ -27,7 +29,7 @@ class Set {
     };
     static onOffForCommandMember(id) {
         let data;
-        globalclient.setOnOffCommandMember = sql_OnOff.prepare("INSERT OR REPLACE INTO command_member (OnOffID, GuildID, Convert, Birthday, Blush, Grouphug, Growl, Hug, Hydrate, Slap, Help) VALUES (@OnOffID, @GuildID, @Convert, @Birthday, @Blush, @Grouphug, @Growl, @Hug, @Hydrate, @Slap, @Help);");
+        globalclient.setOnOffCommandMember = sql_OnOff.prepare("INSERT OR REPLACE INTO command_member (OnOffID, GuildID, Convert, Eval, Birthday, Blush, Grouphug, Growl, Hug, Hydrate, Slap, Help) VALUES (@OnOffID, @GuildID, @Convert, @Eval, @Birthday, @Blush, @Grouphug, @Growl, @Hug, @Hydrate, @Slap, @Help);");
         data = globalclient.setOnOffCommandMember.run(id);
         return data;
     };
@@ -116,7 +118,6 @@ class Set {
         data = globalclient.setLogsRoles.run(id);
         return data;
     };
-    // ChannelRole
     // Channel
     static channelForAdmin(id) {
         let data;
@@ -186,7 +187,7 @@ class Set {
     //     data = globalclient.setPoll.run(id);
     //     return data;
     // };
-    // Twitchrequest
+    // Twitch
     static twitchTokenRequest(id) {
         let data;
         globalclient.setTwitchToken = sql_TwitchRequest.prepare("INSERT OR REPLACE INTO twitchrequest (TwitchRequestID, GuildID, Token, Cooldown) VALUES (@TwitchRequestID, @GuildID, @Token, @Cooldown);");
@@ -213,30 +214,23 @@ class Set {
         data = globalclient.setMessageDel.run(id);
         return data;
     };
-    // All AuditLog
-    static allAuditLogs(id) {
-        let data;
-        globalclient.setAllAuditLogs = sql_AuditLogs.prepare("INSERT OR REPLACE INTO auditlog (AuditLogID, GuildID, Type, Date) VALUES (@AuditLogID, @GuildID, @Type, @Date);");
-        data = globalclient.setAuditLogs.run(id);
-        return data;
-    };
-    static allAuditLogsMsgDel(id) {
-        let data;
-        globalclient.setAllMessageDel = sql_AuditLogs.prepare("INSERT OR REPLACE INTO messagedel (AuditLogID, GuildID, Type, Count, Date) VALUES (@AuditLogID, @GuildID, @Type, @Count, @Date);");
-        data = globalclient.setMessageDel.run(id);
-        return data;
-    };
-    // // Member
-    // static memberProfile(id) {
+    // Member
+    // static profile(id) {
     //     let data;
-    //     globalclient.setMemberProfile = sql_MemberProfile.prepare("INSERT OR REPLACE INTO member (ProfileID, GuildID, JoinTimestamp, PremiumTimestamp, Nickname, MemberID, DisplayName) VALUES (@ProfileID, @GuildID, @JoinTimestamp, @PremiumTimestamp, @Nickname, @MemberID, @DisplayName);");
-    //     data = globalclient.setMemberProfile.run(id);
+    //     globalclient.setProfile = sql_Profile.prepare("INSERT OR REPLACE INTO members (ProfileID, GuildID, MemberID, DisplayName, Nickname, Consent) VALUES (@ProfileID, @GuildID, @MemberID, @DisplayName, @Nickname, @Consent);");
+    //     data = globalclient.setProfile.run(id);
     //     return data;
     // };
-    // static memberScores(id) {
+    // static scores(id) {
     //     let data;
-    //     globalclient.setMemberScores = sql_MemberProfile.prepare("INSERT OR REPLACE INTO scores (ProfileID, MemberID, GuildID, Exp, Level) VALUES (@ProfileID, @MemberID, @GuildID, @Exp, @Level);");
-    //     data = globalclient.setMemberScores.run(id);
+    //     globalclient.setScores = sql_Profile.prepare("INSERT OR REPLACE INTO scores (ProfileID, GuildID, MemberID, Exp, Level) VALUES (@ProfileID, @GuildID, @MemberID, @Exp, @Level);");
+    //     data = globalclient.setScores.run(id);
+    //     return data;
+    // };
+    // static achievements(id) {
+    //     let data;
+    //     globalclient.setAchievements = sql_Achievements.prepare("INSERT OR REPLACE INTO achievements (ProfileID, GuildID, Bitfield, Background, Icon, Rarity) VALUES (@ProfileID, @GuildID, @Bitfield, @Background, @Icon, @Rarity);");
+    //     data = globalclient.setAchievements.run(id);
     //     return data;
     // };
 };
