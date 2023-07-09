@@ -1,13 +1,13 @@
 
 ## Table of Content
-- [Prerequisites](ClanBot#prerequisites)<br>
-- [Installation](ClanBot#installation)<br>
-- [Automatic](ClanBot#automatic)<br>
-- [Manuel](ClanBot#manuel)<br>
-- [Getting required tokens](ClanBot#getting-required-tokens)<br>
-- [Discord bot application](ClanBot#discord-bot-application)<br>
-- [Starting ClanBot](ClanBot#starting-clanbot)<br>
-- [Inviting ClanBot](ClanBot#inviting-clanbot)<br>
+- [Prerequisites](README.md#prerequisites)<br>
+- [Installation](README.md#installation)<br>
+- [Automatic](README.md#automatic)<br>
+- [Manuel](README.md#manuel)<br>
+- [Getting required tokens](README.md#getting-required-tokens)<br>
+- [Discord bot application](README.md#discord-bot-application)<br>
+- [Starting ClanBot](README.md#starting-clanbot)<br>
+- [Inviting ClanBot](README.md#inviting-clanbot)<br>
 ***
 ### Prerequisites
 
