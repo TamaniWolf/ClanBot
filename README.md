@@ -1,46 +1,81 @@
-# ClanBot
-[![Discord Server](https://img.shields.io/discord/720746186788831323?color=%237289da&label=discord&logo=discord&style=flat-square)](https://discord.gg/6qcehmM)
 
-**A "simple", customizable Discord bot for Familly, Friends and Communitys with fun in minde.**
-
+## Table of Content
+- [Prerequisites](readme#prerequisites)<br>
+- [Installation](readme#installation)<br>
+- [Automatic](readme#automatic)<br>
+- [Manuel](readme#manuel)<br>
+- [Getting required tokens](readme#getting-required-tokens)<br>
+- [Discord bot application](readme#discord-bot-application)<br>
+- [Starting ClanBot](readme#starting-clanbot)<br>
+- [Inviting ClanBot](readme#inviting-clanbot)<br>
 ***
-## How To Install
-First of all, it is important to know this bot is intendet to be run on an Linux based server (Ubuntu, Debian, etc...) I have not tested it outside of Linux and Visual Studio Code. 
+### Prerequisites
 
-> NOTE: You will need at least `sudo` permissions to performe the installation. If you are loggin in as root you don't need to use sudo before commands.
+This bot is built on NodeJS. If you do not yet have NodeJS installed, download and install the latest LTS version from the official website for your platform:
 
-### With Install Script
-Now that we are sure we want to use an Linux server to Install ClanBot with the Install Script, we log-in in to the server via the ssh login.<br>
-Go to the directory you want the bot to be in to.<br>
-I recommend `/home/discord/` for it's home.<br>
-Now you need to get the install script, this is strate forward and simple. Copy the code below and past it in the command line.<br>
+https://nodejs.org/en/download/
 
-```
-git clone https://github.com/TamaniWolf/clanbot-installer.git
-``` 
-Once the cloning has finished you will need to change the directorys and files permissions to make it executable.<br>
-We use `chmod` for it as followed:<br>
-```
-sudo chmod -R +rwx clanbot-installer/
-sudo chmod -R g+rwx clanbot-installer/
-```
-> : -R = recursive; + = adden; r = read; w = write; x = execute
+**I recommend Node v16+.**
 
-All is ready to start the install script with the command below.
-```
-sudo ./clanbot-installer.sh
-``` 
-> NOTE: with `./` you can execute any shell script. Exemple: `./start.sh`.
+### Installation
+#### Automatic
 
-Now we are in the Installer, you only need to follow thy instructions.<br>
+To Automaticly setup ClanBot, clone the repository with git or download it as an ZIP file and unzip it.
+Once done, enter the directory and execute the installer script:
 
+    cd ClanBot
+    ./clanbot-installer
 
-### Manuel Install
-This one is a lot more Custom but also a lot more work. It is what it is, an Manuel Install.<br>
+First pnpm will be installed and configured, then the depending packages.
+After this you will be asked to enter some needed data for the config.
+- Discord Bot Token
+- Prefix (optional)
+- Server Owner ID
+- Server ID
+- Bot ID
 
-But good thing we already have a wiki page for it :-D<br>
-**-> [To the Install Page!](https://github.com/TamaniWolf/ClanBot/wiki/installation-and-setup) <-**<br>
+#### Manuel
 
+To set up ClanBot, clone the repository with git or download it as an ZIP file and unzip it.
+Once done, enter the directory and install the dependencies:
 
+    cd ClanBot
+    npm install
 
-> A Product of the Eternal Clan <br> [Discord](https://discord.gg/6qcehmM) | [Twitter](https://twitter.com/RealTweetWolf) | [Mastodon](https://mastodon.social/@tamaniwolf) | [Tumblr](https://www.tumblr.com/eternalclan) | [Wiki](https://github.com/TamaniWolf/ClanBot/wiki)
+I recommend to use pnpm for space efficiency of the dependencies:
+
+    cd ClanBot
+    npm i g- pnpm
+    pnpm i -g <package>
+
+To get the dependencie packages for the bot:
+
+    pnpm update
+
+### Getting required tokens
+
+You will need:
+`DISCORD_BOT_TOKEN`
+Note that you will need to set up some external applications:
+
+#### Discord bot application
+Your Discord bot needs to be registered as an application, and you will need a bot token  (`DISCORD_BOT_TOKEN` in .env).     
+Follow [this guide](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) for more information.
+
+### Starting ClanBot
+
+Once the application has been configured, start it using `node` from the installation directory:
+
+    node .
+
+Or with pm2.
+
+    pm2 start clanbot.js
+  
+### Inviting ClanBot
+
+Send the following link to the admin of a Discord server to let them invite the Bot:
+
+  `https://discordapp.com/oauth2/authorize?client_id=BOT_CLIENT_ID&scope=bot`
+  
+Swap `BOT_CLIENT_ID` in the URL above for your Discord app's client id, which you can find in the app details.
