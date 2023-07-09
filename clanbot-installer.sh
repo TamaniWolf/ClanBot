@@ -1,14 +1,32 @@
 #!/bin/sh
 echo ""
 echo ""
-echo "Configuring ClanBot"
-root=$(pwd)
-choice=4
+echo "Installing ClanBot dependencies"
 
+root=$(pwd)
+choice=1
+while [ "$choice" -eq 1 ]; do
+    
+    echo ""
+    npm i -g pnpm;
+    pnpm setup;
+    source /root/.bashrc;
+    pnpm add -g axios better-sqlite3 discord.js dotenv feedparser glob humanize-duration luxon markdown-escape mathjs octokit;
+    pnpm update;
+    choice=2
+
+done
+
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo "Configuring ClanBot"
 token=""
 prefix=""
 
-while [ "$choice" -eq 4 ]; do
+while [ "$choice" -eq 2 ]; do
     
     echo ""
     echo "Config - .env"
