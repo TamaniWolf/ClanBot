@@ -9,7 +9,7 @@
   "author": "Tamani Wolf",
   "license": "ISC",
   "dependencies": {
-    "axios": "1.6.0",
+    "axios": "1.7.4",
     "better-sqlite3": "8.4.0",
     "discord.js": "14.11.0",
     "dotenv": "16.3.0",
